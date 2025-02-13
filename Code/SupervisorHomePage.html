@@ -6,18 +6,49 @@
         <title>YHROCU</title>
         <style>
             body{
-                background-color: #ADD8E6;
+                background-color: lightblue;
             }
         </style>
        <!--style title with css style sheet-->
         <body>
             <h1>YHROCU</h1>
-            <h2>Task Manager</h2>
+            <h2>Task Management system</h2>
         </body>
 
     </head>
     <body>
-        
+        <form action="/search" method="get">
+            <label for="search">Search:</label>
+            <input type="text" id="search" name="query" placeholder="Search for a project...">
+            <button type="submit">Search</button>
+        </form>
 
+        <h4>Filters:</h4>
+        <div class="search-container">
+            <input type="text" id="search-box" placeholder="Completion Status">
+            <div id="dropdown" class="dropdown-content">
+                <a href="#">Not yet started</a>
+                <a href="#">In Progress</a>
+                <a href="#">Complete</a>
+            </div>
+            <!--add javascript and css to get dropdown box functionality-->
+        </div>
+        <div class="search-container">
+            <input type="text" id="search-box" placeholder="Review Status">
+            <div id="dropdown" class="dropdown-content">
+                <a href="#">Review Incomplete</a>
+                <a href="#">Review Complete</a>
+            </div>
+            <!--add javascript and css to get dropdown box functionality-->
+        </div>
+        <div class="search-container">
+            <input type="text" id="search-box" placeholder="Team">
+            <div id="dropdown" class="dropdown-content">
+                <a href="#">Team 1</a>
+                <a href="#">Team 2</a>
+                <a href="#">Team 3</a>
+            </div>
+            <!--add javascript and css to get dropdown box functionality-->
+        </div>
     </body>
 </html>
