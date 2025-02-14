@@ -1,0 +1,68 @@
+body {
+    background-color: lightblue;
+    color: black;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header, footer {
+    background-color: white;
+    color: black;
+    padding: 20px;
+    text-align: center;
+}
+section#projects {
+    background-color: lightblue;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+div.project {
+    background-color: lightgray;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+ul.tasks {
+    list-style-type: none;
+    padding: 0;
+}
+
+ul.tasks li {
+    background-color: white;
+    margin: 5px 0;
+    padding: 5px;
+    border-radius: 3px;
+}
+main {
+    padding: 20px;
+    background-color: lightblue;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: black;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+button {
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: black;
+    color: white;
+}
