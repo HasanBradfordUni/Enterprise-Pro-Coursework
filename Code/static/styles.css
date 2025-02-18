@@ -66,3 +66,43 @@ button:hover {
     background-color: black;
     color: white;
 }
+
+.login-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            text-align: center;
+}
+.login-container h2 {
+    color: #007bff;
+    margin-bottom: 20px;
+}
+.input-group {
+    margin-bottom: 15px;
+}
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.checkbox-container {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+}
+.login-btn {
+    width: 100%;
+    background: #004080;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+.login-btn:hover {
+    background: #003366;
+}
