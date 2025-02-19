@@ -4,6 +4,8 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>YHROCU</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
         <style>
             body{
                 background-color: lightblue;
@@ -25,30 +27,30 @@
 
         <h4>Filters:</h4>
         <div class="search-container">
-            <input type="text" id="search-box" placeholder="Completion Status">
-            <div id="dropdown" class="dropdown-content">
-                <a href="#">Not yet started</a>
-                <a href="#">In Progress</a>
-                <a href="#">Complete</a>
-            </div>
-            <!--add javascript and css to get dropdown box functionality-->
+            <input type="text" id="search-box" placeholder="Completion Status:">
+            <select id="dropdown" class="dropdown-content">
+                <option value="Not yet started">Not yet started</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Complete">Complete</option>
+            </select>
         </div>
+
         <div class="search-container">
-            <input type="text" id="search-box" placeholder="Review Status">
-            <div id="dropdown" class="dropdown-content">
-                <a href="#">Review Incomplete</a>
-                <a href="#">Review Complete</a>
-            </div>
-            <!--add javascript and css to get dropdown box functionality-->
+            <input type="text" id="search-box" placeholder="Review Status:">
+            <select id="dropdown" class="dropdown-content">
+                <option value="Review Incomplete">Review Incomplete</option>
+              <option value="Review Complete">Review Complete</option>
+            </select>
         </div>
+
         <div class="search-container">
-            <input type="text" id="search-box" placeholder="Team">
-            <div id="dropdown" class="dropdown-content">
-                <a href="#">Team 1</a>
-                <a href="#">Team 2</a>
-                <a href="#">Team 3</a>
-            </div>
-            <!--add javascript and css to get dropdown box functionality-->
+            <input type="text" id="search-box" placeholder="Team:">
+            <select id="dropdown" class="dropdown-content">
+                <option value="Team 1">Team 1</option>
+                <option value="Team 2">Team 2</option>
+                <option value="Team 3">Team 3</option>
+            </select>
         </div>
+
     </body>
 </html>
