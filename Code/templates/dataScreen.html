@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data screen (developer)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+        .inputs {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+        textarea {
+            width: 45%;
+            height: 500px;
+        }
+    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to the Data screen - only for usage by developers</h1>
+        <h2>Main usage is to send SQL queries to the database</h2>
+        <form action="/databaseCommand", method="post">
+            <div class="inputs">
+                <textarea name="sqlQuery" placeholder="Enter SQL Query"></textarea>
+                <textarea name="databaseOutput" readonly placeholder="Result of SQL Query will be here">{{ result }}</textarea>
+            </div>
+            <button type="submit">Send Query</button>
+        </form>
+    </div>
+</body>
+</html>
