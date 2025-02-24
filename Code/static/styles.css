@@ -103,6 +103,18 @@ button:hover {
     cursor: pointer;
     margin-top: 10px;
 }
+
+.dropdown-content {
+    width: 100%;
+    background: #004080;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
 .login-btn:hover {
     background: #003366;
 }
@@ -113,7 +125,7 @@ button:hover {
     display: flex;
     justify-content: center; /*Center horizontally*/
     align-items: center; /*center vertically*/
-    height: 100vh; /*full viewport height*/
+    height: 1vh;
 }
 
 .info-placeholder {
