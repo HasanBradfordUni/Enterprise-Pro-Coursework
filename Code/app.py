@@ -1,17 +1,17 @@
 from flask import Flask, request, jsonify, render_template
 from use_database import *
 import os
-
+ 
 app = Flask(__name__)  # create a new Flask app
-
+ 
 @app.route('/')
 def index():
     return render_template('index.html')
-
+ 
 @app.route('/databaseConnect')
 def databaseConnect():
     return render_template('dataScreen.html')
-
+ 
 @app.route('/databaseCommand', methods=['POST'])
 def databaseCommand():
     query = request.form['sqlQuery']
@@ -23,5 +23,9 @@ def databaseCommand():
     result = execute_query(databaseConnection, query)
     databaseConnection.close()
     return render_template('dataScreen.html', result=result)
+
+@app.route('/supervisor')
+def supervisor():
+    return render_template('SupervisorHomePage.html')
 
 app.run(port=5000)  # run the Flask app

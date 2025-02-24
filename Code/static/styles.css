@@ -106,3 +106,21 @@ button:hover {
 .login-btn:hover {
     background: #003366;
 }
+
+.search-container {
+    background-color: white;
+    color: lightgray;
+    display: flex;
+    justify-content: center; /*Center horizontally*/
+    align-items: center; /*center vertically*/
+    height: 100vh; /*full viewport height*/
+}
+
+.info-placeholder {
+    width: 200px;
+    height: 100px;
+    background-color: lightblue;
+    border: 2px solid blue;
+    padding: 10px;
+}
+   
