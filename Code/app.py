@@ -17,7 +17,7 @@ def databaseCommand():
     query = request.form['sqlQuery']
     print("Database Path:", os.path.abspath("database.db"))
     #get the path of the current working directory
-    filepath = os.path.join(os.getcwd(), 'database.db')
+    filepath = os.path.join(os.getcwd(), 'Code/database.db')
     print("File Path:", filepath)
     databaseConnection = create_connection(filepath)
     result = execute_query(databaseConnection, query)
