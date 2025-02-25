@@ -33,7 +33,7 @@ The Yorkshire and Humber Regional Organised Crime Unit (YHROCU) requires a web-b
 ## Technology Stack
 - **Frontend**: Web-based user interface.
 - **Backend**: Python with Flask.
-- **Database**: To be determined based on project requirements.
+- **Database**: SQLlite
 - **Authentication**: OpenAuth or equivalent security protocols.
 - **Email Integration**: For task notifications.
 
@@ -58,13 +58,32 @@ The Yorkshire and Humber Regional Organised Crime Unit (YHROCU) requires a web-b
 ## Deliverables
 - Software Requirements Specification (SRS)
 - Software Design Document (SDD)
+- Meeting Minutes
 - Functional Task Management System
 - Testing Reports
 - Software Documentation
+- Team Statement
+- Any Other Relevant Documents
+
+## Gantt Charts (Project planning)
+
+### Version 1
+
+![Gantt Chart Version 1](Other Documents/Gantt chart for project timelines and plan.png)
+
+### Version 2
+
+![Gantt Chart Version 2](Other Documents/Gantt chart for project timelines and plan V2.png)
+
+### Version 3
+
+*Currently In Progress*
 
 ## Timeline
-- **SRS Draft Deadline**: 5th February 2025
-- **Final SRS Submission**: 11th February 2025
+- **SRS Draft Deadline**: 5th February 2025 ✅
+- **Final SRS Submission**: 18th February 2025 ✅
+- **SDD Draft Deadline**: 24th February 2025 ✅
+- **Final SDD Version**: 4th March 2025 
 - **Development & Testing**: Ongoing until completion
 
 This README will be updated as the project progresses to reflect changes and improvements in scope and functionality.

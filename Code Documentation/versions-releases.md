@@ -4,6 +4,8 @@
 
 ### This extra information includes the Version Name/Number and also the Files Affected
 
+## Pre-release versions
+
 | Commit ID | Version Name/Number | Commit Info | Files Affected | Person |
 |------------------------------------------|------|-------------|----------------|------------|
 | 24fca1a6a2819d56c6b71d737e5c974e7bafc5a0 | v0.0 | Initial commit | Readme.md | Hasan |
@@ -21,3 +23,12 @@
 | 414e72caa71f03ac4f4d4116d79a7ac2ca845335 | v1.2 | Data screen and other minor development changes including setting up database | app.py, index.html, database.db, dataScreen.html, use_database.py | Hasan |
 | 0bd9795bb4e8b1b55265cb2b7ab71a2d769324cc | v1.2.1 | Development changes with Supervisor Home Page and ensuring it works with Flask app | app.py, styles.css, SupervisorHomePage.html, index.html | Hamza |
 | 4a8b3ae91d5fe411db5308b28d49dba0b24ce32a | v1.2.1 | Drafting version history documentation | versions-releases.md [This document] | Hasan |
+| 080455bcf04d0a45bb4fe5b3133b7ba513dbc87a | v1.2.1 | Updating version history documentation | versions-releases.md [This document] | Hasan |
+
+<hr>
+
+## First release versions
+
+| Commit ID | Version Name/Number | Commit Info | Files Affected | Person |
+|------------------------------------------|------|-------------|----------------|------------|
+| 24fca1a6a2819d56c6b71d737e5c974e7bafc5a0 | v0.0 | Initial commit | Readme.md | Hasan |
