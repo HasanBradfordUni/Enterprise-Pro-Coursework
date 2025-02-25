@@ -69,15 +69,19 @@ The Yorkshire and Humber Regional Organised Crime Unit (YHROCU) requires a web-b
 
 ### Version 1
 
-![Gantt Chart Version 1](Other Documents/Gantt chart for project timelines and plan.png)
+![Gantt Chart Version 1](https://i.postimg.cc/J4j10vKG/Gantt-chart-for-project-timelines-and-plan-V2.png)
 
 ### Version 2
 
-![Gantt Chart Version 2](Other Documents/Gantt chart for project timelines and plan V2.png)
+![Gantt Chart Version 2](https://i.postimg.cc/4yTSSLcS/Gantt-chart-for-project-timelines-and-plan-V2.png)
 
 ### Version 3
 
 *Currently In Progress*
+
+## Version History and Releases
+
+[*See version hisory and releases document*](https://shorturl.at/DbmPo)
 
 ## Timeline
 - **SRS Draft Deadline**: 5th February 2025 ✅
