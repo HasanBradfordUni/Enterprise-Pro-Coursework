@@ -81,7 +81,7 @@ The Yorkshire and Humber Regional Organised Crime Unit (YHROCU) requires a web-b
 
 ## Version History and Releases
 
-[*See version hisory and releases document*](https://shorturl.at/sj9xA)
+[*See version history and releases document*](https://tinyurl.com/versions-releases)
 
 ## Timeline
 - **SRS Draft Deadline**: 5th February 2025 ✅
