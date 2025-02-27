@@ -28,4 +28,8 @@ def databaseCommand():
 def supervisor():
     return render_template('SupervisorHomePage.html')
 
+@app.route('/tasks')
+def tasks():
+    return render_template('tasks.html')
+
 app.run(port=5000)  # run the Flask app
