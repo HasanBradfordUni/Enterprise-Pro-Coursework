@@ -19,8 +19,9 @@ def databaseCommand():
     #get the path of the current working directory
     filepath = os.path.join(os.getcwd(), 'Code/database.db')
     print("File Path:", filepath)
-    databaseConnection = create_connection(filepath)
-    result = execute_query(databaseConnection, query)
+    thisDatabase = databaseManager()
+    databaseConnection = thisDatabase.create_connection(filepath)
+    result = thisDatabase.execute_query(query)
     databaseConnection.close()
     return render_template('dataScreen.html', result=result)
 
