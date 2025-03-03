@@ -16,23 +16,45 @@
 <body>
     <header>
         <h1>Tasks to complete</h1>
+        <h2>Project: Website development</h2>
     </header>
-    <form action="">
+    <form action="/create_task", method="post">
         <input type="text" class="todo-input">
         <button class="todo-button" type="submit">
             <i class="fas fa-plus-circle fa-lg"></i>
         </button>
+        <div class="select-headings">
+            <h3 class="filter-heading"> Filter Options </h3>
+            <h3 class="sort-heading"> Sort Options </h3>
+        </div>
         <div class="select">
             <select name="todos" id="" class="filter-todo">
                 <option value="all">All</option>
-                <option value="completed">Completed</option>
-                <option value="incomplete">Incomplete</option>
+                <option value="Completed">Completed</option>
+                <option value="New">New</option>
+                <option value="In-progress">In Progress</option>
+                <option value="Overdue">Overdue</option>
+            </select>
+            <select name="sorting-options" id="" class="sort-todo">
+                <option value="title">Title</option>
+                <option value="assigned-date">Assigned Date</option>
+                <option value="due-date">Due Date</option>
+                <option value="status">Status</option>
             </select>
         </div>
     </form>
         
     <div class="todo-container">
-        <ul class="todo-list"></ul>
+        {% for tasks in tasks %}
+        <div class="task-box">
+            <h1>Title: {{ task.title }}</h1>
+            <h3>Details: {{ task.details }} </h3>
+            <p>Status: {{ task.status}}</p>
+            <p>Assigned To: Person 1</p>
+            <h4>Assigned date: {{ task.assigned_date }}</h4>
+            <h4>Due date: {{ task.due_date }}</h4>
+        </div>
+        {% endfor %}
     </div>
     
 </body>

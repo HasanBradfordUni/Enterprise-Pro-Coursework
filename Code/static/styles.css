@@ -213,31 +213,53 @@ button:hover {
     position: relative;
     overflow: hidden;
     border-radius: 50px;
+    display: flex;
 }
 
-select {
+.filter-todo {
     color:rgb(255, 200, 0);
-    width: 80%;
+    width: 50%;
     margin-left: 5%;
     height: 3.2rem;
     cursor: pointer;
     padding: 1rem;
 }
 
-/*
-.select::after {
-    content: "\25BC";
-    position: absolute;
-    background:rgb(255, 200, 0);
-    top: 0;
-    right: 0;
-    padding: 1rem;
-    pointer-events: none;
-    transition: all 0.3s ease;
-}*/
-
 .select::hover::after {
     background: white;
     color: rgb(255, 200, 0);
+}
+
+.sort-todo {
+    color:rgb(255, 200, 0);
+    width: 30%;
+    margin-left: 5%;
+    height: 3.2rem;
+    cursor: pointer;
+    padding: 1rem;
+}
+
+.select-headings {
+    display: flex;
+    justify-content: space-between;
+    text-decoration: underline;
+}
+
+.filter-heading {
+    margin-left: 25%;
+}
+
+.sort-heading {
+    margin-right: 22%;
+}
+    
+
+.task-box{
+    width: 75%;
+    margin: auto;
+    box-shadow: 3px 3px 3px 0px #003366;
+    color: black;
+    background-color: white;
+    border-radius: 5px;
 }
                                                                                          
