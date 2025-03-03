@@ -125,14 +125,30 @@ button:hover {
     display: flex;
     justify-content: center; /*Center horizontally*/
     align-items: center; /*center vertically*/
-    height: 1vh;
+    height: 10vh;
 }
 
-.info-placeholder {
-    width: 200px;
-    height: 100px;
+.info-placeholder1 {
+    position: relative;
+    top: 10px;
+    left: 10px;
+    width: 500px;
+    height: 700px;
     background-color: lightblue;
     border: 2px solid blue;
     padding: 10px;
+    align-self: self-start;
+}
+
+.info-placeholder2 {
+    position: relative;
+    bottom: 713px;
+    left: 650px;
+    width: 800px;
+    height: 600px;
+    background-color: lightblue;
+    border: 2px solid blue;
+    padding: 10px;
+    align-self: self-end;
 }
    
