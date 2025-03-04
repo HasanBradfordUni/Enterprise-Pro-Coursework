@@ -27,7 +27,7 @@ class myClass():
     def load_tasks(self):
         tasks = self.database.get_tasks(project_id=self.project_id)
         return tasks
- 
+
     def databaseConnect(self):
         return render_template('dataScreen.html')
     
