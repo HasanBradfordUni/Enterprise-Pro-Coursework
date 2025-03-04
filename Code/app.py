@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, render_template, Blueprint
 from use_database import databaseManager
 from datetime import datetime
 from search_sort import listOperationsManager
+from forms import LoginForm
 import os
  
 class myClass():
@@ -23,6 +24,24 @@ class myClass():
  
     def index(self):
         return render_template('index.html')
+     
+    def login(self):
+        form = LoginForm()
+        username = form.username.data
+        password = form.password.data
+        if form.validate_on_submit():
+           thisUser = self.database.find_user(username)
+           if thisUser:
+               # Check the password
+               if user.password == password:
+                   return redirect(url_for('index'))
+               else:
+                   flash("Password incorrect, please try again.")
+                   return redirect(url_for('login'))
+           else:
+               flash("That email does not exist, please try again.")
+               return redirect(url_for('login'))
+          return render_template("login.html", form=form)
 
     def load_tasks(self):
         tasks = self.database.get_tasks(project_id=self.project_id)
