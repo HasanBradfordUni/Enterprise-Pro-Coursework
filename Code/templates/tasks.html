@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Tasks View</title>
+</head>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <!-- Font Awesome cdn css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="./styles.css">
+<body>
+    <header>
+        <h1>Tasks to complete</h1>
+        <h2>Project: Website development</h2>
+    </header>
+    <form action="/create_task", method="post">
+        <input type="text" class="todo-input">
+        <button class="todo-button" type="submit">
+            <i class="fas fa-plus-circle fa-lg"></i>
+        </button>
+        <div class="select-headings">
+            <h3 class="filter-heading"> Filter Options </h3>
+            <h3 class="sort-heading"> Sort Options </h3>
+        </div>
+        <div class="select">
+            <select name="todos" id="" class="filter-todo">
+                <option value="all">All</option>
+                <option value="Completed">Completed</option>
+                <option value="New">New</option>
+                <option value="In-progress">In Progress</option>
+                <option value="Overdue">Overdue</option>
+            </select>
+            <select name="sorting-options" id="" class="sort-todo">
+                <option value="title">Title</option>
+                <option value="assigned-date">Assigned Date</option>
+                <option value="due-date">Due Date</option>
+                <option value="status">Status</option>
+            </select>
+        </div>
+    </form>
+        
+    <div class="todo-container">
+        {% for tasks in tasks %}
+        <div class="task-box">
+            <h1>Title: {{ task.title }}</h1>
+            <h3>Details: {{ task.details }} </h3>
+            <p>Status: {{ task.status}}</p>
+            <p>Assigned To: Person 1</p>
+            <h4>Assigned date: {{ task.assigned_date }}</h4>
+            <h4>Due date: {{ task.due_date }}</h4>
+        </div>
+        {% endfor %}
+    </div>
+    
+</body>
+</html>

@@ -8,18 +8,9 @@ class databaseManager:
 
     def create_connection(self, path):
         try:
-            connection = sqlite3.connect(path)
+            connection = sqlite3.connect(path, check_same_thread=False)
             self.connection = connection
             return "self.connection to SQLite DB successful"
-        except Error as e:
-            return f"The error '{e}' occurred"
-
-    def execute_query(self, query):
-        cursor = self.connection.cursor()
-        try:
-            cursor.execute(query)
-            self.connection.commit()
-            return cursor.fetchall()
         except Error as e:
             return f"The error '{e}' occurred"
     
@@ -132,7 +123,7 @@ class databaseManager:
         try:
             cursor.execute(query)
             self.connection.commit()
-            return cursor.fetchall()
+            return "Query executed successfully"
         except Error as e:
             return f"The error '{e}' occurred"
         
@@ -239,6 +230,7 @@ class databaseManager:
             SELECT * FROM tasks WHERE task_title = '{task_title}' AND project_id = {project_id}
             """)
         return cursor.fetchone()
+
     
     def find_task_update(self, task_update_id=0, project_id=0, progress_update="", new_status="", update_date=False):
         cursor = self.connection.cursor()
@@ -282,6 +274,48 @@ class databaseManager:
             cursor.execute(query)
         return cursor.fetchone()
     
+    def find_task_update(self, task_update_id=0, project_id=0, progress_update="", new_status="", update_date=False):
+        cursor = self.connection.cursor()
+        if task_update_id != 0:
+            cursor.execute(f"""
+            SELECT * FROM task_updates WHERE task_update_id = {task_update_id}
+            """)
+        else:
+            query = "SELECT * FROM task_updates WHERE 1=1"
+            filters = {
+                "project_id": project_id,
+                "progress_update": progress_update,
+                "new_status": new_status,
+                "update_date": update_date
+            }
+            for key, value in filters.items():
+                if value:
+                    if key == "update_date":
+                        query += f" AND {key} = DATE('{value}')"
+                    else:
+                        query += f" AND {key} = '{value}'"
+            cursor.execute(query)
+        return cursor.fetchone()
+
+    def find_user_in_project(self, project_user_id=0, project_id=0, user_id=0, username=""):
+        cursor = self.connection.cursor()
+        if project_user_id != 0:
+            cursor.execute(f"""
+            SELECT * FROM project_users WHERE project_user_id = {project_user_id}
+            """)
+        else:
+            query = "SELECT * FROM project_users WHERE 1=1"
+            filters = {
+                "project_id": project_id,
+                "user_id": user_id,
+                "username": username
+            }
+            for key, value in filters.items():
+                if value:
+                    query += f" AND {key} = '{value}'"
+            cursor.execute(query)
+        return cursor.fetchone()
+
     def find_assigned_task(self, assigned_task_id=0, task_id=0, assigned_user_id=0, project_id=0):
         cursor = self.connection.cursor()
         if assigned_task_id != 0:
@@ -292,4 +326,13 @@ class databaseManager:
             cursor.execute(f"""
             SELECT * FROM assigned_tasks WHERE task_id = {task_id} AND assigned_user_id = {assigned_user_id} AND project_id = {project_id}
             """)
+        return cursor.fetchone()
+
+    def get_tasks(self, project_id):
+        cursor = self.connection.cursor()
+        cursor.execute(f"""
+        SELECT * FROM tasks WHERE project_id = {project_id}
+        """)
+        return cursor.fetchall()
+
         return cursor.fetchone()
