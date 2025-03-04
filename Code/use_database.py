@@ -328,11 +328,100 @@ class databaseManager:
             """)
         return cursor.fetchone()
 
-    def get_tasks(self, project_id):
+    def get_all_from_table(self, table_name):
         cursor = self.connection.cursor()
         cursor.execute(f"""
-        SELECT * FROM tasks WHERE project_id = {project_id}
+        SELECT * FROM {table_name}
         """)
         return cursor.fetchall()
+        
+    def update_user(self, user_id=0, username="", password="", role="", team=""):
+        cursor = self.connection.cursor()
+        cursor.execute(f"""
+        UPDATE users
+        SET username = '{username}', '{password}', '{role}', '{team}'
+        """)
+        self.connection.commit()
+        return cursor.lastrowid
 
-        return cursor.fetchone()
+    def update_project(self, project_id=0, project_title="", project_details="", project_status="", project_review="", project_owner=""):
+        cursor = self.connection.cursor()
+        cursor.execute(f"""
+        INSERT INTO projects (project_title, project_details, project_status, project_review, project_owner)
+        VALUES ('{project_title}', '{project_details}', '{project_status}', '{project_review}', '{project_owner}')
+        """)
+        self.connection.commit()
+        return cursor.lastrowid
+
+    def update_task(self, task_id=0, task_title="", task_details="", task_status="", task_assigned_date="", task_due_date="", project_id=0):
+        cursor = self.connection.cursor()
+        cursor.execute(f"""
+        INSERT INTO tasks (task_title, task_details, task_status, task_assigned_date, task_due_date, project_id)
+        VALUES ('{task_title}', '{task_details}', '{task_status}', '{task_assigned_date}', '{task_due_date}', '{project_id}')
+        """)
+        self.connection.commit()
+        return cursor.lastrowid
+
+    def update_user_in_project(self, project_user_id=0, project_id="", project_title="", user_id=0, username=""):
+        cursor = self.connection.cursor()
+        cursor.execute(f"""
+        INSERT INTO project_users (project_id, project_title, user_id, username)
+        VALUES ('{project_id}', '{project_title}', '{user_id}', '{username}')
+        """)
+        self.connection.commit()
+        return cursor.lastrowid
+
+    def update_assigned_task(self, assigned_task_id=0, task_id=0, task_title="", assigned_user_id=0, assigned_username="", project_id=0):
+        cursor = self.connection.cursor()
+        cursor.execute(f"""
+        INSERT INTO assigned_tasks (task_id, task_title, assigned_user_id, assigned_username, project_id)
+        VALUES ('{task_id}', '{task_title}', '{assigned_user_id}', '{assigned_username}', '{project_id}') 
+        """)
+        self.connection.commit()
+        return cursor.lastrowid
+
+    def delete_user(self, user_id=0, username=""):
+        cursor = self.connection.cursor()
+        cursor.execute(f"""
+        DELETE FROM users
+        WHERE username = '{username}' OR user_id = {user_id}
+        """)
+        self.connection.commit()
+        return cursor.lastrowid
+
+    def delete_project(self, project_id):
+        cursor = self.connection.cursor()
+        cursor.execute(f"""
+        DELETE FROM projects 
+        WHERE project_id = {project_id}
+        """)
+        self.connection.commit()
+        return cursor.lastrowid
+
+    def delete_task(self, task_id=0, task_title="", project_id=0):
+        cursor = self.connection.cursor()
+        cursor.execute(f"""
+        DELETE FROM tasks 
+        WHERE task_id = {task_id} OR task_title = '{task_title}' AND project_id = {project_id}
+        """)
+        self.connection.commit()
+        return cursor.lastrowid
+
+    def remove_user_from_project(self, project_user_id=0, project_id=0, user_id=0, username=""):
+        cursor = self.connection.cursor()
+        cursor.execute(f"""
+        DELETE FROM project_users 
+        WHERE project_user_id = {project_user_id} AND project_id = {project_id} AND user_id = {user_id} OR username = '{username}'
+        """)
+        self.connection.commit()
+        return cursor.lastrowid
+
+    def remove_assigned_task(self, assigned_task_id=0, task_id=0, assigned_user_id=0, project_id=0):
+        cursor = self.connection.cursor()
+        cursor.execute(f"""
+        DELETE FROM assigned_tasks
+        WHERE assigned_task_id = {assigned_task_id} OR task_id = {task_id} AND assigned_user_id = {assigned_user_id} AND project_id = {project_id}
+        """)
+        self.connection.commit()
+        return cursor.lastrowid
+
