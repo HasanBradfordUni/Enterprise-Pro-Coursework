@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template, Blueprint
+from flask import Flask, request, jsonify, render_template, Blueprint, redirect, url_for, flash
 from use_database import databaseManager
 from datetime import datetime
 from search_sort import listOperationsManager
@@ -11,11 +11,18 @@ class myClass():
         self.user_logged_in = False
         self.deleted_tasks = []
         router('/')(self.index)
-        router('/databaseConnect')(self.databaseConnect)
-        router('/databaseCommand')(self.databaseCommand)
         router('/supervisor')(self.supervisor)
         router('/tasks')(self.tasks)
-        router('/create_task')(self.create_task)
+        router('/create_task', methods=['POST'])(self.create_task)
+        router('/sort_tasks')(self.sort_tasks)
+        router('/filter_tasks')(self.filter_tasks)
+        router('/update_progress')(self.update_progress)
+        router('/edit_task')(self.edit_task)
+        router('/delete_task')(self.delete_task)
+        router('/show_deleted_tasks')(self.show_deleted_tasks)
+        router('/assign_users')(self.assign_users)
+        router('/search_tasks')(self.search_tasks)
+        router('/login', methods=['GET', 'POST'])(self.login)
         self.database = databaseManager()
         self.list_operation_manager = listOperationsManager()
         self.database.create_connection(os.path.join(os.getcwd(), 'Code/database.db'))
@@ -24,42 +31,28 @@ class myClass():
  
     def index(self):
         return render_template('index.html')
-     
+
     def login(self):
         form = LoginForm()
         username = form.username.data
         password = form.password.data
         if form.validate_on_submit():
-           thisUser = self.database.find_user(username)
-           if thisUser:
-               # Check the password
-               if user.password == password:
-                   return redirect(url_for('index'))
-               else:
-                   flash("Password incorrect, please try again.")
-                   return redirect(url_for('login'))
-           else:
-               flash("That email does not exist, please try again.")
-               return redirect(url_for('login'))
-          return render_template("login.html", form=form)
+            thisUser = self.database.find_user(username=username)
+            if thisUser:
+                # Check the password
+                if thisUser.password == password:
+                    return redirect(url_for('index'))
+                else:
+                    print("Password incorrect, please try again.")
+                    return render_template("login.html", form=form, message="Password incorrect, please try again.")
+            else:
+                print("User does not exist, please try again.")
+                return render_template("login.html", form=form, message="User does not exist, please try again.")
+        return render_template("login.html", form=form)
 
     def load_tasks(self):
-        tasks = self.database.get_tasks(project_id=self.project_id)
+        tasks = self.database.get_all_from_table("tasks")
         return tasks
-
-    def databaseConnect(self):
-        return render_template('dataScreen.html')
-    
-    def databaseCommand(self):
-        query = request.form['sqlQuery']
-        print("Database Path:", os.path.abspath("database.db"))
-        #get the path of the current working directory
-        filepath = os.path.join(os.getcwd(), 'Code/database.db')
-        thisDatabase = databaseManager()
-        databaseConnection = thisDatabase.create_connection(filepath)
-        result = thisDatabase.execute_query(query)
-        databaseConnection.close()
-        return render_template('dataScreen.html', result=result)
 
     def supervisor(self):
         return render_template('SupervisorHomePage.html')
@@ -113,11 +106,14 @@ class myClass():
     def assign_users(self, user_ids, task_id):
         thisTask = self.database.find_task(task_id=task_id)
         for user_id in user_ids:
-            thisUser = self.database.get_user(user_id=user_id)
+            thisUser = self.database.find_user(user_id=user_id)
             self.database.add_assigned_task(task_id=task_id, task_title=thisTask["title"], assigned_user_id=user_id, assigned_username=thisUser["username"], project_id=thisTask["project_id"])
         tasks = self.load_tasks()
-        assigned_tasks = self.database.get_assigned_tasks(project_id=self.project_id)
-        return render_template('tasks.html', tasks=tasks, assigned_users=assigned_tasks)
+        assigned_tasks = self.database.get_all_from_table("assigned_tasks")
+        assigned_users = []
+        for task in assigned_tasks:
+            assigned_users.append({task["task_id"]: task["assigned_username"]})
+        return render_template('tasks.html', tasks, assigned_users)
         
 app = Flask(__name__)
 myObj = myClass( app.route )
