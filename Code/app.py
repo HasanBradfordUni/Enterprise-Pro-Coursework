@@ -88,6 +88,48 @@ class myClass():
         task_updates = [{"project_id": project_id, "progress_update": update, "date": datetime.now().strftime("%d-%m-%Y %H:%M")}]
         return render_template('tasks.html', taskUpdates=task_updates)
     
+    """search_projects(search_term: string)
+filter_projects(filter_type: string)
+sort_projects(sort_type: string)
+add_user_to_project(user_id: int, project_id: int)
+remove_user_from_project(user_id: int, project_id: int)
+edit_project(project_id:int)
+delete_project(project_id: int)"""
+
+    def search_projects(self, search_term):
+        projects = self.database.get_all_from_table("projects")
+        project_titles = [project["title"] for project in projects]
+        search_results = self.binary_search(project_titles, search_term)
+        return render_template('projects.html', projects=search_results)
+    
+    def filter_projects(self, filter_type):
+        projects = self.database.get_all_from_table("projects")
+        filtered_projects = self.list_operation_manager.filter_data(projects, filter_type)
+        return render_template('projects.html', projects=filtered_projects)
+    
+    def sort_projects(self, sort_type):
+        projects = self.database.get_all_from_table("projects")
+        sorted_projects = self.list_operation_manager.categorise_data(projects, sort_type)
+        return render_template('projects.html', projects=sorted_projects)
+
+    def add_user_to_project(self, user_id, project_id):
+        pass
+
+    def remove_user_from_project(self, user_id, project_id):
+        pass
+
+    def edit_project(self, project_id):
+        self.database.edit_task(project_id=project_id)
+        projects = self.database.get_all_from_table("projects")
+        return render_template('projects.html', projects=projects)
+
+    def delete_project(self, project_id):
+        deleted_project = self.database.find_task(project_id=project_id)
+        self.database.remove_project(project_id=project_id)
+        self.deleted_projects.append(deleted_project)
+        projects = self.load_projects()
+        return render_template('projects.html', projects=projects)
+
     def edit_task(self, task_id):
         self.database.edit_task(task_id=task_id)
         tasks = self.load_tasks()
