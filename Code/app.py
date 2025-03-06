@@ -14,7 +14,7 @@ class myClass():
         router('/databaseCommand')(self.databaseCommand)
         router('/supervisor')(self.supervisor)
         router('/tasks')(self.tasks)
-        router('/create_task')(self.create_task)
+        router('/create_task', methods=['POST'])(self.create_task)
         self.database = databaseManager()
         self.list_operation_manager = listOperationsManager()
         self.database.create_connection(os.path.join(os.getcwd(), 'Code/database.db'))
@@ -55,7 +55,7 @@ class myClass():
         search_results = self.binary_search(task_titles, search_term)
         return render_template('tasks.html', tasks=search_results)
 
-    def create_task(self):
+    def create_task(self, methods):
         task_title = request.form['todo-input']
         self.database.add_task(task_title, task_title, "New", datetime.now().strftime("%d-%m-%Y %H:%M"), datetime.now().strftime("%d-%m-%Y %H:%M"), self.project_id)
         tasks = self.load_tasks()
@@ -86,7 +86,7 @@ class myClass():
         self.database.remove_task(task_id=task_id)
         self.deleted_tasks.append(deleted_task)
         tasks = self.load_tasks()
-        return render_template('tasks.html', tasks=tasks)
+        return render_template('tasks.html', tasks=tasks)   
     
     def show_deleted_tasks(self):
         return render_template('tasks.html', deleted_tasks=self.deleted_tasks)
