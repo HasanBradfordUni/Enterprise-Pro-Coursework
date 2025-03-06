@@ -362,4 +362,12 @@ button:hover {
     background-color: white;
     border-radius: 5px;
 }
-                                                                                         
+.label{
+    text-size-adjust: 0.5;
+}                                                                                         
+
+.todo-input{
+    position: relative;
+    margin-left: 45px;
+    width: 15%;
+}

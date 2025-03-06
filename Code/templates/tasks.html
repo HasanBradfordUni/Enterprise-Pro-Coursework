@@ -16,17 +16,27 @@
 <body>
     <header>
         <h1>Tasks to complete</h1>
-        <h2>Project: Website development</h2>
+        <h2>Project: {{ project.title }}</h2>
     </header>
+        <h2> Add new task</h2>
     <form action="/create_task", method="post">
-        <input type="text" class="todo-input">
+        <label for="task-title">Title of New task</label>
+        <input type="text" class="todo-input" id="task-title">
+        <label for="task-details">Details of New task</label>
+        <input type="text" class="todo-input" id="task-details">
+        <label for="task-due-date">Due Date of New task</label>
+        <input type="datetime" class="todo-input" id="task-due-date">
         <button class="todo-button" type="submit">
             <i class="fas fa-plus-circle fa-lg"></i>
         </button>
+    </form>
+    <form>
         <div class="select-headings">
             <h3 class="filter-heading"> Filter Options </h3>
             <h3 class="sort-heading"> Sort Options </h3>
         </div>
+    </form>
+    <form>
         <div class="select">
             <select name="todos" id="" class="filter-todo">
                 <option value="all">All</option>
