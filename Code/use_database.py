@@ -113,7 +113,6 @@ class databaseManager:
             FOREIGN KEY (task_id) REFERENCES tasks (task_id),
             FOREIGN KEY (assigned_user_id) REFERENCES users (user_id),
             FOREIGN KEY (project_id) REFERENCES projects (project_id),
-            FOREIGN KEY (task_title) REFERENCES tasks (task_title),
             FOREIGN KEY (assigned_username) REFERENCES users (username)
         );
         """

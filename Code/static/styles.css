@@ -253,7 +253,7 @@ button:hover {
 }
 
 .todo-container {
-    display: flex;
+    display: block;
     justify-content: center;
     align-items: center;
 }
@@ -363,7 +363,6 @@ button:hover {
     margin-right: 22%;
 }
     
-
 .task-box{
     width: 75%;
     margin: auto;
@@ -371,7 +370,10 @@ button:hover {
     color: black;
     background-color: white;
     border-radius: 5px;
+    margin-bottom: 20px;
+    padding: 10px;
 }
+
 .label{
     text-size-adjust: 0.5;
 }                                                                                         

@@ -112,7 +112,7 @@ class myClass():
         task_title = request.form['task-title']
         task_details = request.form['task-details']
         print(request.form['task-due-date'])
-        due_date = datetime.now() + timedelta(days=10)
+        due_date = datetime.strptime(request.form['task-due-date'], "%Y-%m-%d")
         task_due_date = due_date.strftime("%d-%m-%Y")
         task_assigned_date = datetime.now().strftime("%d-%m-%Y")
         task_status = 'New'

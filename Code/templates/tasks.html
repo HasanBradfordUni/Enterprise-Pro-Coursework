@@ -67,12 +67,32 @@
             <h4>Assigned date: {{ task[4] }}</h4>
             <h4>Due date: {{ task[3] }}</h4>
         </div>
+        <br>
         {% endfor %}
     </div>
 
     <footer>
         <p>&copy; 2025 Enterprise Pro Task Management System</p>
     </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentTasks = JSON.parse('{{ tasks|tojson|escapejs }}');
+            const assignedUsers = JSON.parse('{{ assigned_users|tojson|escapejs }}');
+            
+            currentTasks.forEach(task => {
+                const taskBox = document.querySelector(`.task-box:has(h1:contains("${task[1]}"))`);
+                if (taskBox) {
+                    const assignedToParagraph = taskBox.querySelector('p:contains("Assigned To:")');
+                    const assignedUsersList = assignedUsers
+                        .filter(user => user[4] === task[0])
+                        .map(user => user[3])
+                        .join(', ');
+                    assignedToParagraph.textContent = `Assigned To: ${assignedUsersList}`;
+                }
+            });
+        });
+    </script>
     
 </body>
 </html>
