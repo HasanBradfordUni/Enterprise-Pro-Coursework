@@ -21,6 +21,14 @@
     <body>
         <header>
             <h1>YHROCU Task Management System</h1>
+            <div class="menuBar">
+                <ul class="nav">
+                  <li class="nav" id="currentPage">
+                    <a class="nav" href="{{ url_for('index') }}">Home</a>
+                  </li>
+                  <li class="nav"><a class="nav" id="login-logout-btn" href="{{ url_for('login') }}">Login</a></li>
+                </ul>
+            </div>
         </header>
 
         <form action="/search" method="get">
@@ -71,5 +79,23 @@
         <footer>
             <p>&copy; 2025 Enterprise Pro Task Management System</p>
         </footer>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var loginLogoutBtn = document.getElementById('login-logout-btn');
+                fetch("{{ url_for('get_user_status') }}")
+                    .then(response => response.json())
+                    .then(data => {
+                    var isLoggedIn = data[0];
+                    if (isLoggedIn) {
+                        loginLogoutBtn.textContent = 'Log out';
+                        loginLogoutBtn.href = "{{ url_for('logout') }}";
+                    } else {
+                        loginLogoutBtn.textContent = 'Login';
+                        loginLogoutBtn.href = "{{ url_for('login') }}";
+                    }
+                });
+            });
+        </script>
     </body>
 </html>

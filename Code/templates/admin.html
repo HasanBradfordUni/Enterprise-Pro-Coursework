@@ -3,12 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Management System</title>
+    <title>YHROCU Admin Page</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <header>
-        <h1>Task Management System</h1>
+        <h1>Configure admin settings for the YHROCU Task Management System</h1>
+        <div class="menuBar">
+            <ul class="nav">
+              <li class="nav" id="currentPage">
+                <a class="nav" href="{{ url_for('index') }}">Home</a>
+              </li>
+              <li class="nav"><a class="nav" id="login-logout-btn" href="{{ url_for('login') }}">Login</a></li>
+            </ul>
+        </div>
     </header>
 <section id="create-project">
     <h2>Create Project</h2>
@@ -69,5 +77,23 @@
 <footer>
     <p>&copy; 2025 Enterprise Pro Task Management System</p>
 </footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var loginLogoutBtn = document.getElementById('login-logout-btn');
+        fetch("{{ url_for('get_user_status') }}")
+            .then(response => response.json())
+            .then(data => {
+            var isLoggedIn = data[0];
+            if (isLoggedIn) {
+                loginLogoutBtn.textContent = 'Log out';
+                loginLogoutBtn.href = "{{ url_for('logout') }}";
+            } else {
+                loginLogoutBtn.textContent = 'Login';
+                loginLogoutBtn.href = "{{ url_for('login') }}";
+            }
+        });
+    });
+</script>
 </body>
 </html>

@@ -24,6 +24,11 @@
 | 0bd9795bb4e8b1b55265cb2b7ab71a2d769324cc | v1.2.1 | Development changes with Supervisor Home Page and ensuring it works with Flask app | app.py, styles.css, SupervisorHomePage.html, index.html | Hamza |
 | 4a8b3ae91d5fe411db5308b28d49dba0b24ce32a | v1.2.1 | Drafting version history documentation | versions-releases.md [This document] | Hasan |
 | 080455bcf04d0a45bb4fe5b3133b7ba513dbc87a | v1.2.1 | Updating version history documentation | versions-releases.md [This document] | Hasan |
+| 025335a86a558b76df42eb30a646543a346f2a58 | SS1 | Wrote back-end searching and sorting methods | search-sort.py | Ehtesham |
+| 25b33774c346c61e434130788b1ed9cdf9e12701 | v1.2.2 | Merge this version (SS1) with main code (V1.2) | search-sort.py | Ehtesham |
+| a5258007d62c321c5caba5a6a6bf0d13c067fa53 | v1.2.3 | Reorganising files and making sure database works | [To fill in] | Hasan |
+| efe6f1f936daca60a51b6ca0349769f2f5f9aa2d | v1.2.3 | Updating Readme and version history documentation | [To fill in] | Hasan |
+| bd25e0798a8db893ff1d8cf1b2a772030cc9762b | v1.2.3 | Another updae to the Readme, code still at same version | [To fill in] | Hasan |
 
 <hr>
 

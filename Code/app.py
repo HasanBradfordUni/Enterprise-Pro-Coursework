@@ -38,6 +38,8 @@ class myClass():
         router('/create_user', methods=['GET', 'POST'])(self.create_user)
         router('/admin')(self.admin)
         router('/passwordReset')(self.passwordReset)
+        router('/logout')(self.logout)
+        router('/get_user_status', methods=['GET'])(self.get_user_status)
         self.database = databaseManager()
         self.list_operation_manager = listOperationsManager()
         self.database.create_connection(os.path.join(os.getcwd(), 'Code/database.db'))
@@ -47,12 +49,23 @@ class myClass():
         self.user_role = "user"
  
     def index(self):
+        if not self.user_logged_in:
+            return redirect(url_for('login'))
+        elif self.user_role == "admin":
+            return redirect(url_for('admin'))
+        elif self.user_role == "supervisor":
+            return redirect(url_for('supervisor'))
         projects = self.database.get_all_from_table("projects")
         tasks = self.database.get_all_from_table("tasks")
+        users_in_projects = self.database.get_all_from_table("project_users")
         project_tasks = []
+        assigned_projects = []
         for project in projects:
-            project_tasks.append({project[1]: [task[1] for task in tasks if task[6] == project[0]]})
-        return render_template('index.html', projects=projects, project_tasks=project_tasks)
+            for project_user in users_in_projects:
+                if project_user[1] == project[0] and project_user[3] == self.user_id:
+                    assigned_projects.append(project)
+                    project_tasks.append({project[1]: [task[1] for task in tasks if task[6] == project[0]]})
+        return render_template('index.html', projects=assigned_projects, project_tasks=project_tasks)
 
     def login(self):
         form = LoginForm()
@@ -60,11 +73,9 @@ class myClass():
         password = form.password.data
         if form.validate_on_submit():
             thisUser = self.database.find_user(username=username)
-            print(thisUser)
             if thisUser:
                 # Check the password
                 if check_password_hash(thisUser[2], password) or password == thisUser[2]:
-                    print("Login successful")
                     self.user_logged_in = True
                     self.user_id = thisUser[0]
                     self.user_role = thisUser[3]
@@ -85,7 +96,8 @@ class myClass():
         pass
 
     def supervisor(self):
-        return render_template('SupervisorHomePage.html')
+        projects = self.database.get_all_from_table("projects")
+        return render_template('SupervisorHomePage.html', projects=projects)
     
     def admin(self):
         form = CreateProjectForm()
@@ -220,7 +232,7 @@ class myClass():
     
     def delete_task(self, task_id):
         deleted_task = self.database.find_task(task_id=task_id)
-        self.database.remove_task(task_id=task_id)
+        self.database.delete_task(task_id=task_id)
         self.deleted_tasks.append(deleted_task)
         tasks = self.load_tasks()
         return render_template('tasks.html', tasks=tasks)   
@@ -234,6 +246,15 @@ class myClass():
             thisUser = self.database.find_user(user_id=user_id)
             self.database.add_assigned_task(task_id=task_id, task_title=thisTask[1], assigned_user_id=user_id, assigned_username=thisUser[1], project_id=thisTask[6])
         return redirect(url_for('tasks'))
+
+    def get_user_status(self):
+        return [self.user_logged_in, self.user_id, self.user_role]
+    
+    def logout(self):
+        self.user_logged_in = False
+        self.user_id = 0
+        self.user_role = "user"
+        return redirect(url_for('index'))
         
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'randomString'
