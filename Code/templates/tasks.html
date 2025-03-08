@@ -19,7 +19,7 @@
         <h2>Project: {{ project[1] }}</h2>
     </header>
         <h2 class="centered-heading">Add new task</h2>
-    <form action="/create_task", method="post">
+    <form action="/create_task" method="post">
         <label for="task-title">Title of New task</label>
         <input type="text" class="todo-input" id="task-title" name="task-title">
         <label for="task-details">Details of New task</label>
@@ -59,13 +59,13 @@
         <p>No tasks found</p>
         {% endif %}
         {% for task in tasks %}
-        <div class="task-box">
+        <div class="task-box" data-task-id="{{ task[0] }}">
             <h1>Title: {{ task[1] }}</h1>
             <h3>Details: {{ task[2] }} </h3>
-            <p>Status: {{ task[5] }}</p>
-            <p>Assigned To: Unknown</p>
+            <p>Status: {{ task[3] }}</p>
+            <p class="assigned-users">Assigned To: Unknown</p>
             <h4>Assigned date: {{ task[4] }}</h4>
-            <h4>Due date: {{ task[3] }}</h4>
+            <h4>Due date: {{ task[5] }}</h4>
         </div>
         <br>
         {% endfor %}
@@ -77,18 +77,20 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const currentTasks = JSON.parse('{{ tasks|tojson|escapejs }}');
-            const assignedUsers = JSON.parse('{{ assigned_users|tojson|escapejs }}');
+            const currentTasks = JSON.parse('{{ tasks|tojson }}');
+            const assignedUsers = JSON.parse('{{ assigned_tasks|tojson }}');
             
             currentTasks.forEach(task => {
-                const taskBox = document.querySelector(`.task-box:has(h1:contains("${task[1]}"))`);
+                const taskBox = document.querySelector(`.task-box[data-task-id="${task[0]}"]`);
                 if (taskBox) {
-                    const assignedToParagraph = taskBox.querySelector('p:contains("Assigned To:")');
+                    const assignedToParagraph = taskBox.querySelector('.assigned-users');
                     const assignedUsersList = assignedUsers
-                        .filter(user => user[4] === task[0])
-                        .map(user => user[3])
+                        .filter(user => user[1] === task[0])
+                        .map(user => user[4])
                         .join(', ');
-                    assignedToParagraph.textContent = `Assigned To: ${assignedUsersList}`;
+                    if (assignedUsersList) {
+                        assignedToParagraph.innerHTML = `Assigned To: ${assignedUsersList}`;
+                    }
                 }
             });
         });

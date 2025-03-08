@@ -116,7 +116,7 @@ class myClass():
         task_due_date = due_date.strftime("%d-%m-%Y")
         task_assigned_date = datetime.now().strftime("%d-%m-%Y")
         task_status = 'New'
-        self.database.add_task(task_title, task_details, task_due_date, task_assigned_date, task_status, self.project_id)
+        self.database.add_task(task_title, task_details, task_status, task_assigned_date, task_due_date, self.project_id)
         return redirect(url_for('tasks'))
     
     def sort_tasks(self, sort_type):
@@ -233,12 +233,7 @@ class myClass():
         for user_id in user_ids:
             thisUser = self.database.find_user(user_id=user_id)
             self.database.add_assigned_task(task_id=task_id, task_title=thisTask[1], assigned_user_id=user_id, assigned_username=thisUser[1], project_id=thisTask[6])
-        tasks = self.load_tasks()
-        assigned_tasks = self.database.get_all_from_table("assigned_tasks")
-        assigned_users = []
-        for task in assigned_tasks:
-            assigned_users.append({task[1]: task[4]})
-        return render_template('tasks.html', tasks, assigned_users)
+        return redirect(url_for('tasks'))
         
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'randomString'
