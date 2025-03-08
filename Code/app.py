@@ -37,6 +37,7 @@ class myClass():
         router('/delete_project')(self.delete_project)
         router('/create_user', methods=['GET', 'POST'])(self.create_user)
         router('/admin')(self.admin)
+        router('/passwordReset')(self.passwordReset)
         self.database = databaseManager()
         self.list_operation_manager = listOperationsManager()
         self.database.create_connection(os.path.join(os.getcwd(), 'Code/database.db'))
@@ -79,6 +80,9 @@ class myClass():
     def load_tasks(self):
         tasks = self.database.get_all_from_table("tasks")
         return tasks
+
+    def passwordReset(self):
+        pass
 
     def supervisor(self):
         return render_template('SupervisorHomePage.html')
