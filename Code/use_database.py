@@ -10,8 +10,10 @@ class databaseManager:
         try:
             connection = sqlite3.connect(path, check_same_thread=False)
             self.connection = connection
-            return "self.connection to SQLite DB successful"
+            #print(self.connection)
+            return "connection to SQLite DB successful"
         except Error as e:
+            #print(self.connection)
             return f"The error '{e}' occurred"
     
     def get_last_row_id(self, table_name):
@@ -130,7 +132,7 @@ class databaseManager:
     def add_user(self, username, password, role, team):
         cursor = self.connection.cursor()
         cursor.execute(f"""
-        INSERT INTO user_input (username, password, role, team)
+        INSERT INTO users (username, password, role, team)
         VALUES ('{username}', '{password}', '{role}', '{team}')
         """)
         self.connection.commit()

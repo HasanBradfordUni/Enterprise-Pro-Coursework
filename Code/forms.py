@@ -2,12 +2,15 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, SubmitField, SelectField
 from wtforms.validators import DataRequired, ValidationError
 from use_database import databaseManager
+import os
 
 thisDatabase = databaseManager()
+thisDatabase.create_connection(os.path.join(os.getcwd(), 'Code/database.db'))
 
-def validate_project_owner(field):
-    thisUser = thisDatabase.find_user(field.data)
+def validate_project_owner(form, field):
+    thisUser = thisDatabase.find_user(username=field.data)
     if not thisUser:
+        print('User does not exist')
         raise ValidationError('User does not exist')
 
 class LoginForm(FlaskForm):

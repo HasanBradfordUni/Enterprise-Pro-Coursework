@@ -1,9 +1,12 @@
-from flask import Flask, request, jsonify, render_template, Blueprint, redirect, url_for, flash
-from use_database import databaseManager
+from flask import Flask, request, jsonify, render_template, Blueprint, redirect, url_for
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_wtf import CSRFProtect
 from datetime import datetime
-from search_sort import listOperationsManager
-from forms import LoginForm
 import os
+
+from use_database import databaseManager
+from search_sort import listOperationsManager
+from forms import LoginForm, CreateUserForm, UpdateUserDetailsForm, CreateProjectForm, UpdateProgressForm, EditTaskForm
  
 class myClass():
     def __init__(self, router):
@@ -13,7 +16,7 @@ class myClass():
         router('/')(self.index)
         router('/supervisor')(self.supervisor)
         router('/tasks')(self.tasks)
-        router('/create_task', methods=['POST'])(self.create_task)
+        router('/create_task', methods=['GET', 'POST'])(self.create_task)
         router('/sort_tasks')(self.sort_tasks)
         router('/filter_tasks')(self.filter_tasks)
         router('/update_progress')(self.update_progress)
@@ -23,14 +26,27 @@ class myClass():
         router('/assign_users')(self.assign_users)
         router('/search_tasks')(self.search_tasks)
         router('/login', methods=['GET', 'POST'])(self.login)
+        router('/search_projects')(self.search_projects)
+        router('/filter_projects')(self.filter_projects)
+        router('/sort_projects')(self.sort_projects)
+        router('/add_user_to_project')(self.add_user_to_project)
+        router('/remove_user_from_project')(self.remove_user_from_project)
+        router('/create_project', methods=['GET', 'POST'])(self.create_project)
+        router('/edit_project')(self.edit_project)
+        router('/delete_project')(self.delete_project)
+        router('/create_user', methods=['GET', 'POST'])(self.create_user)
+        router('/admin')(self.admin)
         self.database = databaseManager()
         self.list_operation_manager = listOperationsManager()
         self.database.create_connection(os.path.join(os.getcwd(), 'Code/database.db'))
         self.database.create_tables()
         self.project_id = 1
+        self.user_id = 0
+        self.user_role = "user"
  
     def index(self):
-        return render_template('index.html')
+        projects = self.database.get_all_from_table("projects")
+        return render_template('index.html', projects=projects)
 
     def login(self):
         form = LoginForm()
@@ -38,9 +54,14 @@ class myClass():
         password = form.password.data
         if form.validate_on_submit():
             thisUser = self.database.find_user(username=username)
+            print(thisUser)
             if thisUser:
                 # Check the password
-                if thisUser.password == password:
+                if check_password_hash(thisUser[2], password) or password == thisUser[2]:
+                    print("Login successful")
+                    self.user_logged_in = True
+                    self.user_id = thisUser[0]
+                    self.user_role = thisUser[3]
                     return redirect(url_for('index'))
                 else:
                     print("Password incorrect, please try again.")
@@ -56,10 +77,18 @@ class myClass():
 
     def supervisor(self):
         return render_template('SupervisorHomePage.html')
+    
+    def admin(self):
+        form = CreateProjectForm()
+        form1 = CreateUserForm()
+        return render_template('admin.html', form=form, form1=form1)
 
     def tasks(self):
         tasks = self.load_tasks()
-        return render_template('tasks.html', tasks=tasks)
+        project = self.database.find_project(project_id=self.project_id)
+        task_updates = self.database.get_all_from_table("task_updates")
+        assigned_tasks = self.database.get_all_from_table("assigned_tasks")
+        return render_template('tasks.html', tasks=tasks, project=project, task_updates=task_updates, assigned_tasks=assigned_tasks)
     
     def search_tasks(self, search_term):
         tasks = self.load_tasks()
@@ -67,9 +96,13 @@ class myClass():
         search_results = self.binary_search(task_titles, search_term)
         return render_template('tasks.html', tasks=search_results)
 
-    def create_task(self, methods):
-        task_title = request.form['todo-input']
-        self.database.add_task(task_title, task_title, "New", datetime.now().strftime("%d-%m-%Y %H:%M"), datetime.now().strftime("%d-%m-%Y %H:%M"), self.project_id)
+    def create_task(self):
+        task_title = request.form['task-title']
+        task_details = request.form['task-details']
+        task_due_date = request.form['task-due-date']
+        task_assigned_date = datetime.now().strftime("%d-%m-%Y %H:%M")
+        task_status = 'New'
+        self.database.add_task(task_title, task_details, task_due_date, task_assigned_date, task_status, self.project_id)
         tasks = self.load_tasks()
         return render_template('tasks.html', tasks=tasks)
     
@@ -86,15 +119,7 @@ class myClass():
     def update_progress(self, project_id, update):
         self.database.add_task_update(project_id=project_id, progress_update=update)
         task_updates = [{"project_id": project_id, "progress_update": update, "date": datetime.now().strftime("%d-%m-%Y %H:%M")}]
-        return render_template('tasks.html', taskUpdates=task_updates)
-    
-    """search_projects(search_term: string)
-filter_projects(filter_type: string)
-sort_projects(sort_type: string)
-add_user_to_project(user_id: int, project_id: int)
-remove_user_from_project(user_id: int, project_id: int)
-edit_project(project_id:int)
-delete_project(project_id: int)"""
+        return render_template('tasks.html', taskUpdates=task_updates, )
 
     def search_projects(self, search_term):
         projects = self.database.get_all_from_table("projects")
@@ -118,10 +143,38 @@ delete_project(project_id: int)"""
     def remove_user_from_project(self, user_id, project_id):
         pass
 
+    def create_project(self):
+        form = CreateProjectForm()
+        if form.validate_on_submit():
+            project_title = form.project_title.data
+            project_details = form.project_details.data
+            project_status = form.project_status.data
+            project_review = form.project_review.data
+            project_owner = form.project_owner.data
+            rowId = self.database.add_project(project_title, project_details, project_status, project_review, project_owner)
+            if rowId:
+                print("Project added successfully")
+            return redirect(url_for('index'))
+        else:
+            print("Project not added")
+            print(form.errors)
+        return redirect(url_for('admin'))
+    
+    def create_user(self):
+        form = CreateUserForm()
+        username = form.username.data
+        password = form.password.data
+        role = form.role.data.lower()
+        team = form.team.data.lower()
+        hashed_password = generate_password_hash(password)
+        if form.validate_on_submit():
+            self.database.add_user(username, hashed_password, role, team)
+            return redirect(url_for('index'))
+        return redirect(url_for('admin'))
+
     def edit_project(self, project_id):
-        self.database.edit_task(project_id=project_id)
-        projects = self.database.get_all_from_table("projects")
-        return render_template('projects.html', projects=projects)
+        self.database.update_project(project_id=project_id)
+        return redirect(url_for('index'))
 
     def delete_project(self, project_id):
         deleted_project = self.database.find_task(project_id=project_id)
@@ -158,7 +211,7 @@ delete_project(project_id: int)"""
         return render_template('tasks.html', tasks, assigned_users)
         
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'randomString'
 myObj = myClass( app.route )
 app.register_blueprint(myObj.blueprint)
-app.config['SECRET_KEY'] = 'randomString'
 app.run(host='localhost', port=5000)

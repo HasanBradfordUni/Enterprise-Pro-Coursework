@@ -68,12 +68,14 @@ button:hover {
 }
 
 .login-container {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-            width: 300px;
-            text-align: center;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    text-align: center;
+    margin: 0 auto;
+    margin-top: 100px;
 }
 .login-container h2 {
     color: #007bff;
@@ -87,6 +89,12 @@ button:hover {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
+}
+.input-group label {
+    display: block;
+    text-align: left;
+    margin-left: 20px;
+    margin-bottom: 5px;
 }
 .checkbox-container {
     display: flex;

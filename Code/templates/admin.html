@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Management System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Task Management System</h1>
+    </header>
+<section id="create-project">
+    <h2>Create Project</h2>
+    <form action="{{ url_for('create_project') }}" method="POST" enctype="multipart/form-data">
+        {{ form1.hidden_tag() }}
+        <div class="form-group">
+            {{ form.project_title.label }}<br>
+            {{ form.project_title(size=32) }}
+        </div>
+        <div class="form-group">
+            {{ form.project_details.label }}<br>
+            {{ form.project_details(rows=4, cols=32) }}
+        </div>
+        <div class="form-group">
+            {{ form.project_status.label }}<br>
+            {{ form.project_status() }}
+        </div>
+        <div class="form-group">
+            {{ form.project_review.label }}<br>
+            {{ form.project_review() }}
+        </div>
+        <div class="form-group">
+            {{ form.project_owner.label }}<br>
+            {{ form.project_owner(size=32) }}
+        </div>
+        <div class="form-group">
+            {{ form.submit() }}
+        </div>
+    </form>
+</section>
+
+<!-- Add the form here -->
+<section id="create-user">
+    <h2>Create User</h2>
+    <form action="{{ url_for('create_user') }}" method="POST" enctype="multipart/form-data">
+        {{ form1.hidden_tag() }}
+        <div class="form-group">
+            {{ form1.username.label }}<br>
+            {{ form1.username(size=32) }}
+        </div>
+        <div class="form-group">
+            {{ form1.password.label }}<br>
+            {{ form1.password(size=32) }}
+        </div>
+        <div class="form-group">
+            {{ form1.role.label }}<br>
+            {{ form1.role() }}
+        </div>
+        <div class="form-group">
+            {{ form1.team.label }}<br>
+            {{ form1.team() }}
+        </div>
+        <div class="form-group">
+            {{ form1.submit() }}
+        </div>
+    </form>
+</section>
+<footer>
+    <p>&copy; 2025 Enterprise Pro Task Management System</p>
+</footer>
+</body>
+</html>
