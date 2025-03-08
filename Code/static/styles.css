@@ -12,8 +12,9 @@ header, footer {
     padding: 20px;
     text-align: center;
 }
+
 section#projects {
-    background-color: rgb(20, 26, 28);
+    background-color: white;
     padding: 20px;
     border-radius: 10px;
 }
@@ -76,6 +77,7 @@ button:hover {
     text-align: center;
     margin: 0 auto;
     margin-top: 100px;
+    margin-bottom: 100px;
 }
 .login-container h2 {
     color: #007bff;
@@ -85,7 +87,7 @@ button:hover {
     margin-bottom: 15px;
 }
 .input-group input {
-    width: 100%;
+    width: 90%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -93,7 +95,7 @@ button:hover {
 .input-group label {
     display: block;
     text-align: left;
-    margin-left: 20px;
+    margin-left: 50px;
     margin-bottom: 5px;
 }
 .checkbox-container {
@@ -378,4 +380,8 @@ button:hover {
     position: relative;
     margin-left: 45px;
     width: 15%;
+}
+
+.centered-heading {
+    text-align: center;
 }

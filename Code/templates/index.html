@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Management System</title>
+    <title>YHROCU Task Management System</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
@@ -12,24 +12,29 @@
     </header>
     <main>
         <section id="projects">
-            <h2>Projects</h2>
+            <h1>Your Projects</h1>
+            {% if projects|length == 0 %}
+            <p>No projects found</p>
+            {% endif %}
+            <!-- Add the projects dynamically here using jinja -->
+            {% for project in projects %}
             <div class="project">
-                <h3>Project 1</h3>
+                <h3>{{ project[1] }}</h3>
+                <p>{{ project[2] }}</p>
+                <h2>Project Status: {{ project[3] }}</h2>
+                <h2>Tasks</h2>
                 <ul class="tasks">
-                    <li>Task 1</li>
-                    <li>Task 2</li>
-                    <li>Task 3</li>
+                    {% if project_tasks[project[1]]|length == 0 %}
+                    <li>No tasks found</li>
+                    {% endif %}
+                    {% for task in project_tasks[project[1]] %}
+                    <li>{{ task }}</li>
+                    {% endfor %}
                 </ul>
+                <h3>Review due in {{ project[4] }}</h3>
+                <h3>Project owner: {{ project[5] }}</h3>
             </div>
-            <div class="project">
-                <h3>Project 2</h3>
-                <ul class="tasks">
-                    <li>Task 1</li>
-                    <li>Task 2</li>
-                    <li>Task 3</li>
-                </ul>
-            </div>
-            <!-- Add more projects as needed -->
+            {% endfor %}
         </section>
         <a href="{{ url_for('login') }}">
             <button>Go to login screen</button>

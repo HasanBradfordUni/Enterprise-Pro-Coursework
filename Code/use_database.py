@@ -419,7 +419,7 @@ class databaseManager:
         cursor = self.connection.cursor()
         cursor.execute(f"""
         DELETE FROM tasks 
-        WHERE task_id = {task_id} OR task_title = '{task_title}' AND project_id = {project_id}
+        WHERE task_id = {task_id} OR (task_title = '{task_title}' AND project_id = {project_id})
         """)
         self.connection.commit()
         return cursor.lastrowid
@@ -428,7 +428,7 @@ class databaseManager:
         cursor = self.connection.cursor()
         cursor.execute(f"""
         DELETE FROM project_users 
-        WHERE project_user_id = {project_user_id} AND project_id = {project_id} AND user_id = {user_id} OR username = '{username}'
+        WHERE project_user_id = {project_user_id} OR (project_id = {project_id} AND (user_id = {user_id} OR username = '{username}'))
         """)
         self.connection.commit()
         return cursor.lastrowid
@@ -437,7 +437,7 @@ class databaseManager:
         cursor = self.connection.cursor()
         cursor.execute(f"""
         DELETE FROM assigned_tasks
-        WHERE assigned_task_id = {assigned_task_id} OR task_id = {task_id} AND assigned_user_id = {assigned_user_id} AND project_id = {project_id}
+        WHERE assigned_task_id = {assigned_task_id} OR (task_id = {task_id} AND assigned_user_id = {assigned_user_id} AND project_id = {project_id})
         """)
         self.connection.commit()
         return cursor.lastrowid

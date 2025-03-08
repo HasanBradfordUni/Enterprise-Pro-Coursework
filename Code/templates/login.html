@@ -1,14 +1,15 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
-    <title>Log into the YHROCU Project Management System</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YHROCU Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-
-<h1>YHROCU</h1>
-<body>
- </style>
+    <header>
+        <h1>Log in to the YHROCU Task Management System</h1>
+    </header>
 
  <form action="{{ url_for('login') }}" method="POST" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
@@ -22,7 +23,7 @@
             </div>
             <div class="checkbox-container">
                 <label><input type="checkbox"> Remember me</label>
-                <a href="#">Forgot Password?</a>
+                <a href="{{ url_for('passwordReset') }}">Forgot Password?</a>
             </div>
             <input class="login-btn" type="submit" value="LOG IN">
             <input type="hidden" id="message" value="{{ message }}">
@@ -40,6 +41,8 @@
         showMessage(document.getElementById("message").value);
     }
 </script>
-
+<footer>
+    <p>&copy; 2025 Enterprise Pro Task Management System</p>
+</footer>
 </body>
 </html>
