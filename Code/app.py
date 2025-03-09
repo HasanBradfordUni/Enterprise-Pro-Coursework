@@ -1,12 +1,11 @@
-from flask import Flask, request, jsonify, render_template, Blueprint, redirect, url_for
+from flask import Flask, request, jsonify, render_template, Blueprint, redirect, url_for, flash
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_wtf import CSRFProtect
-from datetime import datetime, timedelta
+from datetime import datetime
 import os
 
 from use_database import databaseManager
 from search_sort import listOperationsManager
-from forms import LoginForm, CreateUserForm, UpdateUserDetailsForm, CreateProjectForm, UpdateProgressForm, EditTaskForm
+from forms import LoginForm, CreateUserForm, UpdateUserDetailsForm, CreateProjectForm, UpdateProgressForm, EditTaskForm, UsersInProjectsForm
  
 class myClass():
     def __init__(self, router):
@@ -30,7 +29,7 @@ class myClass():
         router('/search_projects')(self.search_projects)
         router('/filter_projects')(self.filter_projects)
         router('/sort_projects')(self.sort_projects)
-        router('/add_user_to_project')(self.add_user_to_project)
+        router('/add_user_to_project', methods=['GET', 'POST'])(self.add_user_to_project)
         router('/remove_user_from_project')(self.remove_user_from_project)
         router('/create_project', methods=['GET', 'POST'])(self.create_project)
         router('/edit_project')(self.edit_project)
@@ -40,6 +39,8 @@ class myClass():
         router('/passwordReset')(self.passwordReset)
         router('/logout')(self.logout)
         router('/get_user_status', methods=['GET'])(self.get_user_status)
+        router('/modify_user', methods=['GET', 'POST'])(self.modify_user)
+        router('/setProjectId/<int:project_id>')(self.setProjectId)
         self.database = databaseManager()
         self.list_operation_manager = listOperationsManager()
         self.database.create_connection(os.path.join(os.getcwd(), 'Code/database.db'))
@@ -66,6 +67,10 @@ class myClass():
                     assigned_projects.append(project)
                     project_tasks.append({project[1]: [task[1] for task in tasks if task[6] == project[0]]})
         return render_template('index.html', projects=assigned_projects, project_tasks=project_tasks)
+
+    def setProjectId(self, project_id):
+        self.project_id = project_id
+        return redirect(url_for('tasks'))
 
     def login(self):
         form = LoginForm()
@@ -96,13 +101,21 @@ class myClass():
         pass
 
     def supervisor(self):
+        if self.user_role != "supervisor":
+            flash("You are not authorised to view this page\nMust be a supervisor", "danger")
+            return redirect(url_for('index'))
         projects = self.database.get_all_from_table("projects")
         return render_template('SupervisorHomePage.html', projects=projects)
     
     def admin(self):
         form = CreateProjectForm()
         form1 = CreateUserForm()
-        return render_template('admin.html', form=form, form1=form1)
+        form2 = UpdateUserDetailsForm()
+        form3 = UsersInProjectsForm()
+        if self.user_role != "admin":
+            flash("You are not authorised to view this page\nMust be an admin", "danger")
+            return redirect(url_for('index'))
+        return render_template('admin.html', form=form, form1=form1, form2=form2, form3=form3)
 
     def tasks(self):
         tasks = self.load_tasks()
@@ -129,6 +142,8 @@ class myClass():
         task_assigned_date = datetime.now().strftime("%d-%m-%Y")
         task_status = 'New'
         self.database.add_task(task_title, task_details, task_status, task_assigned_date, task_due_date, self.project_id)
+        task_id = self.database.get_last_row_id("tasks")
+        self.database.add_assigned_task(task_id=task_id, task_title=task_title, assigned_user_id=self.user_id, assigned_username=self.database.find_user(user_id=self.user_id)[1], project_id=self.project_id)
         return redirect(url_for('tasks'))
     
     def sort_tasks(self, sort_type):
@@ -170,11 +185,21 @@ class myClass():
         sorted_projects = self.list_operation_manager.categorise_data(projects, sort_type)
         return render_template('projects.html', projects=sorted_projects)
 
-    def add_user_to_project(self, user_id, project_id):
-        project_title = self.database.find_project(project_id=project_id)[1]
-        username = self.database.find_user(user_id=user_id)[1]
-        self.database.add_user_into_project(project_id=project_id, user_id=user_id, project_title=project_title, username=username)
-        return redirect(url_for('index'))
+    def add_user_to_project(self):
+        form = UsersInProjectsForm()
+        if form.validate_on_submit():
+            project_title = form.project_title.data
+            usernames = form.username.data
+            project_id = self.database.find_project(project_title=project_title)[0]
+            for username in usernames:
+                user_id = self.database.find_user(username=username)[0]
+                rowId = self.database.add_user_into_project(project_id=project_id, user_id=user_id, project_title=project_title, username=username)
+            if rowId:
+                flash("User(s) added to selected project successfully", "success")
+            return redirect(url_for('index'))
+        else:
+            flash("User(s) not added to selected project", "danger")
+        return redirect(url_for('admin'))
 
     def remove_user_from_project(self, user_id, project_id):
         id = self.database.find_user_in_project(user_id=user_id, project_id=project_id)[0]
@@ -191,11 +216,10 @@ class myClass():
             project_owner = form.project_owner.data
             rowId = self.database.add_project(project_title, project_details, project_status, project_review, project_owner)
             if rowId:
-                print("Project added successfully")
+                flash("Project added successfully", "success")
             return redirect(url_for('index'))
         else:
-            print("Project not added")
-            print(form.errors)
+            flash("Project not added", "danger")
         return redirect(url_for('admin'))
     
     def create_user(self):
@@ -206,12 +230,10 @@ class myClass():
         team = form.team.data.lower()
         hashed_password = generate_password_hash(password)
         if form.validate_on_submit():
-            self.database.add_user(username, hashed_password, role, team)
-            print("User added successfully")
+            rowID = self.database.add_user(username, hashed_password, role, team)
+            if rowID:
+                flash("User added successfully", "success")
             return redirect(url_for('index'))
-        else:
-            print("User not added")
-            print(form.errors)
         return redirect(url_for('admin'))
 
     def edit_project(self, project_id):
@@ -225,17 +247,37 @@ class myClass():
         projects = self.database.get_all_from_table("projects")
         return render_template('projects.html', projects=projects)
 
+    def modify_user(self):
+        form = UpdateUserDetailsForm()
+        username = form.username.data
+        user = self.database.find_user(username=username)
+        user_id = user[0]
+        password = form.password.data
+        if password:
+            hashed_password = generate_password_hash(password)
+        else:
+            hashed_password = ""
+        role = form.role.data.lower()
+        if role == user[3]:
+            role = ""
+        team = form.team.data.lower()
+        if team == user[4]:
+            team = ""
+        if form.validate_on_submit():
+            self.database.update_user(user_id=user_id, password=hashed_password, role=role, team=team)
+            flash("User updated successfully", "success")
+            return redirect(url_for('index'))
+        return redirect(url_for('admin'))
+
     def edit_task(self, task_id):
-        self.database.edit_task(task_id=task_id)
-        tasks = self.load_tasks()
-        return render_template('tasks.html', tasks=tasks)
+        self.database.update_task(task_id=task_id)
+        return redirect(url_for('tasks'))
     
     def delete_task(self, task_id):
         deleted_task = self.database.find_task(task_id=task_id)
         self.database.delete_task(task_id=task_id)
         self.deleted_tasks.append(deleted_task)
-        tasks = self.load_tasks()
-        return render_template('tasks.html', tasks=tasks)   
+        return redirect(url_for('tasks')) 
     
     def show_deleted_tasks(self):
         return render_template('tasks.html', deleted_tasks=self.deleted_tasks)

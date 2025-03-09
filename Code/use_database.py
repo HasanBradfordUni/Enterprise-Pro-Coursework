@@ -339,7 +339,7 @@ class databaseManager:
     def update_user(self, user_id=0, username="", password="", role="", team=""):
         cursor = self.connection.cursor()
         updates = { "username": username, "password": password, "role": role, "team": team }
-        query = "UPDATE users SET " + ", ".join([f"{key} = '{value}'" for key, value in updates.items() if value])
+        query = "UPDATE users SET " + ", ".join([f"{key} = '{value}'" for key, value in updates.items() if value != ""])
         
         if user_id != 0:
             query += f" WHERE user_id = {user_id}"
@@ -353,7 +353,7 @@ class databaseManager:
     def update_project(self, project_id=0, project_title="", project_details="", project_status="", project_review="", project_owner=""):
         cursor = self.connection.cursor()
         updates = { "project_title": project_title, "project_details": project_details, "project_status": project_status, "project_review": project_review, "project_owner": project_owner }
-        query = "UPDATE projects SET " + ", ".join([f"{key} = '{value}'" for key, value in updates.items() if value])
+        query = "UPDATE projects SET " + ", ".join([f"{key} = '{value}'" for key, value in updates.items() if value != ""])
         query += f" WHERE project_id = {project_id}"
         cursor.execute(query)
         self.connection.commit()
@@ -362,7 +362,7 @@ class databaseManager:
     def update_task(self, task_id=0, task_title="", task_details="", task_status="", task_assigned_date="", task_due_date="", project_id=0):
         cursor = self.connection.cursor()
         updates = { "task_title": task_title, "task_details": task_details, "task_status": task_status, "task_assigned_date": task_assigned_date, "task_due_date": task_due_date, "project_id": project_id }
-        query = "UPDATE tasks SET " + ", ".join([f"{key} = {value}" if str(value).isdigit() else f"{key} = '{value}'" for key, value in updates.items() if value])
+        query = "UPDATE tasks SET " + ", ".join([f"{key} = {value}" if str(value).isdigit() and value != 0 else f"{key} = '{value}'" for key, value in updates.items() if value != ""])
         query += f" WHERE task_id = {task_id}"
         cursor.execute(query)
         self.connection.commit()
@@ -371,7 +371,7 @@ class databaseManager:
     def update_user_in_project(self, project_user_id=0, project_id=0, project_title="", user_id=0, username=""):
         cursor = self.connection.cursor()
         updates = { "project_title": project_title, "user_id": user_id, "username": username }
-        query = "UPDATE project_users SET " + ", ".join([f"{key} = {value}" if str(value).isdigit() else f"{key} = '{value}'" for key, value in updates.items() if value])
+        query = "UPDATE project_users SET " + ", ".join([f"{key} = {value}" if str(value).isdigit() and value != 0 else f"{key} = '{value}'" for key, value in updates.items() if value != ""])
         
         if project_user_id != 0:
             query += f" WHERE project_user_id = {project_user_id}"
@@ -385,7 +385,7 @@ class databaseManager:
     def update_assigned_task(self, assigned_task_id=0, task_id=0, task_title="", assigned_user_id=0, assigned_username="", project_id=0):
         cursor = self.connection.cursor()
         updates = { "assigned_user_id": assigned_user_id, "assigned_username": assigned_username, "task_title": task_title }
-        query = "UPDATE assigned_tasks SET " + ", ".join([f"{key} = '{value}'" for key, value in updates.items() if value])
+        query = "UPDATE assigned_tasks SET " + ", ".join([f"{key} = {value}" if str(value).isdigit() and value != 0 else f"{key} = '{value}'" for key, value in updates.items() if value != ""])
         
         if assigned_task_id != 0:
             query += f" WHERE assigned_task_id = {assigned_task_id}"

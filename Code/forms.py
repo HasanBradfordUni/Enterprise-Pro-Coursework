@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, SubmitField, SelectField
+from wtforms import StringField, TextAreaField, SubmitField, SelectField, SelectMultipleField
 from wtforms.validators import DataRequired, ValidationError
 from use_database import databaseManager
 import os
@@ -26,10 +26,18 @@ class CreateUserForm(FlaskForm):
     submit = SubmitField('Submit')
 
 class UpdateUserDetailsForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
-    password = StringField('Password', validators=[DataRequired()], render_kw={"type": "password"})
-    role = SelectField('Role', choices=[('User', 'User'), ('Supervisor', 'Supervisor'), ('Admin', 'Admin')], validators=[DataRequired()])
-    team = SelectField('Team', choices=[('Police', 'Police'), ('Intern', 'Intern'), ('Other', 'Other')], validators=[DataRequired()])
+    users = [(user[1], user[1]) for user in thisDatabase.get_all_from_table('users')]
+    username = SelectField('Username', choices=users, validators=[DataRequired()])
+    password = StringField('Password', render_kw={"type": "password"})
+    role = SelectField('Role', choices=[('User', 'User'), ('Supervisor', 'Supervisor'), ('Admin', 'Admin')])
+    team = SelectField('Team', choices=[('Police', 'Police'), ('Intern', 'Intern'), ('Other', 'Other')])
+    submit = SubmitField('Submit')
+
+class UsersInProjectsForm(FlaskForm):
+    users = [(user[1], user[1]) for user in thisDatabase.get_all_from_table('users')]
+    projects = [(project[1], project[1]) for project in thisDatabase.get_all_from_table('projects')]
+    project_title = SelectField('Project Title', choices=projects, validators=[DataRequired()])
+    username = SelectMultipleField('Username', choices=users, validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 class CreateProjectForm(FlaskForm):

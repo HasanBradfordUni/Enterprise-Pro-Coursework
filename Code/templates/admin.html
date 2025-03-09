@@ -18,7 +18,7 @@
             </ul>
         </div>
     </header>
-<section id="create-project">
+<section id="create-project" class="admin-form">
     <h2>Create Project</h2>
     <form action="{{ url_for('create_project') }}" method="POST" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
@@ -49,7 +49,7 @@
 </section>
 
 <!-- Add the form here -->
-<section id="create-user">
+<section id="create-user" class="admin-form">
     <h2>Create User</h2>
     <form action="{{ url_for('create_user') }}" method="POST" enctype="multipart/form-data">
         {{ form1.hidden_tag() }}
@@ -74,6 +74,61 @@
         </div>
     </form>
 </section>
+
+<section id="update-user-details" class="admin-form">
+    <h2>Update Details of an existing user</h2>
+    <form action="{{ url_for('modify_user') }}" method="POST" enctype="multipart/form-data">
+        {{ form2.hidden_tag() }}
+        <div class="form-group">
+            {{ form2.username.label }}<br>
+            {{ form2.username() }}
+        </div>
+        <div class="form-group">
+            {{ form2.password.label }}<br>
+            {{ form2.password(size=32) }}
+        </div>
+        <div class="form-group">
+            {{ form2.role.label }}<br>
+            {{ form2.role() }}
+        </div>
+        <div class="form-group">
+            {{ form2.team.label }}<br>
+            {{ form2.team() }}
+        </div>
+        <div class="form-group">
+            {{ form2.submit() }}
+        </div>
+    </form>
+</section>
+
+<section id="add-user-to-project" class="admin-form">
+    <h2>Add user(s) to project</h2>
+    <form action="{{ url_for('add_user_to_project') }}" method="POST" enctype="multipart/form-data">
+        {{ form3.hidden_tag() }}
+        <div class="form-group">
+            {{ form3.project_title.label }}<br>
+            {{ form3.project_title() }}
+        </div>
+        <div class="form-group">
+            {{ form3.username.label }}<br>
+            {{ form3.username() }}
+        </div>
+        <div class="form-group">
+            {{ form3.submit() }}
+        </div>
+    </form>
+</section>
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="hidden-messages">
+    {% for message in messages %}
+        <p id="hidden-message">{{ message }}</p>
+    {% endfor %}
+{% endif %}
+{% endwith %}
+</div>
+<br>
 <footer>
     <p>&copy; 2025 Enterprise Pro Task Management System</p>
 </footer>
@@ -93,6 +148,11 @@
                 loginLogoutBtn.href = "{{ url_for('login') }}";
             }
         });
+
+        var hiddenMessage = document.getElementById('hidden-message');
+            if (hiddenMessage) {
+                alert(hiddenMessage.textContent);
+            }
     });
 </script>
 </body>

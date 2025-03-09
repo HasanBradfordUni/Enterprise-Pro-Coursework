@@ -44,6 +44,15 @@
             </div>
             {% endfor %}
         </section>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <div class="hidden-messages">
+                {% for message in messages %}
+                    <p id="hidden-message">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        </div>
         <a href="{{ url_for('login') }}">
             <button>Go to login screen</button>
         </a>
@@ -61,17 +70,22 @@
         document.addEventListener('DOMContentLoaded', function() {
             var loginLogoutBtn = document.getElementById('login-logout-btn');
             fetch("{{ url_for('get_user_status') }}")
-                .then(response => response.json())
-                .then(data => {
-                var isLoggedIn = data[0];
-                if (isLoggedIn) {
-                    loginLogoutBtn.textContent = 'Log out';
-                    loginLogoutBtn.href = "{{ url_for('logout') }}";
-                } else {
-                    loginLogoutBtn.textContent = 'Login';
-                    loginLogoutBtn.href = "{{ url_for('login') }}";
-                }
+            .then(response => response.json())
+            .then(data => {
+            var isLoggedIn = data[0];
+            if (isLoggedIn) {
+                loginLogoutBtn.textContent = 'Log out';
+                loginLogoutBtn.href = "{{ url_for('logout') }}";
+            } else {
+                loginLogoutBtn.textContent = 'Login';
+                loginLogoutBtn.href = "{{ url_for('login') }}";
+            }
             });
+
+            var hiddenMessage = document.getElementById('hidden-message');
+            if (hiddenMessage) {
+                alert(hiddenMessage.textContent);
+            }
         });
     </script>
     <footer>
