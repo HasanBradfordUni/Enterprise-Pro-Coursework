@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>YHROCU</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    </head>
+    <body>
+        <header>
+            <h1>YHROCU Task Management System</h1>
+            <div class="menuBar">
+                <ul class="nav">
+                  <li class="nav" id="currentPage">
+                    <a class="nav" href="{{ url_for('index') }}">Home</a>
+                  </li>
+                  <li class="nav"><a class="nav" id="login-logout-btn" href="{{ url_for('login') }}">Login</a></li>
+                </ul>
+            </div>
+        </header>
+
+        <form action="{{ url_for('search_projects') }}" method="get">
+            <label for="search">Search:</label>
+            <input type="text" id="search" name="query" placeholder="Search for a project...">
+            <button type="submit">Search</button>
+        </form>
+
+        <h4>Filters:</h4>
+        <div class="filter-container">
+            <label for="">Choose Completion Status:</label>
+            <select id="dropdown1" class="dropdown-content">
+                <option value="in-progress">In Progress</option>
+                <option value="complete">Complete</option>
+                <option value="other">Not yet started</option>
+            </select>
+        </div>
+
+        <div class="filter-container">
+            <label for="">Choose Review Status:</label>
+            <select id="dropdown2" class="dropdown-content">
+                <option value="Review Incomplete">Review Incomplete</option>
+                <option value="Review Complete">Review Complete</option>
+            </select>
+        </div>
+
+        <div class="filter-container">
+            <label for="">Choose Team:</label>
+            <select id="dropdown3" class="dropdown-content">
+                <option value="police">Police</option>
+                <option value="intern">Intern</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+    <div class="supervisor-boxes">
+
+        <section id="supervisor-projects">
+            <h1 class="project-heading">List of projects</h1>
+            {% if projects|length == 0 %}
+            <p>No projects found</p>
+            {% endif %}
+            <!-- Add the projects dynamically here using jinja -->
+            {% for project in projects %}
+            <div class="project1">
+                <input type="hidden" id="project-id" value="{{ project[0] }}">
+                <h3 class="project-heading">{{ project[1] }}</h3>
+                <p>{{ project[2] }}</p>
+                <h2 class="project-heading">Project Status: {{ project[3] }}</h2>
+                <h2 class="project-heading">Tasks</h2>
+                <ul class="tasks">
+                    {% if project[6]|length == 0 %}
+                    <li>No tasks found</li>
+                    {% endif %}
+                    {% for task in project[6] %}
+                    <li>{{ task }}</li>
+                    {% endfor %}
+                </ul>
+                <h3 class="project-heading">Review due in {{ project[4] }}</h3>
+                <h3 class="project-heading">Project owner: {{ project[5] }}</h3>
+                <a href="{{ url_for('setProjectId', project_id=project[0]) }}"><button>Select Project</button></a>
+                <a href="{{ url_for('setProjectId', project_id=project[0]) }}"><button>View Project</button></a>
+            </div>
+            {% endfor %}
+        </section>
+        
+        <div class="info-placeholder2">
+            <h1>Selected Project</h1>
+            <div class="this-project">
+                <input type="hidden" id="selected-project-id" value="">
+                <h3 class="project-heading">Selected Project Title</h3>
+                <p>Selected project details</p>
+                <h2 class="project-heading">Selected project status:</h2>
+                <h2 class="project-heading">Selected project Tasks</h2>
+                <ul class="tasks">
+                    <li>Example Task</li>
+                </ul>
+                <h3 class="project-heading">Review due in:</h3>
+                <h3 class="project-heading">Selected Project owner:</h3>
+                <a href="{{ url_for('setProjectId', project_id=0) }}"><button>View Project</button></a>
+            </div>
+        </div>
+    </div>
+       
+
+        <footer>
+            <p>&copy; 2025 Enterprise Pro Task Management System</p>
+        </footer>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var loginLogoutBtn = document.getElementById('login-logout-btn');
+                fetch("{{ url_for('get_user_status') }}")
+                    .then(response => response.json())
+                    .then(data => {
+                    var isLoggedIn = data[0];
+                    if (isLoggedIn) {
+                        loginLogoutBtn.textContent = 'Log out';
+                        loginLogoutBtn.href = "{{ url_for('logout') }}";
+                    } else {
+                        loginLogoutBtn.textContent = 'Login';
+                        loginLogoutBtn.href = "{{ url_for('login') }}";
+                    }
+                });
+            });
+
+            document.addEventListener('DOMContentLoaded', function() {
+                var selectButtons = document.querySelectorAll('a[href*="setProjectId"] button');
+
+                selectButtons.forEach(function(button) {
+                    button.addEventListener('click', function(event) {
+                        event.preventDefault();
+                        var projectDiv = button.closest('.project1');
+                        var projectId = projectDiv.querySelector('input[type="hidden"]').value;
+                        projectId = parseInt(projectId, 10);
+                        var projectTitle = projectDiv.querySelector('h3.project-heading').textContent;
+                        var projectDetails = projectDiv.querySelector('p').textContent;
+                        var projectStatus = projectDiv.querySelector('h2.project-heading').textContent;
+                        var projectTasks = projectDiv.querySelectorAll('ul.tasks li');
+                        var reviewDue = projectDiv.querySelectorAll('h3.project-heading')[1].textContent;
+                        var projectOwner = projectDiv.querySelectorAll('h3.project-heading')[2].textContent;
+
+                        document.getElementById('selected-project-id').value = projectId;
+                        document.querySelector('.this-project h3.project-heading').textContent = projectTitle;
+                        document.querySelector('.this-project p').textContent = projectDetails;
+                        document.querySelector('.this-project h2.project-heading').textContent = projectStatus;
+                        var tasksList = document.querySelector('.this-project ul.tasks');
+                        tasksList.innerHTML = '';
+                        projectTasks.forEach(function(task) {
+                            var li = document.createElement('li');
+                            li.textContent = task.textContent;
+                            tasksList.appendChild(li);
+                        });
+                        document.querySelector('.this-project h3.project-heading:nth-of-type(2)').textContent = reviewDue;
+                        document.querySelector('.this-project h3.project-heading:nth-of-type(3)').textContent = projectOwner;
+                        var viewProjectButton = document.querySelector('.this-project a[href*="setProjectId"]');
+                        viewProjectButton.href = "{{ url_for('setProjectId', project_id=0) }}".replace(0, projectId);
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>

@@ -114,7 +114,7 @@ class myClass():
             thisProject.append([task[1] for task in tasks if task[6] == project[0]])
             theseProjects.append(thisProject)
         projects = theseProjects
-        return render_template('SupervisorHomePage.html', projects=projects)
+        return render_template('supervisor.html', projects=projects)
     
     def admin(self):
         form = CreateProjectForm()
