@@ -59,14 +59,14 @@ class myClass():
         projects = self.database.get_all_from_table("projects")
         tasks = self.database.get_all_from_table("tasks")
         users_in_projects = self.database.get_all_from_table("project_users")
-        project_tasks = []
         assigned_projects = []
         for project in projects:
             for project_user in users_in_projects:
                 if project_user[1] == project[0] and project_user[3] == self.user_id:
+                    project = [project[0], project[1], project[2], project[3], project[4], project[5]]
+                    project.append([task[1] for task in tasks if task[6] == project[0]])
                     assigned_projects.append(project)
-                    project_tasks.append({project[1]: [task[1] for task in tasks if task[6] == project[0]]})
-        return render_template('index.html', projects=assigned_projects, project_tasks=project_tasks)
+        return render_template('index.html', projects=assigned_projects)
 
     def setProjectId(self, project_id):
         self.project_id = project_id
@@ -95,14 +95,17 @@ class myClass():
 
     def load_tasks(self):
         tasks = self.database.get_all_from_table("tasks")
+        for task in tasks:
+            if task[6] != self.project_id:
+                tasks.remove(task)
         return tasks
 
     def passwordReset(self):
         pass
 
     def supervisor(self):
-        if self.user_role != "supervisor":
-            flash("You are not authorised to view this page\nMust be a supervisor", "danger")
+        if self.user_role == "user":
+            flash("You are not authorised to view this page\nMust be a supervisor or admin", "danger")
             return redirect(url_for('index'))
         projects = self.database.get_all_from_table("projects")
         tasks = self.load_tasks()

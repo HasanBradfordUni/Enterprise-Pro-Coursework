@@ -1,7 +1,3 @@
-"""listOperationsManager(); binary_search(arr: list, target: string); 
-categorise_data(arr: list, categories_type: string); 
-merge_sort(arr: list); filter_data(arr: list, filter_type: string);"""
-
 class listOperationsManager:
     def __init__(self):
         self.arr = []

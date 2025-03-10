@@ -32,15 +32,16 @@
                 <h2>Project Status: {{ project[3] }}</h2>
                 <h2>Tasks</h2>
                 <ul class="tasks">
-                    {% if project_tasks['project[1]']|length == 0 %}
+                    {% if project[6]|length == 0 %}
                     <li>No tasks found</li>
                     {% endif %}
-                    {% for task in project_tasks['project[1]'] %}
+                    {% for task in project[6] %}
                     <li>{{ task }}</li>
                     {% endfor %}
                 </ul>
                 <h3>Review due in {{ project[4] }}</h3>
                 <h3>Project owner: {{ project[5] }}</h3>
+                <a href="{{ url_for('setProjectId', project_id=project[0]) }}"><button>View Project</button></a>
             </div>
             {% endfor %}
         </section>
@@ -53,18 +54,6 @@
             {% endif %}
         {% endwith %}
         </div>
-        <a href="{{ url_for('login') }}">
-            <button>Go to login screen</button>
-        </a>
-        <a href="{{ url_for('supervisor') }}">
-            <button>Go to supervisor screen</button>
-        </a>
-        <a href="{{ url_for('tasks') }}">
-            <button>Go to tasks screen</button>
-        </a>
-        <a href="{{ url_for('admin') }}">
-            <button>Go to admin screen</button>
-        </a>
     </main>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
