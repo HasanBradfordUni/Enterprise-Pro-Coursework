@@ -26,6 +26,21 @@ div.project {
     border-radius: 5px;
 }
 
+div.project1 {
+    background-color: blue;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    color: white;
+}
+
+div.project1 ul.tasks li {
+    background-color: black;
+    margin: 5px 0;
+    padding: 5px;
+    border-radius: 3px;
+}
+
 ul.tasks {
     list-style-type: none;
     padding: 0;
@@ -136,18 +151,6 @@ button:hover {
     justify-content: center; /*Center horizontally*/
     align-items: center; /*center vertically*/
     height: 10vh;
-}
-
-.info-placeholder1 {
-    position: relative;
-    top: 10px;
-    left: 10px;
-    width: 500px;
-    height: 700px;
-    background-color: lightblue;
-    border: 2px solid blue;
-    padding: 10px;
-    align-self: self-start;
 }
 
 .info-placeholder2 {

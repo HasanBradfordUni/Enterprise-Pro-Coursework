@@ -105,6 +105,15 @@ class myClass():
             flash("You are not authorised to view this page\nMust be a supervisor", "danger")
             return redirect(url_for('index'))
         projects = self.database.get_all_from_table("projects")
+        tasks = self.load_tasks()
+        theseProjects = []
+        for project in projects:
+            thisProject = []
+            for atr in project:
+                thisProject.append(atr)
+            thisProject.append([task[1] for task in tasks if task[6] == project[0]])
+            theseProjects.append(thisProject)
+        projects = theseProjects
         return render_template('SupervisorHomePage.html', projects=projects)
     
     def admin(self):
