@@ -1,3 +1,7 @@
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))  # Add project root to path
+
 from Code.use_database import databaseManager
 
 class testDatabase:
@@ -6,7 +10,7 @@ class testDatabase:
         self.connection = None
 
     def test_connection(self):
-        con = self.thisDatabase.create_connection('../Code/database.db')
+        con = self.thisDatabase.create_connection('../Code/test_database.db')
         self.connection = con
         try:
             assert self.connection is not None
@@ -86,7 +90,13 @@ class testDatabase:
             return "All subtests passed - Add user test successful"
         else:
             return "Cannot add project - Add project test unsuccessful"
-            
+
+if __name__ == "__main__":
+    thisTest = testDatabase()
+    print(thisTest.test_connection())
+    print(thisTest.test_add_user())
+    print(thisTest.test_add_project())
+
         
 
     
