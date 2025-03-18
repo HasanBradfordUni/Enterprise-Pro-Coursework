@@ -150,7 +150,7 @@ class databaseManager:
         cursor = self.connection.cursor()
         cursor.execute(f"""
         INSERT INTO tasks (task_title, task_details, task_status, task_assigned_date, task_due_date, project_id)
-        VALUES ('{task_title}', '{task_details}', '{task_status}', '{task_assigned_date}', '{task_due_date}', '{project_id}')
+        VALUES ('{task_title}', '{task_details}', '{task_status}', '{task_assigned_date}', '{task_due_date}', {project_id})
         """)
         self.connection.commit()
         return cursor.lastrowid
@@ -168,7 +168,7 @@ class databaseManager:
         cursor = self.connection.cursor()
         cursor.execute(f"""
         INSERT INTO project_users (project_id, project_title, user_id, username)
-        VALUES ('{project_id}', '{project_title}', '{user_id}', '{username}')
+        VALUES ({project_id}, '{project_title}', {user_id}, '{username}')
         """)
         self.connection.commit()
         return cursor.lastrowid
