@@ -42,34 +42,31 @@
 | 41efc33e00fdf2114b9892837927225a757885d8 | S2 | Updating project placeholders | styles.css, SupervisorHomePage.html | Hamza |
 | 3bb942624d3d380314524f7b676ea4d2d70a9c50 | S3 | updated style of supervisor & HTML | styles.css, SupervisorHomePage.html | Hamza |
 | 434de611fce3bc2435ae2ef54ff1e8c4de33ab10 | v1.3.1 | Merge this version (T1) with main code (V1.3) | app.py, database.db, search-sort.py, styles.css, index.html, tasks.html, use_database.py | Umair + Hasan (review merge) |
-| b4fb7f9f9ce000bd1bb110c9bca7a9dfd213974b | v1.3.2 | Create forms.py | forms.py | Humayun |
-| 17c6f5aa37ac6d7926c1cf025c4497fc29267336 | v1.3.3 | Update app.py | app.py | Humayun |
-| bd25e0798a8db893ff1d8cf1b2a772030cc9762b | v1.3.4 | Update login.html | login.html | Humayun |
-| bd25e0798a8db893ff1d8cf1b2a772030cc9762b | v1.2.3 | Another updae to the Readme, code still at same version | [To fill in] | Hasan |
-| bd25e0798a8db893ff1d8cf1b2a772030cc9762b | v1.2.3 | Another updae to the Readme, code still at same version | [To fill in] | Hasan |
-| bd25e0798a8db893ff1d8cf1b2a772030cc9762b | v1.2.3 | Another updae to the Readme, code still at same version | [To fill in] | Hasan |
-| bd25e0798a8db893ff1d8cf1b2a772030cc9762b | v1.2.3 | Another updae to the Readme, code still at same version | [To fill in] | Hasan |
-| bd25e0798a8db893ff1d8cf1b2a772030cc9762b | v1.2.3 | Another updae to the Readme, code still at same version | [To fill in] | Hasan |
-| bd25e0798a8db893ff1d8cf1b2a772030cc9762b | v1.2.3 | Another updae to the Readme, code still at same version | [To fill in] | Hasan |
-| bd25e0798a8db893ff1d8cf1b2a772030cc9762b | v1.2.3 | Another updae to the Readme, code still at same version | [To fill in] | Hasan |
-| bd25e0798a8db893ff1d8cf1b2a772030cc9762b | v1.2.3 | Another updae to the Readme, code still at same version | [To fill in] | Hasan |
-| bd25e0798a8db893ff1d8cf1b2a772030cc9762b | v1.2.3 | Another updae to the Readme, code still at same version | [To fill in] | Hasan |
-| bd25e0798a8db893ff1d8cf1b2a772030cc9762b | v1.2.3 | Another updae to the Readme, code still at same version | [To fill in] | Hasan |
-| bd25e0798a8db893ff1d8cf1b2a772030cc9762b | v1.2.3 | Another updae to the Readme, code still at same version | [To fill in] | Hasan |
-| bd25e0798a8db893ff1d8cf1b2a772030cc9762b | v1.2.3 | Another updae to the Readme, code still at same version | [To fill in] | Hasan |
-| bd25e0798a8db893ff1d8cf1b2a772030cc9762b | v1.2.3 | Another updae to the Readme, code still at same version | [To fill in] | Hasan |
-| bd25e0798a8db893ff1d8cf1b2a772030cc9762b | v1.2.3 | Another updae to the Readme, code still at same version | [To fill in] | Hasan |
-| bd25e0798a8db893ff1d8cf1b2a772030cc9762b | v1.2.3 | Another updae to the Readme, code still at same version | Readme.md | Hasan |
-| bd25e0798a8db893ff1d8cf1b2a772030cc9762b | v1.2.3 | Another updae to the Readme, code still at same version | [To fill in] | Hasan |
-| bd25e0798a8db893ff1d8cf1b2a772030cc9762b | v1.2.3 | Another updae to the Readme, code still at same version | [To fill in] | Hasan |
-| bd25e0798a8db893ff1d8cf1b2a772030cc9762b | v1.2.3 | Another updae to the Readme, code still at same version | [To fill in] | Hasan |
-| bd25e0798a8db893ff1d8cf1b2a772030cc9762b | v1.2.3 | Another updae to the Readme, code still at same version | [To fill in] | Hasan |
-| bd25e0798a8db893ff1d8cf1b2a772030cc9762b | v1.2.3 | Another updae to the Readme, code still at same version | [To fill in] | Hasan |
-| bd25e0798a8db893ff1d8cf1b2a772030cc9762b | v1.2.3 | Another updae to the Readme, code still at same version | [To fill in] | Hasan |
-| bd25e0798a8db893ff1d8cf1b2a772030cc9762b | v1.2.3 | Another updae to the Readme, code still at same version | [To fill in] | Hasan |
-| bd25e0798a8db893ff1d8cf1b2a772030cc9762b | v1.2.3 | Another updae to the Readme, code still at same version | [To fill in] | Hasan |
-| bd25e0798a8db893ff1d8cf1b2a772030cc9762b | v1.2.3 | Another updae to the Readme, code still at same version | [To fill in] | Hasan |
-| bd25e0798a8db893ff1d8cf1b2a772030cc9762b | v1.2.3 | Another updae to the Readme, code still at same version | [To fill in] | Hasan |
+| b4fb7f9f9ce000bd1bb110c9bca7a9dfd213974b | L1 | Create forms.py | forms.py | Humayun |
+| 17c6f5aa37ac6d7926c1cf025c4497fc29267336 | L2 | Update app.py | app.py | Humayun |
+| bd25e0798a8db893ff1d8cf1b2a772030cc9762b | L3 | Update login.html | login.html | Humayun |
+| 7398c157be1521c5dd54fbaffb503cbd65d6b83c | v1.3.2 | Update use_database.py (Wrote all the methods to interact with database that are left, still need to edit some slightly) | use_database.py | Rahat + Hasan |
+| 32d5fd7bc49f7c40b5277e21b889c6e4ec66999b | v1.3.3 | Adding rest of the forms | forms.py | Hammad |
+| 75514f659cc8f46739c44807c00157b08ce67ec3 | v1.4 | Integrating merged files and completing code configurations - Merged versions of login branch, tasks branch, search-sort branch were all integrated with the main code and database connections were fully set up, Flask routes are mostly configured now as well and the application mostly works as intended | app.py, database.db, forms.py, search-sort.py, dataScreen.html [deleted], index.html, login.html, use_database.py | Hasan |
+| dff765e3c63a9aa9d9065e03e7e168a4d867e5cf | v1.4.1 | Merge pull request from HasanBradfordUni/supervisor (Merging Supervisor branch - version S1 to S5) | styles.css, SupervisorHomePage.html| Hamza |
+| f245ea8ab5ab723eab82071c674cd25be2ad8b81 | v1.4.2 | Adding project related methods to Python code | app.py | Hamza |
+| bbb10f3e03fd93b0b403205854097b929206f2bd | v1.5 | Merging latest version of tasks branch with main programme - developing python app and tasks for html | app.py, styles.css, tasks.html | Umair |
+| d6b41d7ff576587df7c283b435afa619200b9bc7 | v1.5 | Uploading meeting minutes from this week | 2 files in Meeting Minutes | Hasan |
+| cc5561c4194f248c9a68a803ae3e3f58ca9cabaf | v1.5 | Non-disclosure agreement, version 1 | NDA student-CEC.docx | Hasan |
+| da94e6507c87013c333b26ffac91e8865626d543 | v1.5 | Uploading final Software Design documents | 4 files in Requirements and Design | Hasan |
+| 4a6d5396b076aa7444d2409b32e5c1a1f0b38098 | v1.5 | Non-disclosure agreement, version 2 | NDA student-CEC.docx | Hasan |
+| 770ee8a01d36de3c26693c6d7e28c82dfa682491 | v1.5 | Uploading new relevant files (Midway submission report and Gantt chart V3) | Enterprise Pro Report Team22.pdf, Gantt chart for project timelines and plan V3.png | Hasan |
+| 9e6b850e3c038f448a8187e604784d92105837f2 | v1.5 | Update README.md | Readme.md | Hasan |
+| e19fa455e8565fa298dc5a6425e8ca17da78e431 | v1.5.1 | Development changes, getting ready for client presentation | app.py, database.db, forms.py, styles.css, admin.html, index.html, tasks.html, use_database.py | Hasan |
+| 9838e24c0a0ae802a98c5ebad87e5c84b8136f2c | v1.5.2 | More development changes and configuration changes to get ready for client presentation | app.py, database.db, styles.css, admin.html, index.html, login.html, tasks.html, use_database.py | Hasan |
+| 209dbd8ebf0b46fee39cda1d6477115fc441d679 | v1.5.3 | Fixing password resert route issue | app.py | Hasan |
+| 25f259e85a84b50d61d2842e4245d2c2f9eb07df | v1.5.4 | Some minor styling changes and updating tasks logic, database also slightly modified | app.py, styles.css, tasks.html, use_database.py | Hasan |
+| e2b05d6d8221688720892893c01f3818f9565175 | v1.5.5 | Updating tasks logic so that assigned users can be shown properly | app.py, tasks.html | Hasan |
+| a13355fed1c8039966501a3f4dcd8fc054452af2 | v1.5.6 | Adding nav bar and login/logout logic, minor styling changes and version history document updates | versions-releases.md [This document], app.py, styles.css, admin.html, index.html, tasks.html, SupervisorHomePage.html | Hasan |
+| 77dde5e65bfc7608724f7a406f7fe28c77983e0e | v1.6 | A lot of developmental changes, mostly to do with admin features, some other minorn improvements as well | app.py, forms.py, styles.css, admin.html, index.html, use_database.py | Hasan |
+| 455610d722d7d886d4855f7ff7c944f5dee20c9d | S6 | Mostly styling changes to teh supervisor page but some developmental changes as well | app.py, styles.css, SupervisorHomePage.html | Hamza |
+| 8b408a8a3a511562032c2110158de5f69f918623 | S7 | In collobration with Hasan, developed features for supervisor html page | app.py, styles.css, supervisor.html | Hamza + Hasan |
+| d87547b53c27c0d09b319636c4b03e05ab7e6625 | v1.6.1 | Final development changes before client presentation | app.py, search-sort.py, index.html, initialTestingPlan.md, text.txt [deleted] | Hasan |
 
 <hr>
 
@@ -77,4 +74,4 @@
 
 | Commit ID | Version Name/Number | Commit Info | Files Affected | Person |
 |------------------------------------------|------|-------------|----------------|------------|
-| 24fca1a6a2819d56c6b71d737e5c974e7bafc5a0 | v0.0 | Initial commit | Readme.md | Hasan |
+| 24fca1a6a2819d56c6b71d737e5c974e7bafc5a0 | v2.0 | Initial commit | Readme.md | Hasan |
