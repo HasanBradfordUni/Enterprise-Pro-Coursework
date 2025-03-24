@@ -81,6 +81,19 @@
 
 <section id="progress-logs" class="task-form">
     <h2>Progress Logs</h2>
+    <div class="todo-container">
+        {% if task_updates|length == 0 %}
+        <p>No task updates found</p>
+        {% endif %}
+        {% for task_update in task_updates %}
+        <div class="task-box" data-task-update-id="{{ task_update[0] }}">
+            <h1>Date: {{ task_update[4] }}</h1>
+            <h3>Progress Update: {{ task_update[2] }} </h3>
+            <p>Status: {{ task_update[3] }}</p>
+        </div>
+        <br>
+        {% endfor %}
+    </div>
     <form action="{{ url_for('update_progress') }}" method="POST" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
         <div class="form-group">
