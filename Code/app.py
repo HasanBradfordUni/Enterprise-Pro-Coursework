@@ -19,7 +19,7 @@ class myClass():
         router('/create_task', methods=['POST'])(self.create_task)
         router('/sort_tasks')(self.sort_tasks)
         router('/filter_tasks')(self.filter_tasks)
-        router('/update_progress')(self.update_progress)
+        router('/update_progress/<int:project_id>/<string:update>', methods=['GET', 'POST'])(self.update_progress)
         router('/edit_task')(self.edit_task)
         router('/delete_task')(self.delete_task)
         router('/show_deleted_tasks')(self.show_deleted_tasks)

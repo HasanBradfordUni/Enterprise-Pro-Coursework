@@ -17,6 +17,7 @@
     <header>
         <h1>Tasks to complete</h1>
         <h2>Project: {{ project[1] }}</h2>
+        <input type="hidden" id="project_id" value="{{ project[0] }}">
         <div class="menuBar">
             <ul class="nav">
               <li class="nav" id="currentPage">
@@ -94,11 +95,11 @@
         <br>
         {% endfor %}
     </div>
-    <form action="{{ url_for('update_progress') }}" method="POST" enctype="multipart/form-data">
+    <form id="progresss-update-form" action="" method="POST" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
         <div class="form-group">
             {{ form.progress_update.label }}<br>
-            {{ form.progress_update(size=120) }}
+            {{ form.progress_update(size=40) }}
         </div>       
         <div class="form-group">
             {{ form.submit() }}
@@ -106,30 +107,43 @@
     </form>
 </section>
 
-    <footer>
-        <p>&copy; 2025 Enterprise Pro Task Management System</p>
-    </footer>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const currentTasks = JSON.parse('{{ tasks|tojson }}');
-            const assignedUsers = JSON.parse('{{ assigned_tasks|tojson }}');
-            
-            currentTasks.forEach(task => {
-                const taskBox = document.querySelector(`.task-box[data-task-id="${task[0]}"]`);
-                if (taskBox) {
-                    const assignedToParagraph = taskBox.querySelector('.assigned-users');
-                    const assignedUsersList = assignedUsers
-                        .filter(user => user[1] === task[0])
-                        .map(user => user[4])
-                        .join(', ');
-                    if (assignedUsersList) {
-                        assignedToParagraph.innerHTML = `Assigned To: ${assignedUsersList}`;
-                    }
-                }
-            });
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('progresss-update-form');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const projectId = document.getElementById('project_id').value;
+            const progressUpdate = form.querySelector('input[name="progress_update"]').value;
+            const url = `{{ url_for('update_progress') }}?project_id=${projectId}&progress_update=${encodeURIComponent(progressUpdate)}`;
+            window.location.href = url;
         });
-    </script>
+    });
+</script>
+
+<footer>
+    <p>&copy; 2025 Enterprise Pro Task Management System</p>
+</footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const currentTasks = JSON.parse('{{ tasks|tojson }}');
+        const assignedUsers = JSON.parse('{{ assigned_tasks|tojson }}');
+        
+        currentTasks.forEach(task => {
+            const taskBox = document.querySelector(`.task-box[data-task-id="${task[0]}"]`);
+            if (taskBox) {
+                const assignedToParagraph = taskBox.querySelector('.assigned-users');
+                const assignedUsersList = assignedUsers
+                    .filter(user => user[1] === task[0])
+                    .map(user => user[4])
+                    .join(', ');
+                if (assignedUsersList) {
+                    assignedToParagraph.innerHTML = `Assigned To: ${assignedUsersList}`;
+                }
+            }
+        });
+    });
+</script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {

@@ -420,6 +420,18 @@ div.menuBar {
     margin-bottom: 10px;
 }
 
+.task-form {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    border: 3px solid black;
+    width: 30%;
+    text-align: center;
+    margin: auto 0;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 .admin-form h2 {
     color: crimson;
     margin-bottom: 20px;
