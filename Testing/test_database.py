@@ -1,3 +1,7 @@
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))  # Add project root to path
+
 from Code.use_database import databaseManager
 import datetime
 
@@ -275,6 +279,77 @@ class testDatabase:
             else:
                 return "Cannot add Task update - Add Task update test unsuccessful"
 
+    def test_update_project(self):
+        project_id = int(input("Enter the project id of the project you wish to update: "))
+        title = ""
+        details = ""
+        status = ""
+        review = ""
+        owner = ""
+        title_update = input("Do you wish to update the project title (y/n)? ")
+        if title_update.upper() == "Y":
+            title = input("Enter the new project title: ") 
+        details_update = input("Do you wish to update the project details (y/n)? ")
+        if details_update.upper() == "Y":
+            details = input("Enter the new project details: ")
+        status_update = input("Do you wish to update the project status (y/n)? ")
+        if status_update.upper() == "Y":
+            status = input("Enter the new project status: ")
+        review_update = input("Do you wish to update the project review (y/n)? ")
+        if review_update.upper() == "Y":
+            review = input("Enter the new project review: ")
+        owner_update = input("Do you wish to update the project owner (y/n)? ")
+        if owner_update.upper() == "Y":
+            owner = input("Enter the new project owner: ")
+        row_id = self.thisDatabase.update_project(project_id, title, details, status, review, owner)
+        if row_id:
+            print("Project updated successfully!")
+            thisProject = self.thisDatabase.find_project(project_id=project_id)
+            if not thisProject:
+                return "Cannot retrieve project - Update project test unsuccessful"
+            try:
+                if title == "":
+                    print("Project title wasn't updated!")
+                else:
+                    assert thisProject[1] == title
+                    print("Project title matches!")
+            except AssertionError:
+                return "Project title doesn't match!"
+            try:
+                if details == "":
+                    print("Project details wasn't updated!")
+                else:
+                    assert thisProject[2] == details
+                    print("Project details match!")
+            except AssertionError:
+                return "Project details don't match!"
+            try:
+                if status == "":
+                    print("Project status wasn't updated!")
+                else:
+                    assert thisProject[3] == status
+                    print("Project status matches!")
+            except AssertionError:
+                return "Project status doesn't match!"
+            try:
+                if review == "":
+                    print("Project review wasn't updated!")
+                else:
+                    assert thisProject[4] == review
+                    print("Project review matches!")
+            except AssertionError:
+                return "Project review doesn't match!"
+            try:
+                if owner == "":
+                    print("Project owner wasn't updated!")
+                else:
+                    assert thisProject[5] == owner
+                    print("Project owner matches!")
+            except AssertionError:
+                return "Project owner doesn't match!"
+            return "All subtests passed - Update project test successful"
+        else:
+            return "Cannot update project - Update project test unsuccessful"
         
         
             
