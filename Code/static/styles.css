@@ -328,8 +328,9 @@ div.this-project .project-heading {
 }
     
 .task-box{
-    width: 75%;
-    margin: auto;
+    width: 60%;
+    margin-left: auto;
+    margin-right: 5%;
     box-shadow: 3px 3px 3px 0px #003366;
     color: black;
     background-color: white;
@@ -427,8 +428,9 @@ div.menuBar {
     border: 3px solid black;
     width: 30%;
     text-align: center;
-    margin: auto 0;
-    margin-top: 10px;
+    margin-left: 0%;
+    margin-right: auto;
+    margin-top: -22%;
     margin-bottom: 10px;
 }
 
@@ -446,4 +448,14 @@ div.menuBar {
 
 .filter-container label {
     margin-left: 100px;
+}
+
+.icons {
+    position: absolute;
+    margin-left: 50%;
+}
+
+.icons img {
+    width: 50px;
+    height: 50px;
 }
