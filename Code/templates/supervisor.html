@@ -36,15 +36,18 @@
         </div>
 
         <div class="filter-container">
-            <label for="">Choose Review Status:</label>
+            <label for="" style="margin-right: 2%;">Choose Review Status:</label>
             <select id="dropdown2" class="dropdown-content">
-                <option value="Review Incomplete">Review Incomplete</option>
-                <option value="Review Complete">Review Complete</option>
+                <option value="one-day">1 day</option>
+                <option value="three-days">3 days</option>
+                <option value="one-week">1 week</option>
+                <option value="two-weeks">2 weeks</option>
+                <option value="one-month">1 month</option>
             </select>
         </div>
 
         <div class="filter-container">
-            <label for="">Choose Team:</label>
+            <label for="" style="margin-right: 6.2%;">Choose Team:</label>
             <select id="dropdown3" class="dropdown-content">
                 <option value="police">Police</option>
                 <option value="intern">Intern</option>
@@ -52,9 +55,8 @@
             </select>
         </div>
     <div class="supervisor-boxes">
-
+        <h1 class="project-heading">List of projects</h1>
         <section id="supervisor-projects">
-            <h1 class="project-heading">List of projects</h1>
             {% if projects|length == 0 %}
             <p>No projects found</p>
             {% endif %}
@@ -76,28 +78,12 @@
                 </ul>
                 <h3 class="project-heading">Review due in {{ project[4] }}</h3>
                 <h3 class="project-heading">Project owner: {{ project[5] }}</h3>
-                <a href="{{ url_for('setProjectId', project_id=project[0]) }}"><button>Select Project</button></a>
                 <a href="{{ url_for('setProjectId', project_id=project[0]) }}"><button>View Project</button></a>
             </div>
+            <br>
             {% endfor %}
-        </section>
-        
-        <div class="info-placeholder2">
-            <h1>Selected Project</h1>
-            <div class="this-project">
-                <input type="hidden" id="selected-project-id" value="">
-                <h3 class="project-heading">Selected Project Title</h3>
-                <p>Selected project details</p>
-                <h2 class="project-heading">Selected project status:</h2>
-                <h2 class="project-heading">Selected project Tasks</h2>
-                <ul class="tasks">
-                    <li>Example Task</li>
-                </ul>
-                <h3 class="project-heading">Review due in:</h3>
-                <h3 class="project-heading">Selected Project owner:</h3>
-                <a href="{{ url_for('setProjectId', project_id=0) }}"><button>View Project</button></a>
-            </div>
-        </div>
+        </section> 
+
     </div>
        
 
