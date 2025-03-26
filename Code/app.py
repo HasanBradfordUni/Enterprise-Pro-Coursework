@@ -5,7 +5,7 @@ import os
 
 from use_database import databaseManager
 from search_sort import listOperationsManager
-from forms import LoginForm, CreateUserForm, UpdateUserDetailsForm, CreateProjectForm, UpdateProgressForm, EditTaskForm, UsersInProjectsForm
+from forms import LoginForm, CreateUserForm, UpdateUserDetailsForm, CreateProjectForm, UpdateProgressForm, EditTaskForm, UsersInProjectsForm, PasswordResetForm
  
 class myClass():
     def __init__(self, router):
@@ -36,7 +36,7 @@ class myClass():
         router('/delete_project')(self.delete_project)
         router('/create_user', methods=['GET', 'POST'])(self.create_user)
         router('/admin')(self.admin)
-        router('/passwordReset')(self.passwordReset)
+        router('/passwordReset', methods=['GET', 'POST'])(self.passwordReset)
         router('/logout')(self.logout)
         router('/get_user_status', methods=['GET'])(self.get_user_status)
         router('/modify_user', methods=['GET', 'POST'])(self.modify_user)
@@ -101,7 +101,27 @@ class myClass():
         return tasks
 
     def passwordReset(self):
-        pass
+        form = PasswordResetForm()
+        username = form.username.data
+        password = form.password.data
+        confirm_password = form.confirm_password.data
+        if form.validate_on_submit():
+            thisUser = self.database.find_user(username=username)
+            if thisUser:
+                # Check the password
+                if password == confirm_password:
+                    hashed_password = generate_password_hash(password)
+                    self.database.update_user(user_id=thisUser[0], password=hashed_password)
+                    self.user_logged_in = True
+                    self.user_id = thisUser[0]
+                    self.user_role = thisUser[3]
+                    flash("Password reset successfully", "success")
+                    return redirect(url_for('index'))
+                else:
+                    return render_template("login.html", form=form, message="Passwords do not match, please try again.")
+            else:
+                return render_template("login.html", form=form, message="User does not exist, please try again.")
+        return render_template("passwordReset.html", form=form)
 
     def supervisor(self):
         if self.user_role == "user":
@@ -140,7 +160,7 @@ class myClass():
     def search_tasks(self, search_term):
         tasks = self.load_tasks()
         task_titles = [task["title"] for task in tasks]
-        search_results = self.binary_search(task_titles, search_term)
+        search_results = self.list_operation_manager.binary_search(task_titles, search_term)
         project = self.database.find_project(project_id=self.project_id)
         task_updates = self.database.get_all_from_table("task_updates")
         assigned_tasks = self.database.get_all_from_table("assigned_tasks")
@@ -177,14 +197,14 @@ class myClass():
     
     def update_progress(self, project_id, update):
         self.database.add_task_update(project_id=project_id, progress_update=update)
-        task_updates = [{"project_id": project_id, "progress_update": update, "date": datetime.now().strftime("%d-%m-%Y %H:%M")}]
+        task_updates = self.database.get_all_from_table("task_updates")
         project = self.database.find_project(project_id=project_id)
         tasks = self.load_tasks()
         return render_template('tasks.html', tasks=tasks, project=project, task_updates=task_updates)
 
     def search_projects(self, search_term):
         projects = self.database.get_all_from_table("projects")
-        project_titles = [project["title"] for project in projects]
+        project_titles = [project[1] for project in projects]
         search_results = self.list_operation_manager.binary_search(project_titles, search_term)
         return render_template('projects.html', projects=search_results)
     
