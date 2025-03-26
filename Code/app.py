@@ -200,7 +200,8 @@ class myClass():
         task_updates = self.database.get_all_from_table("task_updates")
         project = self.database.find_project(project_id=project_id)
         tasks = self.load_tasks()
-        return render_template('tasks.html', tasks=tasks, project=project, task_updates=task_updates)
+        assigned_tasks = self.database.get_all_from_table("assigned_tasks")
+        return render_template('tasks.html', tasks=tasks, project=project, task_updates=task_updates, assigned_tasks=assigned_tasks)
 
     def search_projects(self, search_term):
         projects = self.database.get_all_from_table("projects")

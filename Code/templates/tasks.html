@@ -17,7 +17,6 @@
     <header>
         <h1>Tasks to complete</h1>
         <h2>Project: {{ project[1] }}</h2>
-        <input type="hidden" id="project_id" value="{{ project[0] }}">
         <div class="menuBar">
             <ul class="nav">
               <li class="nav" id="currentPage">
@@ -49,12 +48,13 @@
         <div class="select">
             <select name="todos" id="filter-options" class="filter-todo">
                 <option value="all">All</option>
-                <option value="Completed">Completed</option>
-                <option value="New">New</option>
-                <option value="In-progress">In Progress</option>
-                <option value="Overdue">Overdue</option>
+                <option value="completed">Completed</option>
+                <option value="new">New</option>
+                <option value="in-progress">In Progress</option>
+                <option value="overdue">Overdue</option>
             </select>
             <select name="sorting-options" id="sorting-options" class="sort-todo">
+                <option value="none">None</option>
                 <option value="title">Title</option>
                 <option value="assigned-date">Assigned Date</option>
                 <option value="due-date">Due Date</option>
@@ -78,7 +78,7 @@
             <br>
             {% endfor %}
         </div>
-        <form id="progresss-update-form" action="" method="POST" enctype="multipart/form-data">
+        <form id="progresss-update-form" action="{{ url_for('update_progress', project_id=project[0], update='') }}" method="POST" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
             <div class="form-group">
                 {{ form.progress_update.label }}<br>
@@ -119,7 +119,76 @@
             event.preventDefault();
             const projectId = document.getElementById('project_id').value;
             const progressUpdate = form.querySelector('input[name="progress_update"]').value;
+            action_url = form.action.replace('update=', `update=${progressUpdate}`);
+            form.action = action_url;
+            form.submit();
         });
+
+        const filterDropdown = document.getElementById('filter-options');
+        const sortDropdown = document.getElementById('sorting-options');
+
+        function fetchFilteredTasks() {
+            const filterValue = filterDropdown.value;
+
+            fetch(`{{ url_for('filter_tasks', filter_type='') }}`.replace('filter_type=', `filter_type=${filterValue}`))
+            .then(response => response.json())
+            .then(filteredTasks => {
+                const taskContainer = document.querySelector('.todo-container');
+                taskContainer.innerHTML = '';
+                filteredTasks.forEach(task => {
+                    const taskBox = document.createElement('div');
+                    taskBox.classList.add('task-box');
+                    taskBox.setAttribute('data-task-id', task[0]);
+                    taskBox.innerHTML = `
+                    <div class="icons">
+                        <img src="https://i.ibb.co/nNkRC080/delete-icon-png-12.png" alt="delete-icon-png-12" border="0">
+                        <img src="https://i.ibb.co/GvgwL378/edit-icon-image-29.png" alt="edit-icon-image-29" border="0">
+                        <img src="https://i.ibb.co/35vt9Zwk/person-outline-icon-1.png" alt="person-outline-icon-1" border="0">
+                    </div>
+                    <h1>Title: ${task[1]}</h1>
+                    <h3>Details: ${task[2]}</h3>
+                    <p>Status: ${task[3]}</p>
+                    <p class="assigned-users">Assigned To: Unknown</p>
+                    <h4>Assigned date: ${task[4]}</h4>
+                    <h4>Due date: ${task[5]}</h4>
+                    `;
+                    taskContainer.appendChild(taskBox);
+                });
+            });
+        }
+
+        function fetchSortedTasks() {
+            const sortValue = sortDropdown.value;
+
+            fetch(`{{ url_for('sort_tasks', sort_type='') }}`.replace('sort_type=', `sort_type=${sortValue}`))
+            .then(response => response.json())
+            .then(sortedTasks => {
+                const taskContainer = document.querySelector('.todo-container');
+                taskContainer.innerHTML = '';
+                sortedTasks.forEach(task => {
+                    const taskBox = document.createElement('div');
+                    taskBox.classList.add('task-box');
+                    taskBox.setAttribute('data-task-id', task[0]);
+                    taskBox.innerHTML = `
+                    <div class="icons">
+                        <img src="https://i.ibb.co/nNkRC080/delete-icon-png-12.png" alt="delete-icon-png-12" border="0">
+                        <img src="https://i.ibb.co/GvgwL378/edit-icon-image-29.png" alt="edit-icon-image-29" border="0">
+                        <img src="https://i.ibb.co/35vt9Zwk/person-outline-icon-1.png" alt="person-outline-icon-1" border="0">
+                    </div>
+                    <h1>Title: ${task[1]}</h1>
+                    <h3>Details: ${task[2]}</h3>
+                    <p>Status: ${task[3]}</p>
+                    <p class="assigned-users">Assigned To: Unknown</p>
+                    <h4>Assigned date: ${task[4]}</h4>
+                    <h4>Due date: ${task[5]}</h4>
+                    `;
+                    taskContainer.appendChild(taskBox);
+                });
+            });
+        }
+
+        filterDropdown.addEventListener('change', fetchFilteredTasks);
+        sortDropdown.addEventListener('change', fetchSortedTasks);
     });
 </script>
 
