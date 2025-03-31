@@ -7,7 +7,22 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <header>
+    <header> <!-- New code added-(Start)-->
+         <section class="admin-page">
+            <div class="form-container">
+                <!-- Existing forms go here -->
+                <section id="create-project" class="admin-form">
+                    <h2>Create Project</h2>
+                    <form> <!-- Include form fields here --> </form>
+                </section>
+
+                <section id="create-user" class="admin-form">
+                    <h2>Create User</h2>
+                    <form> <!-- Include form fields here --> </form>
+                </section>
+            </div>
+        </section> 
+        <!-- New code added-(end)-->
         <h1>Configure admin settings for the YHROCU Task Management System</h1>
         <div class="menuBar">
             <ul class="nav">
