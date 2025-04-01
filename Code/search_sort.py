@@ -1,7 +1,7 @@
 class listOperationsManager:
     def __init__(self):
         self.arr = []
-
+        
     def categorise_data(self, arr, categories_type):
         #categorise data into different categories
         if categories_type == "title":
@@ -35,7 +35,7 @@ class listOperationsManager:
 
         while low <= high:
             mid = (low + high) // 2  # Find the middle index
-            if arr[mid] == target:
+            if target in arr[mid]:
                 return mid  # Target found
             elif arr[mid] < target:
                 low = mid + 1  # Focus on the right half
