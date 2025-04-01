@@ -153,6 +153,11 @@ class myClass():
         tasks = self.load_tasks()
         form = UpdateProgressForm()
         project = self.database.find_project(project_id=self.project_id)
+        project_tasks = []
+        for task in tasks:
+            if task[6] == self.project_id:
+                project_tasks.append(task)
+        tasks = project_tasks
         task_updates = self.database.get_all_from_table("task_updates")
         assigned_tasks = self.database.get_all_from_table("assigned_tasks")
         return render_template('tasks.html', tasks=tasks, project=project, task_updates=task_updates, assigned_tasks=assigned_tasks, form=form)
