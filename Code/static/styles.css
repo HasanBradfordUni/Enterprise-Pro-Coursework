@@ -328,8 +328,9 @@ div.this-project .project-heading {
 }
     
 .task-box{
-    width: 75%;
-    margin: auto;
+    width: 60%;
+    margin-left: auto;
+    margin-right: 5%;
     box-shadow: 3px 3px 3px 0px #003366;
     color: black;
     background-color: white;
@@ -420,6 +421,33 @@ div.menuBar {
     margin-bottom: 10px;
 }
 
+/*New code (start)*/
+.form-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two forms per row */
+    gap: 20px; /* Space between forms */
+}
+
+@media (max-width: 768px) {
+    .form-container {
+        grid-template-columns: 1fr; /* Single column layout for smaller screens */
+    }
+}
+/*New code (end) */
+
+.task-form {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    border: 3px solid black;
+    width: 30%;
+    text-align: center;
+    margin-left: 0%;
+    margin-right: auto;
+    margin-top: -12%;
+    margin-bottom: 10px;
+}
+
 .admin-form h2 {
     color: crimson;
     margin-bottom: 20px;
@@ -434,4 +462,14 @@ div.menuBar {
 
 .filter-container label {
     margin-left: 100px;
+}
+
+.icons {
+    position: absolute;
+    margin-left: 50%;
+}
+
+.icons img {
+    width: 50px;
+    height: 50px;
 }

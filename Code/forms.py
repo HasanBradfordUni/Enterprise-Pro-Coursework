@@ -23,6 +23,12 @@ class LoginForm(FlaskForm):
     password = StringField('Password', validators=[DataRequired()], render_kw={"type": "password"})
     submit = SubmitField('Submit')
 
+class PasswordResetForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    password = StringField('Password', validators=[DataRequired()], render_kw={"type": "password"})
+    confirm_password = StringField('Confirm Password', validators=[DataRequired()], render_kw={"type": "password"})
+    submit = SubmitField('Submit')
+
 class CreateUserForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = StringField('Password', validators=[DataRequired()], render_kw={"type": "password"})
