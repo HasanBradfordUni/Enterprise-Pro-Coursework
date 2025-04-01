@@ -19,15 +19,21 @@ section#projects {
 }
 
 section#supervisor-projects {
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* Two equal columns */
-    gap: 20px; /* Space between the boxes */
+    display: flex; /* Enable flexbox layout */
+    flex-wrap: wrap; /* Allow wrapping to new rows */
+    gap: 20px; /* Add space between the boxes */
     padding: 20px;
     border-radius: 10px;
     background-color: lightblue;
-    width: 100%; /* Or a fixed width like 80% */
-    max-width: 1200px; /* Optional, to control maximum width */
-    margin: 0 auto; /* Centers the container */
+}
+
+div.project1 {
+    background-color: #004080;
+    padding: 10px;
+    margin: 10px; /* Remove margin, gap will handle spacing */
+    border-radius: 5px;
+    color: white;
+    width: calc(50% - 20px); /* Two boxes per row, accounting for the gap */
 }
 
 div.project {
@@ -35,15 +41,6 @@ div.project {
     padding: 10px;
     margin-bottom: 10px;
     border-radius: 5px;
-}
-
-div.project1 {
-    background-color: #004080;
-    padding: 10px;
-    margin: 0; /* Removed margin-bottom since 'gap' in grid will handle spacing */
-    border-radius: 5px;
-    color: white;
-    width: 100%; /* Ensure it spans the full width of its grid cell */
 }
 
 div.project1 ul.tasks li {
