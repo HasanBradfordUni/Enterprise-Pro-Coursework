@@ -1,7 +1,12 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, SubmitField, SelectField, SelectMultipleField
 from wtforms.validators import DataRequired, ValidationError
-from use_database import databaseManager
+
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))  # Add project root to path
+
+from Code.use_database import databaseManager
 import os
 
 thisDatabase = databaseManager()
