@@ -166,7 +166,7 @@ class testListOperations:
         
 if __name__ == "__main__":
     tester = testListOperations()
-    tester.test_categorise_data()
-    tester.test_filter_data()
+    print(tester.test_categorise_data())
+    print(tester.test_filter_data())
     print(tester.test_binary_search())
     print(tester.test_merge_sort())
