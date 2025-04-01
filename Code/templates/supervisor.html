@@ -29,15 +29,17 @@
         <div class="filter-container">
             <label for="">Choose Completion Status:</label>
             <select id="dropdown1" class="dropdown-content">
+                <option value="all">All (No fiter)</option>
                 <option value="in-progress">In Progress</option>
                 <option value="complete">Complete</option>
-                <option value="other">Not yet started</option>
+                <option value="other">Other</option>
             </select>
         </div>
 
         <div class="filter-container">
             <label for="" style="margin-right: 2%;">Choose Review Status:</label>
             <select id="dropdown2" class="dropdown-content">
+                <option value="all">All (No fiter)</option>
                 <option value="one-day">1 day</option>
                 <option value="three-days">3 days</option>
                 <option value="one-week">1 week</option>
@@ -49,43 +51,47 @@
         <div class="filter-container">
             <label for="" style="margin-right: 6.2%;">Choose Team:</label>
             <select id="dropdown3" class="dropdown-content">
+                <option value="all">All (No fiter)</option>
                 <option value="police">Police</option>
                 <option value="intern">Intern</option>
                 <option value="other">Other</option>
             </select>
         </div>
-    <div class="supervisor-boxes">
-        <h1 class="project-heading">List of projects</h1>
-        <section id="supervisor-projects">
+        <div class="supervisor-boxes">
+            <h1 class="project-heading">List of projects</h1>
             {% if projects|length == 0 %}
-            <p>No projects found</p>
+                <p>No projects found</p>
             {% endif %}
-            <!-- Add the projects dynamically here using jinja -->
+        
             {% for project in projects %}
-            <div class="project1">
-                <input type="hidden" id="project-id" value="{{ project[0] }}">
-                <h3 class="project-heading">{{ project[1] }}</h3>
-                <p>{{ project[2] }}</p>
-                <h2 class="project-heading">Project Status: {{ project[3] }}</h2>
-                <h2 class="project-heading">Tasks</h2>
-                <ul class="tasks">
-                    {% if project[6]|length == 0 %}
-                    <li>No tasks found</li>
-                    {% endif %}
-                    {% for task in project[6] %}
-                    <li>{{ task }}</li>
-                    {% endfor %}
-                </ul>
-                <h3 class="project-heading">Review due in {{ project[4] }}</h3>
-                <h3 class="project-heading">Project owner: {{ project[5] }}</h3>
-                <a href="{{ url_for('setProjectId', project_id=project[0]) }}"><button>View Project</button></a>
-            </div>
-            <br>
+                {% if loop.index0 % 2 == 0 %} <!-- Start a new supervisor-projects div on odd indices (0-based) -->
+                <section class="supervisor-projects">
+                {% endif %}
+        
+                    <div class="project1">
+                        <input type="hidden" id="project-id" value="{{ project[0] }}">
+                        <h3 class="project-heading">{{ project[1] }}</h3>
+                        <p>{{ project[2] }}</p>
+                        <h2 class="project-heading">Project Status: {{ project[3] }}</h2>
+                        <h2 class="project-heading">Tasks</h2>
+                        <ul class="tasks">
+                            {% if project[6]|length == 0 %}
+                                <li>No tasks found</li>
+                            {% endif %}
+                            {% for task in project[6] %}
+                                <li>{{ task }}</li>
+                            {% endfor %}
+                        </ul>
+                        <h3 class="project-heading">Review due in {{ project[4] }}</h3>
+                        <h3 class="project-heading">Project owner: {{ project[5] }}</h3>
+                        <a href="{{ url_for('setProjectId', project_id=project[0]) }}"><button>View Project</button></a>
+                    </div>
+        
+                {% if loop.index0 % 2 == 1 or loop.last %} <!-- Close the supervisor-projects div after every two projects -->
+                </section>
+                {% endif %}
+        
             {% endfor %}
-        </section> 
-
-    </div>
-       
 
         <footer>
             <p>&copy; 2025 Enterprise Pro Task Management System</p>

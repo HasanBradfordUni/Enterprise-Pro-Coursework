@@ -351,6 +351,198 @@ class testDatabase:
         else:
             return "Cannot update project - Update project test unsuccessful"
         
+    def test_update_task(self):
+        task_id = int(input("Enter the task id of the task you wish to update: "))
+        title = ""
+        details = ""
+        status = ""
+        assigned_date = ""
+        due_date = ""
+        project_id = 0
+        title_update = input("Do you wish to update the task title (y/n)? ")
+        if title_update.upper() == "Y":
+            title = input("Enter the new task title: ") 
+        details_update = input("Do you wish to update the task details (y/n)? ")
+        if details_update.upper() == "Y":
+            details = input("Enter the new task details: ")
+        status_update = input("Do you wish to update the task status (y/n)? ")
+        if status_update.upper() == "Y":
+            status = input("Enter the new task status: ")
+        assigned_date_update = input("Do you wish to update the task assigned date (y/n)? ")
+        if assigned_date_update.upper() == "Y":
+            assigned_date = input("Enter the new task assigned date: ")
+        due_date_update = input("Do you wish to update the task due date (y/n)? ")
+        if due_date_update.upper() == "Y":
+            due_date = input("Enter the new task due date: ")
+        project_id_update = input("Do you wish to update the project id (y/n)? ")
+        if project_id_update.upper() == "Y":
+            project_id = int(input("Enter the new project id: ")) 
+        row_id = self.thisDatabase.update_task(task_id, title, details, status, assigned_date, due_date, project_id)
+        if row_id:
+            print("Task updated successfully!")
+            thisTask = self.thisDatabase.find_task(task_id=task_id)
+            if not thisTask:
+                return "Cannot retrieve task - Update task test unsuccessful"
+            try:
+                if title == "":
+                    print("Task title wasn't updated!")
+                else:
+                    assert thisTask[1] == title
+                    print("Task title matches!")
+            except AssertionError:
+                return "Task title doesn't match!"
+            try:
+                if details == "":
+                    print("Task details wasn't updated!")
+                else:
+                    assert thisTask[2] == details
+                    print("Task details match!")
+            except AssertionError:
+                return "Task details don't match!"
+            try:
+                if status == "":
+                    print("Task status wasn't updated!")
+                else:
+                    assert thisTask[3] == status
+                    print("Task status matches!")
+            except AssertionError:
+                return "Task status doesn't match!"
+            try:
+                if assigned_date == "":
+                    print("Task assigned date wasn't updated!")
+                else:
+                    assert thisTask[4] == assigned_date
+                    print("Task assigned date matches!")
+            except AssertionError:
+                return "Task assigned date doesn't match!"
+            try:
+                if due_date == "":
+                    print("Task due date wasn't updated!")
+                else:
+                    assert thisTask[5] == due_date
+                    print("Task due date matches!")
+            except AssertionError:
+                return "Task due date doesn't match!"
+            try:
+                if project_id == 0:
+                    print("Project id wasn't updated!")
+                else:
+                    assert thisTask[6] == project_id
+                    print("Project id matches!")
+            except AssertionError:
+                return "Project id doesn't match!"
+            return "All subtests passed - Update task test successful"
+        else:
+            return "Cannot update task - Update task test unsuccessful"
+                
         
-            
-            
+    def test_update_user_in_project(self):
+        project_user_id = int(input("Enter the project user id of the user in project you wish to update: "))
+        project_id = int(input("Enter the project id of the project you wish to update: "))
+        title = ""
+        user_id = int(input("Enter the user id of the user you wish to update"))
+        username = ""
+        title_update = input("Do you wish to update the project title (y/n)? ")
+        if title_update.upper() == "Y":
+            title = input("Enter the new project title: ") 
+        username_update = input("Do you wish to update the username (y/n)? ")
+        if username_update.upper() == "Y":
+            username = input("Enter the new username: ")
+        row_id = self.thisDatabase.update_user_in_project(project_user_id, project_id, title, user_id, username)
+        if row_id:
+            print("User in project updated successfully!")
+            thisProject = self.thisDatabase.find_project(project_id=project_id)
+            if not thisProject:
+                return "Cannot retrieve project - Update user in project test unsuccessful"
+            try:
+                if title == "":
+                    print("Project title wasn't updated!")
+                else:
+                    assert thisProject[2] == title
+                    print("Project title matches!")
+            except AssertionError:
+                return "Project title doesn't match!"
+            try:
+                if username == "":
+                    print("Username wasn't updated!")
+                else:
+                    assert thisProject[4] == username
+                    print("Username matches!")
+            except AssertionError:
+                return "Username don't match!"
+            return "All subtests passed - Update user in project test successful"
+        else:
+            return "Cannot update user in project - Update user in project test unsuccessful"
+        
+    def test_update_assigned_task(self):
+        assigned_task_id = int(input("Enter the assigned task id of the assigned task you wish to update: "))
+        task_id = 0
+        task_title = ""
+        user_id = 0
+        username = ""
+        project_id = 0
+        task_id_update = input("Do you wish to update the task id (y/n)? ")
+        if task_id_update.upper() == "Y":
+            task_id = int(input("Enter the new task id: "))
+        task_title_update = input("Do you wish to update the task title (y/n)? ")
+        if task_title_update.upper() == "Y":
+            task_title = input("Enter the new task title: ")
+        user_id_update = input("Do you wish to update the assigned user's id (y/n)? ")
+        if user_id_update.upper() == "Y":
+            user_id = input("Enter the new user id: ")
+        username_update = input("Do you wish to update the assigned user's username (y/n)? ")
+        if username_update.upper() == "Y":
+            username = input("Enter the new username: ")
+        project_id_update = input("Do you wish to update the project id of the assigned task (y/n)? ")
+        if project_id_update.upper() == "Y":
+            project_id = int(input("Enter the new project id: "))
+        row_id = self.thisDatabase.update_assigned_task(assigned_task_id, task_id, task_title, user_id, username, project_id)
+        if row_id:
+            print("Assigned task updated successfully!")
+            thisTask = self.thisDatabase.find_assigned_task(assigned_task_id=assigned_task_id)
+            if not thisTask:
+                return "Cannot retrieve task - Update assigned task test unsuccessful"
+            try:
+                if task_id == 0:
+                    print("Task id wasn't updated!")
+                else:
+                    assert thisTask[1] == task_id
+                    print("Task id matches!")
+            except AssertionError:
+                return "Task id doesn't match!"
+            try:
+                if task_title == "":
+                    print("Task title wasn't updated!")
+                else:
+                    assert thisTask[2] == task_title
+                    print("Task title matches!")
+            except AssertionError:
+                return "Task title doesn't match!"
+            try:
+                if user_id == 0:
+                    print("Assigned user's id wasn't updated!")
+                else:
+                    assert thisTask[3] == user_id
+                    print("Assigned user's id matches!")
+            except AssertionError:
+                return "Assigned user's id doesn't match!"
+            try:
+                if username == "":
+                    print("Assigned user's username wasn't updated!")
+                else:
+                    assert thisTask[4] == username
+                    print("Assigned username matches!")
+            except AssertionError:
+                return "Assigned user's username doesn't match!"
+            try:
+                if project_id == "":
+                    print("Assigned task's project id wasn't updated!")
+                else:
+                    assert thisTask[5] == project_id
+                    print("Project id matches!")
+            except AssertionError:
+                return "Assigned task's project id doesn't match!"
+            return "All subtests passed - Update assigned task test successful"
+        else:
+            return "Cannot update task - Update assigned task test unsuccessful"
+                
