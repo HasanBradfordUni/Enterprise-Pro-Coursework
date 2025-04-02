@@ -12,7 +12,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <!-- Font Awesome cdn css -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="./styles.css">
 <body>
     <header>
         <h1>Tasks to complete</h1>
@@ -78,14 +77,15 @@
             <br>
             {% endfor %}
         </div>
-        <form id="progresss-update-form" action="{{ url_for('update_progress', project_id=project[0], update='') }}" method="POST" enctype="multipart/form-data">
+        <form id="progress-update-form" action="{{ url_for('update_progress', project_id=project[0], update=' ') }}" method="POST" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
+            <input type="hidden" id="project_id" name="project_id" value="{{ project[0] }}">
             <div class="form-group">
                 {{ form.progress_update.label }}<br>
                 {{ form.progress_update(size=40) }}
             </div>       
             <div class="form-group">
-                {{ form.submit() }}
+                <button type="submit" class="btn btn-primary">Submit</button>
             </div>
         </form>
     </section>
@@ -96,10 +96,10 @@
         {% endif %}
         {% for task in tasks %}
         <div class="task-box" data-task-id="{{ task[0] }}">
-            <div class="icons">
-                <img src="https://i.ibb.co/nNkRC080/delete-icon-png-12.png" alt="delete-icon-png-12" border="0">
-                <img src="https://i.ibb.co/GvgwL378/edit-icon-image-29.png" alt="edit-icon-image-29" border="0">
-                <img src="https://i.ibb.co/35vt9Zwk/person-outline-icon-1.png" alt="person-outline-icon-1" border="0">
+            <div class="icons" id="admin-buttons">
+                <img src="https://i.ibb.co/nNkRC080/delete-icon-png-12.png" alt="delete-icon-png-12" id="delete-button" style="display: none;">
+                <img src="https://i.ibb.co/GvgwL378/edit-icon-image-29.png" alt="edit-icon-image-29" id="edit-button" style="display: none;">
+                <img src="https://i.ibb.co/35vt9Zwk/person-outline-icon-1.png" alt="person-outline-icon-1" id="assignment-button" style="display: none;">
             </div>
             <h1>Title: {{ task[1] }}</h1>
             <h3>Details: {{ task[2] }} </h3>
@@ -117,12 +117,37 @@
         const form = document.getElementById('progresss-update-form');
         form.addEventListener('submit', function(event) {
             event.preventDefault();
-            const projectId = document.getElementById('project_id').value;
+
             const progressUpdate = form.querySelector('input[name="progress_update"]').value;
-            action_url = form.action.replace('update=', `update=${progressUpdate}`);
-            form.action = action_url;
+
+            if (!progressUpdate.trim()) {
+                alert("Please enter a progress update.");
+                return;
+            }
+
+            action_url = form.action.replace("update=' '", `update=${encodeURIComponent(progressUpdate)}`);
+            form.action = actionUrl;
+
+            console.log("Submitting to:", form.action);
             form.submit();
         });
+
+        fetch("{{ url_for('get_user_status') }}")
+            .then(response => response.json())
+            .then(data => {
+                const userRole = data[2];
+                const adminButtons = document.querySelectorAll('#admin-buttons');
+                adminButtons.forEach(buttonContainer => {
+                    if (userRole === 'admin') {
+                        buttonContainer.style.display = 'block';
+                    } else if (userRole === 'supervisor') {
+                        const editButton = buttonContainer.querySelector('#edit-button');
+                        const assignButton = buttonContainer.querySelector('#assignment-button');
+                        if (editButton) editButton.style.display = 'inline';
+                        if (assignButton) assignButton.style.display = 'inline';
+                    }
+                });
+            });
 
         const filterDropdown = document.getElementById('filter-options');
         const sortDropdown = document.getElementById('sorting-options');
