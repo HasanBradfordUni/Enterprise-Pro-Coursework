@@ -455,7 +455,8 @@ div.menuBar {
 
 .icons {
     position: absolute;
-    margin-left: 50%;
+    margin-left: 40%;
+    display: flex;
 }
 
 .icons img {
