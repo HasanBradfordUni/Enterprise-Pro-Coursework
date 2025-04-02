@@ -7,32 +7,24 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <header> <!-- New code added-(Start)-->
-         <section class="admin-page">
-            <div class="form-container">
-                <!-- Existing forms go here -->
-                <section id="create-project" class="admin-form">
-                    <h2>Create Project</h2>
-                    <form> <!-- Include form fields here --> </form>
-                </section>
-
-                <section id="create-user" class="admin-form">
-                    <h2>Create User</h2>
-                    <form> <!-- Include form fields here --> </form>
-                </section>
-            </div>
-        </section> 
-        <!-- New code added-(end)-->
+    <header>
         <h1>Configure admin settings for the YHROCU Task Management System</h1>
         <div class="menuBar">
             <ul class="nav">
               <li class="nav" id="currentPage">
                 <a class="nav" href="{{ url_for('index') }}">Home</a>
               </li>
+              <li class="nav" id="supervisorPage">
+                <a class="nav" href="{{ url_for('supervisor') }}">To Projects</a>
+              </li>
               <li class="nav"><a class="nav" id="login-logout-btn" href="{{ url_for('login') }}">Login</a></li>
+              <li class="nav">
+                <a class="nav" href="#row2">Go to below forms</a>
+              </li>
             </ul>
         </div>
     </header>
+    <section class="admin-page">
 <section id="create-project" class="admin-form">
     <h2>Create Project</h2>
     <form action="{{ url_for('create_project') }}" method="POST" enctype="multipart/form-data">
@@ -63,7 +55,6 @@
     </form>
 </section>
 
-<!-- Add the form here -->
 <section id="create-user" class="admin-form">
     <h2>Create User</h2>
     <form action="{{ url_for('create_user') }}" method="POST" enctype="multipart/form-data">
@@ -89,7 +80,9 @@
         </div>
     </form>
 </section>
+    </section>
 
+    <section class="admin-page" id="row2">
 <section id="update-user-details" class="admin-form">
     <h2>Update Details of an existing user</h2>
     <form action="{{ url_for('modify_user') }}" method="POST" enctype="multipart/form-data">
@@ -133,6 +126,7 @@
         </div>
     </form>
 </section>
+    </section>
 
 {% with messages = get_flashed_messages() %}
 {% if messages %}
