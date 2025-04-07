@@ -29,23 +29,29 @@
         <div class="filter-container">
             <label for="">Choose Completion Status:</label>
             <select id="dropdown1" class="dropdown-content">
+                <option value="all">All</option>
                 <option value="in-progress">In Progress</option>
                 <option value="complete">Complete</option>
-                <option value="other">Not yet started</option>
+                <option value="other">Other</option>
             </select>
         </div>
 
         <div class="filter-container">
-            <label for="">Choose Review Status:</label>
+            <label for="" style="margin-right: 1cm;">Choose Review Status:</label>
             <select id="dropdown2" class="dropdown-content">
-                <option value="Review Incomplete">Review Incomplete</option>
-                <option value="Review Complete">Review Complete</option>
+                <option value="all">All</option>
+                <option value="one-day">1 Day</option>
+                <option value="three-days">3 Days</option>
+                <option value="one-week">1 Week</option>
+                <option value="two-weeks">2 Weeks</option>
+                <option value="one-month">1 Month</option>
             </select>
         </div>
 
         <div class="filter-container">
-            <label for="">Choose Team:</label>
+            <label for="" style="margin-right: 2cm;">Choose Team:</label>
             <select id="dropdown3" class="dropdown-content">
+                <option value="all">All</option>
                 <option value="police">Police</option>
                 <option value="intern">Intern</option>
                 <option value="other">Other</option>
@@ -61,72 +67,115 @@
             <!-- Add the projects dynamically here using jinja -->
             {% for project in projects %}
                 {% if loop.index0 % 2 == 0 %} <!-- Start a new supervisor-projects div on odd indices (0-based) -->
-                <section class="supervisor-projects">
-                {% endif %}
-        
-                    <div class="project1">
-                        <input type="hidden" id="project-id" value="{{ project[0] }}">
-                        <h3 class="project-heading">{{ project[1] }}</h3>
-                        <p>{{ project[2] }}</p>
-                        <h2 class="project-heading">Project Status: {{ project[3] }}</h2>
-                        <h2 class="project-heading">Tasks</h2>
-                        <ul class="tasks">
-                            {% if project[6]|length == 0 %}
-                                <li>No tasks found</li>
-                            {% endif %}
-                            {% for task in project[6] %}
-                                <li>{{ task }}</li>
-                            {% endfor %}
-                        </ul>
-                        <h3 class="project-heading">Review due in {{ project[4] }}</h3>
-                        <h3 class="project-heading">Project owner: {{ project[5] }}</h3>
-                        <a href="{{ url_for('setProjectId', project_id=project[0]) }}"><button>View Project</button></a>
+                <div class="project-row">
+                    <div class="project-column">
+                        <div class="project1">
+                            <input type="hidden" id="project-id" value="{{ project[0] }}">
+                            <div class="icons">
+                                <a href="">
+                                  <img
+                                    src="https://i.ibb.co/35vt9Zwk/person-outline-icon-1.png"
+                                    alt="person-outline-icon-1"
+                                    class="assignment-button"
+                                    style="display: block;"
+                                  />
+                                </a>
+                            </div>
+                            <h3 class="project-heading">{{ project[1] }}</h3>
+                            <p>{{ project[2] }}</p>
+                            <h2 class="project-heading">Project Status: {{ project[3] }}</h2>
+                            <h2 class="project-heading">Tasks</h2>
+                            <ul class="tasks">
+                                {% if project[6]|length == 0 %}
+                                    <li>No tasks found</li>
+                                {% endif %}
+                                {% for task in project[6] %}
+                                    <li>{{ task }}</li>
+                                {% endfor %}
+                            </ul>
+                            <h3 class="project-heading">Review due in {{ project[4] }}</h3>
+                            <h3 class="project-heading">Project owner: {{ project[5] }}</h3>
+                            <a href="{{ url_for('setProjectId', project_id=project[0]) }}"><button>View Project</button></a>
+                        </div>
                     </div>
-        
-                {% if loop.index0 % 2 == 1 or loop.last %} <!-- Close the supervisor-projects div after every two projects -->
-                    <div class="project1">
-                        <input type="hidden" id="project-id" value="{{ project[0] }}">
-                        <h3 class="project-heading">{{ project[1] }}</h3>
-                        <p>{{ project[2] }}</p>
-                        <h2 class="project-heading">Project Status: {{ project[3] }}</h2>
-                        <h2 class="project-heading">Tasks</h2>
-                        <ul class="tasks">
-                            {% if project[6]|length == 0 %}
-                                <li>No tasks found</li>
-                            {% endif %}
-                            {% for task in project[6] %}
-                                <li>{{ task }}</li>
-                            {% endfor %}
-                        </ul>
-                        <h3 class="project-heading">Review due in {{ project[4] }}</h3>
-                        <h3 class="project-heading">Project owner: {{ project[5] }}</h3>
-                        <a href="{{ url_for('setProjectId', project_id=project[0]) }}"><button>View Project</button></a>
+                    <div id="assignment-modal" style="display: none;">
+                        <div id="assignment-modal-content">
+                            <h3>Manage Users for Project</h3>
+                            <form
+                                action="{{ url_for('add_user_to_project') }}"
+                                method="POST"
+                                enctype="multipart/form-data"
+                            >
+                                {{ form.hidden_tag() }}
+                                <div class="form-group">
+                                    {{ form.project_title.label }}<br />
+                                    {{ form.project_title() }}
+                                </div>
+                                <div class="form-group">
+                                    {{ form.username.label }}<br />
+                                    {{ form.username() }}
+                                </div>
+                                <div class="form-group">
+                                    {{ form.submit() }}
+                                </div>
+                            </form>
+                        </div>
+                        <button onclick="document.getElementById('assignment-modal').style.display='none'">Close</button>
                     </div>
-                </section>
-                {% endif %}
+                    {% if not loop.last and loop.index0 % 2 == 0 %}
+                        <div class="project-column">
+                            {% set next_project = projects[loop.index] %}
+                            <div class="project1">
+                                <input type="hidden" id="project-id" value="{{ next_project[0] }}">
+                                <h3 class="project-heading">{{ next_project[1] }}</h3>
+                                <p>{{ next_project[2] }}</p>
+                                <h2 class="project-heading">Project Status: {{ next_project[3] }}</h2>
+                                <h2 class="project-heading">Tasks</h2>
+                                <ul class="tasks">
+                                    {% if next_project[6]|length == 0 %}
+                                        <li>No tasks found</li>
+                                    {% endif %}
+                                    {% for task in next_project[6] %}
+                                        <li>{{ task }}</li>
+                                    {% endfor %}
+                                </ul>
+                                <h3 class="project-heading">Review due in {{ next_project[4] }}</h3>
+                                <h3 class="project-heading">Project owner: {{ next_project[5] }}</h3>
+                                <a href="{{ url_for('setProjectId', project_id=next_project[0]) }}"><button>View Project</button></a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
         
             {% endfor %}
         </section>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const assignmentButtons = document.querySelectorAll('.assignment-button');
         
-        <div class="info-placeholder2">
-            <h1>Selected Project</h1>
-            <div class="this-project">
-                <input type="hidden" id="selected-project-id" value="">
-                <h3 class="project-heading">Selected Project Title</h3>
-                <p>Selected project details</p>
-                <h2 class="project-heading">Selected project status:</h2>
-                <h2 class="project-heading">Selected project Tasks</h2>
-                <ul class="tasks">
-                    <li>Example Task</li>
-                </ul>
-                <h3 class="project-heading">Review due in:</h3>
-                <h3 class="project-heading">Selected Project owner:</h3>
-                <a href="{{ url_for('setProjectId', project_id=0) }}"><button>View Project</button></a>
-            </div>
-        </div>
-    </div>
-       
-
+                assignmentButtons.forEach(button => {
+                    button.addEventListener('click', function (event) {
+                        event.preventDefault();
+                        const projectId = button.closest('.project1').querySelector('#project-id').value;
+                        const projectTitle = button.closest('.project1').querySelector('.project-heading').textContent;
+        
+                        // Open the modal
+                        const modal = document.getElementById('assignment-modal');
+                        modal.style.display = 'block';
+        
+                        // Populate the project title in the form
+                        const projectTitleField = document.querySelector('select[name="project_title"]');
+                        for (let option of projectTitleField.options) {
+                            if (option.text === projectTitle) {
+                                option.selected = true;
+                                break;
+                            }
+                        }
+                    });
+                });
+            });
+        </script>
         <footer>
             <p>&copy; 2025 Enterprise Pro Task Management System</p>
         </footer>
@@ -145,41 +194,6 @@
                         loginLogoutBtn.textContent = 'Login';
                         loginLogoutBtn.href = "{{ url_for('login') }}";
                     }
-                });
-            });
-
-            document.addEventListener('DOMContentLoaded', function() {
-                var selectButtons = document.querySelectorAll('a[href*="setProjectId"] button');
-
-                selectButtons.forEach(function(button) {
-                    button.addEventListener('click', function(event) {
-                        event.preventDefault();
-                        var projectDiv = button.closest('.project1');
-                        var projectId = projectDiv.querySelector('input[type="hidden"]').value;
-                        projectId = parseInt(projectId, 10);
-                        var projectTitle = projectDiv.querySelector('h3.project-heading').textContent;
-                        var projectDetails = projectDiv.querySelector('p').textContent;
-                        var projectStatus = projectDiv.querySelector('h2.project-heading').textContent;
-                        var projectTasks = projectDiv.querySelectorAll('ul.tasks li');
-                        var reviewDue = projectDiv.querySelectorAll('h3.project-heading')[1].textContent;
-                        var projectOwner = projectDiv.querySelectorAll('h3.project-heading')[2].textContent;
-
-                        document.getElementById('selected-project-id').value = projectId;
-                        document.querySelector('.this-project h3.project-heading').textContent = projectTitle;
-                        document.querySelector('.this-project p').textContent = projectDetails;
-                        document.querySelector('.this-project h2.project-heading').textContent = projectStatus;
-                        var tasksList = document.querySelector('.this-project ul.tasks');
-                        tasksList.innerHTML = '';
-                        projectTasks.forEach(function(task) {
-                            var li = document.createElement('li');
-                            li.textContent = task.textContent;
-                            tasksList.appendChild(li);
-                        });
-                        document.querySelector('.this-project h3.project-heading:nth-of-type(2)').textContent = reviewDue;
-                        document.querySelector('.this-project h3.project-heading:nth-of-type(3)').textContent = projectOwner;
-                        var viewProjectButton = document.querySelector('.this-project a[href*="setProjectId"]');
-                        viewProjectButton.href = "{{ url_for('setProjectId', project_id=0) }}".replace(0, projectId);
-                    });
                 });
             });
         </script>

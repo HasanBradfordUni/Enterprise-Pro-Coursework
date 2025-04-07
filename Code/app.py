@@ -30,7 +30,7 @@ class myClass():
         router('/filter_projects')(self.filter_projects)
         router('/sort_projects')(self.sort_projects)
         router('/add_user_to_project', methods=['GET', 'POST'])(self.add_user_to_project)
-        router('/remove_user_from_project')(self.remove_user_from_project)
+        router('/remove_user_from_project/<int:user_id>/<int:project_id>')(self.remove_user_from_project)
         router('/create_project', methods=['GET', 'POST'])(self.create_project)
         router('/edit_project')(self.edit_project)
         router('/delete_project')(self.delete_project)
@@ -137,7 +137,8 @@ class myClass():
             thisProject.append([task[1] for task in tasks if task[6] == project[0]])
             theseProjects.append(thisProject)
         projects = theseProjects
-        return render_template('supervisor.html', projects=projects)
+        form = UsersInProjectsForm()
+        return render_template('supervisor.html', projects=projects, form=form)
     
     def admin(self):
         form = CreateProjectForm()
