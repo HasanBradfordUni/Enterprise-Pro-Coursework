@@ -556,4 +556,172 @@ if __name__ == "__main__":
             return "All subtests passed - Update assigned task test successful"
         else:
             return "Cannot update task - Update assigned task test unsuccessful"
-                
+        
+    def test_delete_user(self):
+        users = self.thisDatabase.get_all_from_table("users")
+        user_ids = []
+        usernames = []
+        while user_identifier not in user_ids or user_identifier not in usernames:
+            for user in users:
+                print(f"User id: {user[0]}; Username: {user[1]}")
+                user_ids.append(user[0])
+                usernames.append(user[1])
+            user_identifier = input("Enter the user id or username of the user you wish to delete: ")
+            if user_identifier not in user_ids or user_identifier not in usernames:
+                print("Error! Please enter a valid username/id from the list above")
+        try:
+            user_id = 0
+            username = ""
+            if user_identifier.isdigit():
+                user_id = user_identifier
+            else:
+                username = user_identifier
+            row_id = self.thisDatabase.delete_user(user_id=user_id, username=username)
+            assert row_id is not None
+            return f"User with identifier {user_identifier} deleted successfully - Delete user test successful"
+        except AssertionError:
+            return f"User with identifier {user_identifier} could not be deleted - Delete user test unsuccessful"
+           
+    def test_delete_project(self):
+        projects = self.thisDatabase.get_all_from_table("projects")
+        project_ids = []
+        while project_identifier not in project_ids:
+            for project in projects:
+                print(f"Project id: {project[0]}")
+                project_ids.append(project[0])
+            project_identifier = input("Enter the project id of the project you wish to delete: ")
+            if project_identifier not in project_ids:
+                print("Error! Please enter a valid project id from the list above")
+        try:
+            project_id = 0
+            row_id = self.thisDatabase.delete_project(project_id=project_id)
+            assert row_id is not None
+            return f"Project with identifier {project_identifier} deleted successfully - Delete project test successful"
+        except AssertionError:
+            return f"Project with identifier {project_identifier} could not be deleted - Delete project test unsuccessful"
+        
+    def test_delete_task(self):
+        tasks = self.thisDatabase.get_all_from_table("tasks")
+        task_ids = []
+        task_titles = []
+        project_ids = []
+        while task_identifier not in task_ids or task_identifier not in task_titles:
+            for task in tasks:
+                print(f"Task id: {task[0]}; Task title: {task[1]}; Project id: {task[2]}")
+                task_ids.append(task[0])
+                task_titles.append(task[1])
+                project_ids.append(task[2])
+            task_identifier = input("Enter the task id or task title for the task you wish to delete: ")
+            if task_identifier not in task_ids or task_identifier not in task_titles:
+                print("Error! Please enter a valid task title or task/project id from the list above")
+        try:
+            task_id = 0
+            task_title = ""
+            project_id = 0
+            if task_identifier.isdigit():
+                task_id = task_identifier
+            else:
+                task_title = task_identifier
+                project_id =  int(input("Enter the project id for the task you wish to delete: "))
+            row_id = self.thisDatabase.delete_task(task_id=task_id, task_title=task_title, project_id=project_id)
+            assert row_id is not None
+            return f"Task with identifier {task_identifier} deleted successfully - Delete task test sucessful"
+        except AssertionError:
+            return f"Task with identifier {task_identifier} could not be deleted - Delete task test unsucessful"
+           
+    def test_delete_project_user(self):
+        project_users = []
+        unique_ids = []
+        project_ids = []
+        user_ids = []
+        usernames = []
+        project_users = self.thisDatabase.get_all_from_table("project_users")
+        for project_user in project_users:
+            print(f"Unique id: {project_user[0]}; Project id: {project_user[1]}; User id: {project_user[3]}; Username: {project_user[4]}")
+            unique_ids.append(project_user[0])
+            project_ids.append(project_user[1])
+            user_ids.append(project_user[3])
+            usernames.append(project_user[4])
+        print("Do you wish to delete via unique id or project id and user details?")
+        print("1. Unique id")
+        print("2. Project id and User details")
+        choice = input("Enter 1 or 2 to choose from the options above: ")
+        if choice == "1":
+            unique_id = input("Enter the unique id of the user in project you wish to delete: ")
+            row_id = self.thisDatabase.remove_user_from_project(project_user_id=unique_id)
+            try:
+                assert row_id is not None
+                return f"User in project with identifier {unique_id} deleted successfully - Delete project user test sucessful"
+            except AssertionError:
+                return f"User in project with identifier {unique_id} could not be deleted - Delete project user test unsucessful"
+        elif choice == "2":
+            project_id = 0
+            user_id = 0
+            username = ""
+            while project_id not in project_ids:
+                project_id = input("Enter the project id of the user in project you wish to delete: ")
+                if project_id not in project_ids:
+                    print("Error! Please enter a valid project id from the list above")
+            while user_identifier not in user_ids or user_identifier not in usernames:
+                user_identifier = input("Enter the user id or username of the user in project you wish to delete: ")
+                if user_identifier not in user_ids or user_identifier not in usernames:
+                    print("Error! Please enter a valid username/id from the list above")
+            if user_identifier.isdigit():
+                user_id = user_identifier
+            else:
+                username = user_identifier
+            row_id = self.thisDatabase.remove_user_from_project(project_id=project_id, user_id=user_id, username=username)
+            try:
+                assert row_id is not None
+                return f"User in project with project id {project_id} and user identifier {user_identifier} deleted successfully - Delete project user test sucessful"
+            except AssertionError:
+                return f"User in project with project id {project_id} and user identifier {user_identifier} could not be deleted - Delete project user test unsucessful"
+           
+    def test_delete_assigned_task(self):
+        assigned_tasks = []
+        unique_ids = []
+        project_ids = []
+        user_ids = []
+        task_ids = []
+        assigned_tasks = self.thisDatabase.get_all_from_table("assigned_tasks")
+        for assigned_task in assigned_tasks:
+            print(f"Unique id: {assigned_task[0]}; Project id: {assigned_task[5]}; User id: {assigned_task[3]}; Task id: {assigned_task[1]}")
+            unique_ids.append(assigned_tasks[0])
+            project_ids.append(assigned_tasks[5])
+            user_ids.append(assigned_tasks[3])
+            task_ids.append(assigned_tasks[1])
+        print("Do you wish to delete via unique id or project id and user id and task id?")
+        print("1. Unique id")
+        print("2. Project id and User id and Task id")
+        choice = input("Enter 1 or 2 to choose from the options above: ")
+        if choice == "1":
+            unique_id = input("Enter the unique id of the user in project you wish to delete: ")
+            row_id = self.thisDatabase.remove_assigned_task(assigned_task_id=unique_id)
+            try:
+                assert row_id is not None
+                return f"Assigned Task with identifier {unique_id} deleted successfully - Delete assigned task test sucessful"
+            except AssertionError:
+                return f"Assigned Task with identifier {unique_id} could not be deleted - Delete assigned task test unsucessful"
+        elif choice == "2":
+            project_id = 0
+            user_id = 0
+            task_id = 0
+            while project_id not in project_ids:
+                project_id = input("Enter the project id of the user in project you wish to delete: ")
+                if project_id not in project_ids:
+                    print("Error! Please enter a valid project id from the list above")
+            while user_id not in user_ids:
+                user_id = input("Enter the user id of the user in project you wish to delete: ")
+                if user_id not in user_ids:
+                    print("Error! Please enter a valid user id from the list above")
+            while task_id not in task_ids:
+                task_id = input("Enter the task id of the user in project you wish to delete: ")
+                if task_id not in task_ids:
+                    print("Error! Please enter a valid task id from the list above")
+            row_id = self.thisDatabase.remove_assigned_task(task_id=task_id, user_id=user_id, project_id=project_id)
+            try:
+                assert row_id is not None
+                return f"Assigned Task with project id {project_id} and user id {user_id} and task id {task_id} deleted successfully - Delete assigned task test sucessful"
+            except AssertionError:
+                return f"User in project with project id {project_id} and user id {user_id} and task id {task_id} could not be deleted - Delete assigned task test unsucessful"
+                   
