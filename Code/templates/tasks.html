@@ -1,249 +1,341 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
     <title>YHROCU Tasks View</title>
-</head>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
-    <!-- Font Awesome cdn css -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<body>
+  </head>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
+    rel="stylesheet"
+  />
+  <!-- Font Awesome cdn css -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+  <body>
     <header>
-        <h1>Tasks to complete</h1>
-        <h2>Project: {{ project[1] }}</h2>
-        <div class="menuBar">
-            <ul class="nav">
-              <li class="nav" id="currentPage">
-                <a class="nav" href="{{ url_for('index') }}">Home</a>
-              </li>
-              <li class="nav"><a class="nav" id="login-logout-btn" href="{{ url_for('login') }}">Login</a></li>
-            </ul>
-        </div>
+      <h1>Tasks to complete</h1>
+      <h2>Project: {{ project[1] }}</h2>
+      <div class="menuBar">
+        <ul class="nav">
+          <li class="nav" id="currentPage">
+            <a class="nav" href="{{ url_for('index') }}">Home</a>
+          </li>
+          <li class="nav">
+            <a class="nav" id="login-logout-btn" href="{{ url_for('login') }}"
+              >Login</a
+            >
+          </li>
+        </ul>
+      </div>
     </header>
-        <h2 class="centered-heading">Add new task</h2>
+    <h2 class="centered-heading">Add new task</h2>
     <form action="/create_task" method="post">
-        <label for="task-title">Title of New task</label>
-        <input type="text" class="todo-input" id="task-title" name="task-title">
-        <label for="task-details">Details of New task</label>
-        <input type="text" class="todo-input" id="task-details" name="task-details">
-        <label for="task-due-date">Due Date of New task</label>
-        <input type="date" class="todo-input" id="task-due-date" name="task-due-date">
-        <button class="todo-button" type="submit">
-            <i class="fas fa-plus-circle fa-lg"></i>
-        </button>
+      <label for="task-title">Title of New task</label>
+      <input type="text" class="todo-input" id="task-title" name="task-title" />
+      <label for="task-details">Details of New task</label>
+      <input
+        type="text"
+        class="todo-input"
+        id="task-details"
+        name="task-details"
+      />
+      <label for="task-due-date">Due Date of New task</label>
+      <input
+        type="date"
+        class="todo-input"
+        id="task-due-date"
+        name="task-due-date"
+      />
+      <button class="todo-button" type="submit">
+        <i class="fas fa-plus-circle fa-lg"></i>
+      </button>
     </form>
     <form>
-        <div class="select-headings">
-            <h3 class="filter-heading"> Filter Options </h3>
-            <h3 class="sort-heading"> Sort Options </h3>
-        </div>
+      <div class="select-headings">
+        <h3 class="filter-heading">Filter Options</h3>
+        <h3 class="sort-heading">Sort Options</h3>
+      </div>
     </form>
     <form>
-        <div class="select">
-            <select name="todos" id="filter-options" class="filter-todo">
-                <option value="all">All</option>
-                <option value="completed">Completed</option>
-                <option value="new">New</option>
-                <option value="in-progress">In Progress</option>
-                <option value="overdue">Overdue</option>
-            </select>
-            <select name="sorting-options" id="sorting-options" class="sort-todo">
-                <option value="none">None</option>
-                <option value="title">Title</option>
-                <option value="assigned-date">Assigned Date</option>
-                <option value="due-date">Due Date</option>
-                <option value="status">Status</option>
-            </select>
-        </div>
+      <div class="select">
+        <select name="todos" id="filter-options" class="filter-todo">
+          <option value="all">All</option>
+          <option value="completed">Completed</option>
+          <option value="new">New</option>
+          <option value="in-progress">In Progress</option>
+          <option value="overdue">Overdue</option>
+        </select>
+        <select name="sorting-options" id="sorting-options" class="sort-todo">
+          <option value="none">None</option>
+          <option value="title">Title</option>
+          <option value="assigned-date">Assigned Date</option>
+          <option value="due-date">Due Date</option>
+          <option value="status">Status</option>
+        </select>
+      </div>
     </form>
 
     <section id="progress-logs" class="task-form">
-        <h2>Progress Logs</h2>
-        <div class="todo-container">
-            {% if task_updates|length == 0 %}
-            <p>No task updates found</p>
-            {% endif %}
-            {% for task_update in task_updates %}
-            <div class="task-box" data-task-update-id="{{ task_update[0] }}">
-                <h1>Date: {{ task_update[4] }}</h1>
-                <h3>Progress Update: {{ task_update[2] }} </h3>
-                <p>Status: {{ task_update[3] }}</p>
-            </div>
-            <br>
-            {% endfor %}
+      <h2>Progress Logs</h2>
+      <div class="todo-container">
+        {% if task_updates|length == 0 %}
+        <p>No task updates found</p>
+        {% endif %} {% for task_update in task_updates %}
+        <div class="task-box" data-task-update-id="{{ task_update[0] }}">
+          <h1>Date: {{ task_update[4] }}</h1>
+          <h3>Progress Update: {{ task_update[2] }}</h3>
+          <p>Status: {{ task_update[3] }}</p>
         </div>
-        <form id="progress-update-form" action="{{ url_for('update_progress', project_id=project[0], update=' ') }}" method="POST" enctype="multipart/form-data">
-            {{ form.hidden_tag() }}
-            <input type="hidden" id="project_id" name="project_id" value="{{ project[0] }}">
-            <div class="form-group">
-                {{ form.progress_update.label }}<br>
-                {{ form.progress_update(size=40) }}
-            </div>       
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </div>
-        </form>
-    </section>
-        
-    <div class="todo-container">
-        {% if tasks|length == 0 %}
-        <p>No tasks found</p>
-        {% endif %}
-        {% for task in tasks %}
-        <div class="task-box" data-task-id="{{ task[0] }}">
-            <div class="icons">
-                <a href="{{ url_for('delete_task', task_id=task[0]) }}" >
-                    <img src="https://i.ibb.co/nNkRC080/delete-icon-png-12.png" alt="delete-icon-png-12" class="delete-button" style="display: none;">
-                </a>
-                <a href="editForm()" >
-                    <img src="https://i.ibb.co/GvgwL378/edit-icon-image-29.png" alt="edit-icon-image-29" class="edit-button" style="display: none;">
-                </a>
-                <a href="">
-                    <img src="https://i.ibb.co/35vt9Zwk/person-outline-icon-1.png" alt="person-outline-icon-1" class="assignment-button" style="display: none;">
-                </a>
-            </div>
-            <h1>Title: {{ task[1] }}</h1>
-            <h3>Details: {{ task[2] }} </h3>
-            <p>Status: {{ task[3] }}</p>
-            <p class="assigned-users">Assigned To: Unknown</p>
-            <h4>Assigned date: {{ task[4] }}</h4>
-            <h4>Due date: {{ task[5] }}</h4>
-        </div>
-        <br>
+        <br />
         {% endfor %}
+      </div>
+      <form
+        id="progress-update-form"
+        action="{{ url_for('update_progress', project_id=project[0], update=' ') }}"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        {{ form.hidden_tag() }}
+        <input
+          type="hidden"
+          id="project_id"
+          name="project_id"
+          value="{{ project[0] }}"
+        />
+        <div class="form-group">
+          {{ form.progress_update.label }}<br />
+          {{ form.progress_update(size=40) }}
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+    </section>
+
+    <div class="todo-container">
+      {% if tasks|length == 0 %}
+      <p>No tasks found</p>
+      {% endif %} {% for task in tasks %}
+      <div class="task-box" data-task-id="{{ task[0] }}">
+        <div class="icons">
+          <a href="{{ url_for('delete_task', task_id=task[0]) }}">
+            <img
+              src="https://i.ibb.co/nNkRC080/delete-icon-png-12.png"
+              alt="delete-icon-png-12"
+              class="delete-button"
+              style="display: none"
+            />
+          </a>
+          <a href="editForm()">
+            <img
+              src="https://i.ibb.co/GvgwL378/edit-icon-image-29.png"
+              alt="edit-icon-image-29"
+              class="edit-button"
+              style="display: none"
+            />
+          </a>
+          <a href="">
+            <img
+              src="https://i.ibb.co/35vt9Zwk/person-outline-icon-1.png"
+              alt="person-outline-icon-1"
+              class="assignment-button"
+              style="display: none"
+            />
+          </a>
+        </div>
+        <h1>Title: {{ task[1] }}</h1>
+        <h3>Details: {{ task[2] }}</h3>
+        <p>Status: {{ task[3] }}</p>
+        <p class="assigned-users">Assigned To: Unknown</p>
+        <h4>Assigned date: {{ task[4] }}</h4>
+        <h4>Due date: {{ task[5] }}</h4>
+      </div>
+      <br />
+      {% endfor %}
     </div>
 
-    <div id="edit-task-forms-container" style="display: none;">
-        {% for task in tasks %}
-        <form id="edit-task-form-{{ task[0] }}" class="edit-task-form" action="{{ url_for('edit_task', task_id=task[0]) }}" method="POST" enctype="multipart/form-data" style="display: none;">
-            {{ form1.hidden_tag() }}
-            <input type="hidden" name="task_id" value="{{ task[0] }}">
-            <div class="form-group">
-                {{ form1.task_title.label }}<br>
-                {{ form1.task_title() }}
-            </div>
-            <div class="form-group">
-                {{ form1.task_details.label }}<br>
-                {{ form1.task_details() }}
-            </div>
-            <div class="form-group">
-                {{ form1.task_status.label }}<br>
-                {{ form1.task_status() }}
-            </div>
-            <div class="form-group">
-                {{ form1.task_assigned_date.label }}<br>
-                {{ form1.task_assigned_date() }}
-            </div>
-            <div class="form-group">
-                {{ form1.task_due_date.label }}<br>
-                {{ form1.task_due_date() }}
-            </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">Save Changes</button>
-            </div>
-            <div class="form-group">
-                <button type="button" class="btn btn-secondary" onclick="document.getElementById('edit-task-form-{{ task[0] }}').style.display='none'">Cancel</button>
-            </div>
-        </form>
-        {% endfor %}
+    <div id="edit-task-forms-container" style="display: none">
+      {% for task in tasks %}
+      <form
+        id="edit-task-form-{{ task[0] }}"
+        class="edit-task-form"
+        action="{{ url_for('edit_task', task_id=task[0]) }}"
+        method="POST"
+        enctype="multipart/form-data"
+        style="display: none"
+      >
+        {{ form1.hidden_tag() }}
+        <input type="hidden" name="task_id" value="{{ task[0] }}" />
+        <div class="form-group">
+          {{ form1.task_title.label }}<br />
+          {{ form1.task_title() }}
+        </div>
+        <div class="form-group">
+          {{ form1.task_details.label }}<br />
+          {{ form1.task_details() }}
+        </div>
+        <div class="form-group">
+          {{ form1.task_status.label }}<br />
+          {{ form1.task_status() }}
+        </div>
+        <div class="form-group">
+          {{ form1.task_assigned_date.label }}<br />
+          {{ form1.task_assigned_date() }}
+        </div>
+        <div class="form-group">
+          {{ form1.task_due_date.label }}<br />
+          {{ form1.task_due_date() }}
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+        <div class="form-group">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            onclick="document.getElementById('edit-task-form-{{ task[0] }}').style.display='none'"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+      {% endfor %}
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const editButtons = document.querySelectorAll('.edit-button');
-            editButtons.forEach(button => {
-                button.addEventListener('click', function(event) {
-                    event.preventDefault();
-                    const taskBox = button.closest('.task-box');
-                    const taskId = taskBox.getAttribute('data-task-id');
-                    const editForm = document.getElementById(`edit-task-form-${taskId}`);
-                    if (editForm) {
-                        if (editForm.style.display === 'none' || editForm.style.display === '') {
-                            editForm.style.display = 'block';
-                        } else {
-                            editForm.style.display = 'none';
-                        }
-                    }
-                });
-            });
+      document.addEventListener("DOMContentLoaded", function () {
+        const editButtons = document.querySelectorAll(".edit-button");
+        editButtons.forEach((button) => {
+          button.addEventListener("click", function (event) {
+            event.preventDefault();
+            const taskBox = button.closest(".task-box");
+            const taskId = taskBox.getAttribute("data-task-id");
+            const editForm = document.getElementById(
+              `edit-task-form-${taskId}`
+            );
+            if (editForm) {
+              if (
+                editForm.style.display === "none" ||
+                editForm.style.display === ""
+              ) {
+                editForm.style.display = "block";
+              } else {
+                editForm.style.display = "none";
+              }
+            }
+          });
         });
+      });
     </script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.getElementById('progresss-update-form');
-        form.addEventListener('submit', function(event) {
-            event.preventDefault();
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("progresss-update-form");
+        form.addEventListener("submit", function (event) {
+          event.preventDefault();
 
-            const progressUpdate = form.querySelector('input[name="progress_update"]').value;
+          const progressUpdate = form.querySelector(
+            'input[name="progress_update"]'
+          ).value;
 
-            if (!progressUpdate.trim()) {
-                alert("Please enter a progress update.");
-                return;
-            }
+          if (!progressUpdate.trim()) {
+            alert("Please enter a progress update.");
+            return;
+          }
 
-            action_url = form.action.replace(`update=' '`, `update=${encodeURIComponent(progressUpdate)}`);
-            console.log("Action URL:", action_url);
-            form.action = action_url;
+          action_url = form.action.replace(
+            `update=' '`,
+            `update=${encodeURIComponent(progressUpdate)}`
+          );
+          console.log("Action URL:", action_url);
+          form.action = action_url;
 
-            console.log("Submitting to:", form.action);
-            form.submit();
+          console.log("Submitting to:", form.action);
+          form.submit();
         });
-    });
-</script>
+      });
+    </script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
         fetch("{{ url_for('get_user_status') }}")
-            .then(response => response.json())
-            .then(data => {
-                const userRole = data[2];
-                console.log("User role:", userRole); // Debugging line
-                if (userRole === 'admin') {
-                    deleteButtons = document.querySelectorAll('.delete-button');
-                    editButtons = document.querySelectorAll('.edit-button');
-                    assignmentButtons = document.querySelectorAll('.assignment-button');
-                    deleteButtons.forEach(button => button.style.display = 'flex');
-                    editButtons.forEach(button => button.style.display = 'flex');
-                    assignmentButtons.forEach(button => button.style.display = 'flex');
-                } else if (userRole === 'supervisor') {
-                    deleteButtons = document.querySelectorAll('.delete-button');
-                    editButtons = document.querySelectorAll('.edit-button');
-                    assignmentButtons = document.querySelectorAll('.assignment-button');
-                    deleteButtons.forEach(button => button.style.display = 'none');
-                    editButtons.forEach(button => button.style.display = 'flex');
-                    assignmentButtons.forEach(button => button.style.display = 'flex');
-                } else {
-                    deleteButtons = document.querySelectorAll('.delete-button');
-                    editButtons = document.querySelectorAll('.edit-button');
-                    assignmentButtons = document.querySelectorAll('.assignment-button');
-                    deleteButtons.forEach(button => button.style.display = 'none');
-                    editButtons.forEach(button => button.style.display = 'none');
-                    assignmentButtons.forEach(button => button.style.display = 'none');
-                }
-            });
+          .then((response) => response.json())
+          .then((data) => {
+            const userRole = data[2];
+            console.log("User role:", userRole); // Debugging line
+            if (userRole === "admin") {
+              deleteButtons = document.querySelectorAll(".delete-button");
+              editButtons = document.querySelectorAll(".edit-button");
+              assignmentButtons =
+                document.querySelectorAll(".assignment-button");
+              deleteButtons.forEach(
+                (button) => (button.style.display = "flex")
+              );
+              editButtons.forEach((button) => (button.style.display = "flex"));
+              assignmentButtons.forEach(
+                (button) => (button.style.display = "flex")
+              );
+            } else if (userRole === "supervisor") {
+              deleteButtons = document.querySelectorAll(".delete-button");
+              editButtons = document.querySelectorAll(".edit-button");
+              assignmentButtons =
+                document.querySelectorAll(".assignment-button");
+              deleteButtons.forEach(
+                (button) => (button.style.display = "none")
+              );
+              editButtons.forEach((button) => (button.style.display = "flex"));
+              assignmentButtons.forEach(
+                (button) => (button.style.display = "flex")
+              );
+            } else {
+              deleteButtons = document.querySelectorAll(".delete-button");
+              editButtons = document.querySelectorAll(".edit-button");
+              assignmentButtons =
+                document.querySelectorAll(".assignment-button");
+              deleteButtons.forEach(
+                (button) => (button.style.display = "none")
+              );
+              editButtons.forEach((button) => (button.style.display = "none"));
+              assignmentButtons.forEach(
+                (button) => (button.style.display = "none")
+              );
+            }
+          });
 
-        const filterDropdown = document.getElementById('filter-options');
-        const sortDropdown = document.getElementById('sorting-options');
+        const filterDropdown = document.getElementById("filter-options");
+        const sortDropdown = document.getElementById("sorting-options");
 
         function fetchFilteredTasks() {
-            const filterValue = filterDropdown.value;
+          const filterValue = filterDropdown.value;
 
-            fetch(`{{ url_for('filter_tasks', filter_type='') }}`.replace('filter_type=', `filter_type=${filterValue}`))
-            .then(response => response.json())
-            .then(filteredTasks => {
-                const taskContainer = document.querySelector('.todo-container');
-                taskContainer.innerHTML = '';
-                filteredTasks.forEach(task => {
-                    const taskBox = document.createElement('div');
-                    taskBox.classList.add('task-box');
-                    taskBox.setAttribute('data-task-id', task[0]);
-                    taskBox.innerHTML = `
+          fetch(
+            `{{ url_for('filter_tasks', filter_type='') }}`.replace(
+              "filter_type=",
+              `filter_type=${filterValue}`
+            )
+          )
+            .then((response) => response.json())
+            .then((filteredTasks) => {
+              const taskContainer = document.querySelector(".todo-container");
+              taskContainer.innerHTML = "";
+              filteredTasks.forEach((task) => {
+                const taskBox = document.createElement("div");
+                taskBox.classList.add("task-box");
+                taskBox.setAttribute("data-task-id", task[0]);
+                taskBox.innerHTML = `
                     <div class="icons">
                         <img src="https://i.ibb.co/nNkRC080/delete-icon-png-12.png" alt="delete-icon-png-12" border="0">
                         <img src="https://i.ibb.co/GvgwL378/edit-icon-image-29.png" alt="edit-icon-image-29" border="0">
@@ -256,24 +348,29 @@
                     <h4>Assigned date: ${task[4]}</h4>
                     <h4>Due date: ${task[5]}</h4>
                     `;
-                    taskContainer.appendChild(taskBox);
-                });
+                taskContainer.appendChild(taskBox);
+              });
             });
         }
 
         function fetchSortedTasks() {
-            const sortValue = sortDropdown.value;
+          const sortValue = sortDropdown.value;
 
-            fetch(`{{ url_for('sort_tasks', sort_type='') }}`.replace('sort_type=', `sort_type=${sortValue}`))
-            .then(response => response.json())
-            .then(sortedTasks => {
-                const taskContainer = document.querySelector('.todo-container');
-                taskContainer.innerHTML = '';
-                sortedTasks.forEach(task => {
-                    const taskBox = document.createElement('div');
-                    taskBox.classList.add('task-box');
-                    taskBox.setAttribute('data-task-id', task[0]);
-                    taskBox.innerHTML = `
+          fetch(
+            `{{ url_for('sort_tasks', sort_type='') }}`.replace(
+              "sort_type=",
+              `sort_type=${sortValue}`
+            )
+          )
+            .then((response) => response.json())
+            .then((sortedTasks) => {
+              const taskContainer = document.querySelector(".todo-container");
+              taskContainer.innerHTML = "";
+              sortedTasks.forEach((task) => {
+                const taskBox = document.createElement("div");
+                taskBox.classList.add("task-box");
+                taskBox.setAttribute("data-task-id", task[0]);
+                taskBox.innerHTML = `
                     <div class="icons">
                         <img src="https://i.ibb.co/nNkRC080/delete-icon-png-12.png" alt="delete-icon-png-12" border="0">
                         <img src="https://i.ibb.co/GvgwL378/edit-icon-image-29.png" alt="edit-icon-image-29" border="0">
@@ -286,58 +383,60 @@
                     <h4>Assigned date: ${task[4]}</h4>
                     <h4>Due date: ${task[5]}</h4>
                     `;
-                    taskContainer.appendChild(taskBox);
-                });
+                taskContainer.appendChild(taskBox);
+              });
             });
         }
 
-        filterDropdown.addEventListener('change', fetchFilteredTasks);
-        sortDropdown.addEventListener('change', fetchSortedTasks);
-    });
-</script>
+        filterDropdown.addEventListener("change", fetchFilteredTasks);
+        sortDropdown.addEventListener("change", fetchSortedTasks);
+      });
+    </script>
 
-<footer>
-    <p>&copy; 2025 Enterprise Pro Task Management System</p>
-</footer>
+    <footer>
+      <p>&copy; 2025 Enterprise Pro Task Management System</p>
+    </footer>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const currentTasks = JSON.parse('{{ tasks|tojson }}');
-        const assignedUsers = JSON.parse('{{ assigned_tasks|tojson }}');
-        
-        currentTasks.forEach(task => {
-            const taskBox = document.querySelector(`.task-box[data-task-id="${task[0]}"]`);
-            if (taskBox) {
-                const assignedToParagraph = taskBox.querySelector('.assigned-users');
-                const assignedUsersList = assignedUsers
-                    .filter(user => user[1] === task[0])
-                    .map(user => user[4])
-                    .join(', ');
-                if (assignedUsersList) {
-                    assignedToParagraph.innerHTML = `Assigned To: ${assignedUsersList}`;
-                }
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const currentTasks = JSON.parse("{{ tasks|tojson }}");
+        const assignedUsers = JSON.parse("{{ assigned_tasks|tojson }}");
+
+        currentTasks.forEach((task) => {
+          const taskBox = document.querySelector(
+            `.task-box[data-task-id="${task[0]}"]`
+          );
+          if (taskBox) {
+            const assignedToParagraph =
+              taskBox.querySelector(".assigned-users");
+            const assignedUsersList = assignedUsers
+              .filter((user) => user[1] === task[0])
+              .map((user) => user[4])
+              .join(", ");
+            if (assignedUsersList) {
+              assignedToParagraph.innerHTML = `Assigned To: ${assignedUsersList}`;
             }
+          }
         });
-    });
-</script>
+      });
+    </script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var loginLogoutBtn = document.getElementById('login-logout-btn');
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var loginLogoutBtn = document.getElementById("login-logout-btn");
         fetch("{{ url_for('get_user_status') }}")
-            .then(response => response.json())
-            .then(data => {
+          .then((response) => response.json())
+          .then((data) => {
             var isLoggedIn = data[0];
             if (isLoggedIn) {
-                loginLogoutBtn.textContent = 'Log out';
-                loginLogoutBtn.href = "{{ url_for('logout') }}";
+              loginLogoutBtn.textContent = "Log out";
+              loginLogoutBtn.href = "{{ url_for('logout') }}";
             } else {
-                loginLogoutBtn.textContent = 'Login';
-                loginLogoutBtn.href = "{{ url_for('login') }}";
+              loginLogoutBtn.textContent = "Login";
+              loginLogoutBtn.href = "{{ url_for('login') }}";
             }
-        });
-    });
-</script>
-    
-</body>
+          });
+      });
+    </script>
+  </body>
 </html>

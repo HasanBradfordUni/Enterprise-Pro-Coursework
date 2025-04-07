@@ -1,168 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>YHROCU Admin Page</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+  </head>
+  <body>
     <header>
-        <h1>Configure admin settings for the YHROCU Task Management System</h1>
-        <div class="menuBar">
-            <ul class="nav">
-              <li class="nav" id="currentPage">
-                <a class="nav" href="{{ url_for('index') }}">Home</a>
-              </li>
-              <li class="nav" id="supervisorPage">
-                <a class="nav" href="{{ url_for('supervisor') }}">To Projects</a>
-              </li>
-              <li class="nav"><a class="nav" id="login-logout-btn" href="{{ url_for('login') }}">Login</a></li>
-              <li class="nav">
-                <a class="nav" href="#row2">Go to below forms</a>
-              </li>
-            </ul>
-        </div>
+      <h1>Configure admin settings for the YHROCU Task Management System</h1>
+      <div class="menuBar">
+        <ul class="nav">
+          <li class="nav" id="currentPage">
+            <a class="nav" href="{{ url_for('index') }}">Home</a>
+          </li>
+          <li class="nav" id="supervisorPage">
+            <a class="nav" href="{{ url_for('supervisor') }}">To Projects</a>
+          </li>
+          <li class="nav">
+            <a class="nav" id="login-logout-btn" href="{{ url_for('login') }}"
+              >Login</a
+            >
+          </li>
+          <li class="nav">
+            <a class="nav" href="#row2">Go to below forms</a>
+          </li>
+        </ul>
+      </div>
     </header>
     <section class="admin-page">
-<section id="create-project" class="admin-form">
-    <h2>Create Project</h2>
-    <form action="{{ url_for('create_project') }}" method="POST" enctype="multipart/form-data">
-        {{ form.hidden_tag() }}
-        <div class="form-group">
-            {{ form.project_title.label }}<br>
+      <section id="create-project" class="admin-form">
+        <h2>Create Project</h2>
+        <form
+          action="{{ url_for('create_project') }}"
+          method="POST"
+          enctype="multipart/form-data"
+        >
+          {{ form.hidden_tag() }}
+          <div class="form-group">
+            {{ form.project_title.label }}<br />
             {{ form.project_title(size=32) }}
-        </div>
-        <div class="form-group">
-            {{ form.project_details.label }}<br>
+          </div>
+          <div class="form-group">
+            {{ form.project_details.label }}<br />
             {{ form.project_details(rows=4, cols=32) }}
-        </div>
-        <div class="form-group">
-            {{ form.project_status.label }}<br>
+          </div>
+          <div class="form-group">
+            {{ form.project_status.label }}<br />
             {{ form.project_status() }}
-        </div>
-        <div class="form-group">
-            {{ form.project_review.label }}<br>
+          </div>
+          <div class="form-group">
+            {{ form.project_review.label }}<br />
             {{ form.project_review() }}
-        </div>
-        <div class="form-group">
-            {{ form.project_owner.label }}<br>
+          </div>
+          <div class="form-group">
+            {{ form.project_owner.label }}<br />
             {{ form.project_owner(size=32) }}
-        </div>
-        <div class="form-group">
-            {{ form.submit() }}
-        </div>
-    </form>
-</section>
+          </div>
+          <div class="form-group">{{ form.submit() }}</div>
+        </form>
+      </section>
 
-<section id="create-user" class="admin-form">
-    <h2>Create User</h2>
-    <form action="{{ url_for('create_user') }}" method="POST" enctype="multipart/form-data">
-        {{ form1.hidden_tag() }}
-        <div class="form-group">
-            {{ form1.username.label }}<br>
+      <section id="create-user" class="admin-form">
+        <h2>Create User</h2>
+        <form
+          action="{{ url_for('create_user') }}"
+          method="POST"
+          enctype="multipart/form-data"
+        >
+          {{ form1.hidden_tag() }}
+          <div class="form-group">
+            {{ form1.username.label }}<br />
             {{ form1.username(size=32) }}
-        </div>
-        <div class="form-group">
-            {{ form1.password.label }}<br>
+          </div>
+          <div class="form-group">
+            {{ form1.password.label }}<br />
             {{ form1.password(size=32) }}
-        </div>
-        <div class="form-group">
-            {{ form1.role.label }}<br>
+          </div>
+          <div class="form-group">
+            {{ form1.role.label }}<br />
             {{ form1.role() }}
-        </div>
-        <div class="form-group">
-            {{ form1.team.label }}<br>
+          </div>
+          <div class="form-group">
+            {{ form1.team.label }}<br />
             {{ form1.team() }}
-        </div>
-        <div class="form-group">
-            {{ form1.submit() }}
-        </div>
-    </form>
-</section>
+          </div>
+          <div class="form-group">{{ form1.submit() }}</div>
+        </form>
+      </section>
     </section>
 
     <section class="admin-page" id="row2">
-<section id="update-user-details" class="admin-form">
-    <h2>Update Details of an existing user</h2>
-    <form action="{{ url_for('modify_user') }}" method="POST" enctype="multipart/form-data">
-        {{ form2.hidden_tag() }}
-        <div class="form-group">
-            {{ form2.username.label }}<br>
+      <section id="update-user-details" class="admin-form">
+        <h2>Update Details of an existing user</h2>
+        <form
+          action="{{ url_for('modify_user') }}"
+          method="POST"
+          enctype="multipart/form-data"
+        >
+          {{ form2.hidden_tag() }}
+          <div class="form-group">
+            {{ form2.username.label }}<br />
             {{ form2.username() }}
-        </div>
-        <div class="form-group">
-            {{ form2.password.label }}<br>
+          </div>
+          <div class="form-group">
+            {{ form2.password.label }}<br />
             {{ form2.password(size=32) }}
-        </div>
-        <div class="form-group">
-            {{ form2.role.label }}<br>
+          </div>
+          <div class="form-group">
+            {{ form2.role.label }}<br />
             {{ form2.role() }}
-        </div>
-        <div class="form-group">
-            {{ form2.team.label }}<br>
+          </div>
+          <div class="form-group">
+            {{ form2.team.label }}<br />
             {{ form2.team() }}
-        </div>
-        <div class="form-group">
-            {{ form2.submit() }}
-        </div>
-    </form>
-</section>
+          </div>
+          <div class="form-group">{{ form2.submit() }}</div>
+        </form>
+      </section>
 
-<section id="add-user-to-project" class="admin-form">
-    <h2>Add user(s) to project</h2>
-    <form action="{{ url_for('add_user_to_project') }}" method="POST" enctype="multipart/form-data">
-        {{ form3.hidden_tag() }}
-        <div class="form-group">
-            {{ form3.project_title.label }}<br>
+      <section id="add-user-to-project" class="admin-form">
+        <h2>Add user(s) to project</h2>
+        <form
+          action="{{ url_for('add_user_to_project') }}"
+          method="POST"
+          enctype="multipart/form-data"
+        >
+          {{ form3.hidden_tag() }}
+          <div class="form-group">
+            {{ form3.project_title.label }}<br />
             {{ form3.project_title() }}
-        </div>
-        <div class="form-group">
-            {{ form3.username.label }}<br>
+          </div>
+          <div class="form-group">
+            {{ form3.username.label }}<br />
             {{ form3.username() }}
-        </div>
-        <div class="form-group">
-            {{ form3.submit() }}
-        </div>
-    </form>
-</section>
+          </div>
+          <div class="form-group">{{ form3.submit() }}</div>
+        </form>
+      </section>
     </section>
 
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-<div class="hidden-messages">
-    {% for message in messages %}
-        <p id="hidden-message">{{ message }}</p>
-    {% endfor %}
-{% endif %}
-{% endwith %}
-</div>
-<br>
-<footer>
-    <p>&copy; 2025 Enterprise Pro Task Management System</p>
-</footer>
+    {% with messages = get_flashed_messages() %} {% if messages %}
+    <div class="hidden-messages">
+      {% for message in messages %}
+      <p id="hidden-message">{{ message }}</p>
+      {% endfor %} {% endif %} {% endwith %}
+    </div>
+    <br />
+    <footer>
+      <p>&copy; 2025 Enterprise Pro Task Management System</p>
+    </footer>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var loginLogoutBtn = document.getElementById('login-logout-btn');
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var loginLogoutBtn = document.getElementById("login-logout-btn");
         fetch("{{ url_for('get_user_status') }}")
-            .then(response => response.json())
-            .then(data => {
+          .then((response) => response.json())
+          .then((data) => {
             var isLoggedIn = data[0];
             if (isLoggedIn) {
-                loginLogoutBtn.textContent = 'Log out';
-                loginLogoutBtn.href = "{{ url_for('logout') }}";
+              loginLogoutBtn.textContent = "Log out";
+              loginLogoutBtn.href = "{{ url_for('logout') }}";
             } else {
-                loginLogoutBtn.textContent = 'Login';
-                loginLogoutBtn.href = "{{ url_for('login') }}";
+              loginLogoutBtn.textContent = "Login";
+              loginLogoutBtn.href = "{{ url_for('login') }}";
             }
-        });
+          });
 
-        var hiddenMessage = document.getElementById('hidden-message');
-            if (hiddenMessage) {
-                alert(hiddenMessage.textContent);
-            }
-    });
-</script>
-</body>
+        var hiddenMessage = document.getElementById("hidden-message");
+        if (hiddenMessage) {
+          alert(hiddenMessage.textContent);
+        }
+      });
+    </script>
+  </body>
 </html>

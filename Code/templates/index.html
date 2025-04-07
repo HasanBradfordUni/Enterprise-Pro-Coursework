@@ -1,84 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>YHROCU Task Management System</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+  </head>
+  <body>
     <header>
-        <h1>Task Management System</h1>
-        <div class="menuBar">
-            <ul class="nav">
-              <li class="nav" id="currentPage">
-                <a class="nav" href="{{ url_for('index') }}">Home</a>
-              </li>
-              <li class="nav"><a class="nav" id="login-logout-btn" href="{{ url_for('login') }}">Login</a></li>
-            </ul>
-        </div>
+      <h1>Task Management System</h1>
+      <div class="menuBar">
+        <ul class="nav">
+          <li class="nav" id="currentPage">
+            <a class="nav" href="{{ url_for('index') }}">Home</a>
+          </li>
+          <li class="nav">
+            <a class="nav" id="login-logout-btn" href="{{ url_for('login') }}"
+              >Login</a
+            >
+          </li>
+        </ul>
+      </div>
     </header>
     <main>
-        <section id="projects">
-            <h1>Your Projects</h1>
-            {% if projects|length == 0 %}
-            <p>No projects found</p>
-            {% endif %}
-            <!-- Add the projects dynamically here using jinja -->
-            {% for project in projects %}
-            <div class="project">
-                <h3>{{ project[1] }}</h3>
-                <p>{{ project[2] }}</p>
-                <h2>Project Status: {{ project[3] }}</h2>
-                <h2>Tasks</h2>
-                <ul class="tasks">
-                    {% if project[6]|length == 0 %}
-                    <li>No tasks found</li>
-                    {% endif %}
-                    {% for task in project[6] %}
-                    <li>{{ task }}</li>
-                    {% endfor %}
-                </ul>
-                <h3>Review due in {{ project[4] }}</h3>
-                <h3>Project owner: {{ project[5] }}</h3>
-                <a href="{{ url_for('setProjectId', project_id=project[0]) }}"><button>View Project</button></a>
-            </div>
+      <section id="projects">
+        <h1>Your Projects</h1>
+        {% if projects|length == 0 %}
+        <p>No projects found</p>
+        {% endif %}
+        <!-- Add the projects dynamically here using jinja -->
+        {% for project in projects %}
+        <div class="project">
+          <h3>{{ project[1] }}</h3>
+          <p>{{ project[2] }}</p>
+          <h2>Project Status: {{ project[3] }}</h2>
+          <h2>Tasks</h2>
+          <ul class="tasks">
+            {% if project[6]|length == 0 %}
+            <li>No tasks found</li>
+            {% endif %} {% for task in project[6] %}
+            <li>{{ task }}</li>
             {% endfor %}
-        </section>
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            <div class="hidden-messages">
-                {% for message in messages %}
-                    <p id="hidden-message">{{ message }}</p>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
+          </ul>
+          <h3>Review due in {{ project[4] }}</h3>
+          <h3>Project owner: {{ project[5] }}</h3>
+          <a href="{{ url_for('setProjectId', project_id=project[0]) }}"
+            ><button>View Project</button></a
+          >
         </div>
+        {% endfor %}
+      </section>
+      {% with messages = get_flashed_messages() %} {% if messages %}
+      <div class="hidden-messages">
+        {% for message in messages %}
+        <p id="hidden-message">{{ message }}</p>
+        {% endfor %} {% endif %} {% endwith %}
+      </div>
     </main>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var loginLogoutBtn = document.getElementById('login-logout-btn');
-            fetch("{{ url_for('get_user_status') }}")
-            .then(response => response.json())
-            .then(data => {
+      document.addEventListener("DOMContentLoaded", function () {
+        var loginLogoutBtn = document.getElementById("login-logout-btn");
+        fetch("{{ url_for('get_user_status') }}")
+          .then((response) => response.json())
+          .then((data) => {
             var isLoggedIn = data[0];
             if (isLoggedIn) {
-                loginLogoutBtn.textContent = 'Log out';
-                loginLogoutBtn.href = "{{ url_for('logout') }}";
+              loginLogoutBtn.textContent = "Log out";
+              loginLogoutBtn.href = "{{ url_for('logout') }}";
             } else {
-                loginLogoutBtn.textContent = 'Login';
-                loginLogoutBtn.href = "{{ url_for('login') }}";
+              loginLogoutBtn.textContent = "Login";
+              loginLogoutBtn.href = "{{ url_for('login') }}";
             }
-            });
+          });
 
-            var hiddenMessage = document.getElementById('hidden-message');
-            if (hiddenMessage) {
-                alert(hiddenMessage.textContent);
-            }
-        });
+        var hiddenMessage = document.getElementById("hidden-message");
+        if (hiddenMessage) {
+          alert(hiddenMessage.textContent);
+        }
+      });
     </script>
     <footer>
-        <p>&copy; 2025 Enterprise Pro Task Management System</p>
+      <p>&copy; 2025 Enterprise Pro Task Management System</p>
     </footer>
-</body>
+  </body>
 </html>

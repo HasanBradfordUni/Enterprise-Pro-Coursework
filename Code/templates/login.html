@@ -1,48 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>YHROCU Login</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+  </head>
+  <body>
     <header>
-        <h1>Log in to the YHROCU Task Management System</h1>
+      <h1>Log in to the YHROCU Task Management System</h1>
     </header>
 
- <form action="{{ url_for('login') }}" method="POST" enctype="multipart/form-data">
-        {{ form.hidden_tag() }}
-        <div class="login-container">
-            <h2>USER LOGIN</h2>
-            <div class="input-group">
-                <input type="text" name="username" placeholder="Username">
-            </div>
-            <div class="input-group">
-                <input type="password" name="password" placeholder="Password">
-            </div>
-            <div class="checkbox-container">
-                <label><input type="checkbox"> Remember me</label>
-                <a href="{{ url_for('passwordReset') }}">Forgot Password?</a>
-            </div>
-            <input class="login-btn" type="submit" value="LOG IN">
-            <input type="hidden" id="message" value="{{ message }}">
+    <form
+      action="{{ url_for('login') }}"
+      method="POST"
+      enctype="multipart/form-data"
+    >
+      {{ form.hidden_tag() }}
+      <div class="login-container">
+        <h2>USER LOGIN</h2>
+        <div class="input-group">
+          <input type="text" name="username" placeholder="Username" />
         </div>
-</form>
+        <div class="input-group">
+          <input type="password" name="password" placeholder="Password" />
+        </div>
+        <div class="checkbox-container">
+          <label><input type="checkbox" /> Remember me</label>
+          <a href="{{ url_for('passwordReset') }}">Forgot Password?</a>
+        </div>
+        <input class="login-btn" type="submit" value="LOG IN" />
+        <input type="hidden" id="message" value="{{ message }}" />
+      </div>
+    </form>
 
-<script>
-    function showMessage(message) {
+    <script>
+      function showMessage(message) {
         if (message && message.trim() !== "") {
-            alert(message);
+          alert(message);
         }
-    }
+      }
 
-    window.onload = function() {
+      window.onload = function () {
         showMessage(document.getElementById("message").value);
-    }
-</script>
-<footer>
-    <p>&copy; 2025 Enterprise Pro Task Management System</p>
-</footer>
-</body>
+      };
+    </script>
+    <footer>
+      <p>&copy; 2025 Enterprise Pro Task Management System</p>
+    </footer>
+  </body>
 </html>

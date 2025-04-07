@@ -60,25 +60,51 @@
             {% endif %}
             <!-- Add the projects dynamically here using jinja -->
             {% for project in projects %}
-            <div class="project1">
-                <input type="hidden" id="project-id" value="{{ project[0] }}">
-                <h3 class="project-heading">{{ project[1] }}</h3>
-                <p>{{ project[2] }}</p>
-                <h2 class="project-heading">Project Status: {{ project[3] }}</h2>
-                <h2 class="project-heading">Tasks</h2>
-                <ul class="tasks">
-                    {% if project[6]|length == 0 %}
-                    <li>No tasks found</li>
-                    {% endif %}
-                    {% for task in project[6] %}
-                    <li>{{ task }}</li>
-                    {% endfor %}
-                </ul>
-                <h3 class="project-heading">Review due in {{ project[4] }}</h3>
-                <h3 class="project-heading">Project owner: {{ project[5] }}</h3>
-                <a href="{{ url_for('setProjectId', project_id=project[0]) }}"><button>Select Project</button></a>
-                <a href="{{ url_for('setProjectId', project_id=project[0]) }}"><button>View Project</button></a>
-            </div>
+                {% if loop.index0 % 2 == 0 %} <!-- Start a new supervisor-projects div on odd indices (0-based) -->
+                <section class="supervisor-projects">
+                {% endif %}
+        
+                    <div class="project1">
+                        <input type="hidden" id="project-id" value="{{ project[0] }}">
+                        <h3 class="project-heading">{{ project[1] }}</h3>
+                        <p>{{ project[2] }}</p>
+                        <h2 class="project-heading">Project Status: {{ project[3] }}</h2>
+                        <h2 class="project-heading">Tasks</h2>
+                        <ul class="tasks">
+                            {% if project[6]|length == 0 %}
+                                <li>No tasks found</li>
+                            {% endif %}
+                            {% for task in project[6] %}
+                                <li>{{ task }}</li>
+                            {% endfor %}
+                        </ul>
+                        <h3 class="project-heading">Review due in {{ project[4] }}</h3>
+                        <h3 class="project-heading">Project owner: {{ project[5] }}</h3>
+                        <a href="{{ url_for('setProjectId', project_id=project[0]) }}"><button>View Project</button></a>
+                    </div>
+        
+                {% if loop.index0 % 2 == 1 or loop.last %} <!-- Close the supervisor-projects div after every two projects -->
+                    <div class="project1">
+                        <input type="hidden" id="project-id" value="{{ project[0] }}">
+                        <h3 class="project-heading">{{ project[1] }}</h3>
+                        <p>{{ project[2] }}</p>
+                        <h2 class="project-heading">Project Status: {{ project[3] }}</h2>
+                        <h2 class="project-heading">Tasks</h2>
+                        <ul class="tasks">
+                            {% if project[6]|length == 0 %}
+                                <li>No tasks found</li>
+                            {% endif %}
+                            {% for task in project[6] %}
+                                <li>{{ task }}</li>
+                            {% endfor %}
+                        </ul>
+                        <h3 class="project-heading">Review due in {{ project[4] }}</h3>
+                        <h3 class="project-heading">Project owner: {{ project[5] }}</h3>
+                        <a href="{{ url_for('setProjectId', project_id=project[0]) }}"><button>View Project</button></a>
+                    </div>
+                </section>
+                {% endif %}
+        
             {% endfor %}
         </section>
         
