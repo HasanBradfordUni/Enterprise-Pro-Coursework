@@ -121,27 +121,27 @@
     <div id="edit-task-forms-container" style="display: none;">
         {% for task in tasks %}
         <form id="edit-task-form-{{ task[0] }}" class="edit-task-form" action="{{ url_for('edit_task', task_id=task[0]) }}" method="POST" enctype="multipart/form-data" style="display: none;">
-            {{ form.hidden_tag() }}
+            {{ form1.hidden_tag() }}
             <input type="hidden" name="task_id" value="{{ task[0] }}">
             <div class="form-group">
-                {{ form.title.label }}<br>
-                {{ form.title() }}
+                {{ form1.task_title.label }}<br>
+                {{ form1.task_title() }}
             </div>
             <div class="form-group">
-                {{ form.details.label }}<br>
-                {{ form.details() }}
+                {{ form1.task_details.label }}<br>
+                {{ form1.task_details() }}
             </div>
             <div class="form-group">
-                {{ form.status.label }}<br>
-                {{ form.status() }}
+                {{ form1.task_status.label }}<br>
+                {{ form1.task_status() }}
             </div>
             <div class="form-group">
-                {{ form.assigned_date.label }}<br>
-                {{ form.assigned_date() }}
+                {{ form1.task_assigned_date.label }}<br>
+                {{ form1.task_assigned_date() }}
             </div>
             <div class="form-group">
-                {{ form.due_date.label }}<br>
-                {{ form.due_date() }}
+                {{ form1.task_due_date.label }}<br>
+                {{ form1.task_due_date() }}
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">Save Changes</button>
@@ -162,10 +162,12 @@
                     const taskBox = button.closest('.task-box');
                     const taskId = taskBox.getAttribute('data-task-id');
                     const editForm = document.getElementById(`edit-task-form-${taskId}`);
-                    if (editForm.style.display === 'none') {
-                        editForm.style.display = 'block';
-                    } else {
-                        editForm.style.display = 'none';
+                    if (editForm) {
+                        if (editForm.style.display === 'none' || editForm.style.display === '') {
+                            editForm.style.display = 'block';
+                        } else {
+                            editForm.style.display = 'none';
+                        }
                     }
                 });
             });
@@ -185,8 +187,9 @@
                 return;
             }
 
-            action_url = form.action.replace("update=' '", `update=${encodeURIComponent(progressUpdate)}`);
-            form.action = actionUrl;
+            action_url = form.action.replace(`update=' '`, `update=${encodeURIComponent(progressUpdate)}`);
+            console.log("Action URL:", action_url);
+            form.action = action_url;
 
             console.log("Submitting to:", form.action);
             form.submit();
