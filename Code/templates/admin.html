@@ -141,6 +141,28 @@
           <div class="form-group">{{ form3.submit() }}</div>
         </form>
       </section>
+      
+    </section>
+
+    <section id="delete-user" class="admin-form">
+      <h2>Delete user</h2>
+      <form
+        action=""
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        <div class="form-group">
+          <label for="">Username</label>
+          <select name="" id="">
+            <option value="select-user">select user</option>
+            <option value="user1">user 1</option>
+            <option value="user2">user 2</option>
+          </select>
+          <!---{{ form3.username.label }}<br />
+          {{ form3.username() }} -->
+        </div>
+        <button type="submit">Submit</button>
+      </form>
     </section>
 
     {% with messages = get_flashed_messages() %} {% if messages %}
