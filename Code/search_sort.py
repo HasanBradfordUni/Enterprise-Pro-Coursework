@@ -15,8 +15,29 @@ class listOperationsManager:
             titles5 = [] #range 5 is P-T
             titles6 = [] #range 6 is U-Z
             #create seperate lists for each range and return them as a list of lists
+            for task in arr:
+                if 47 < ord(task[1][0]) < 58:
+                    titles1.append(task)
+                elif 64 < ord(task[1][0]) < 70:
+                    titles2.append(task)
+                elif 69 < ord(task[1][0]) < 75:
+                    titles3.append(task)
+                elif 74 < ord(task[1][0]) < 80:
+                    titles4.append(task)
+                elif 79 < ord(task[1][0]) < 85:
+                    titles5.append(task)
+                else:
+                    titles6.append(task)
+            categories.append(titles1)
+            categories.append(titles2)
+            categories.append(titles3)
+            categories.append(titles4)
+            categories.append(titles5)
+            categories.append(titles6)
             return categories
         elif categories_type == "assigned date":
+            for task in arr:
+                if 
             #write logic to seperate the data by assigned date
             #if statements should be used and the assigned dates should be split by every 3 months
             #create seperate lists for each 3 months and return them as a list of lists
@@ -36,6 +57,22 @@ class listOperationsManager:
             overdue = [] #range 4 is Overdue
             other = [] #range 5 is Other
             #create seperate lists for each status and return them as a list of lists
+            for task in arr:
+                if task[3] == "In progress":
+                    in_progress.append(task)
+                elif task[3] == "Complete":
+                    complete.append(task)
+                elif task[3] == "New":
+                    new.append(task)
+                elif task[3] == "Overdue":
+                    overdue.append(task)
+                else:
+                    other.append(task)
+            categories.append(in_progress)
+            categories.append(complete)
+            categories.append(new)
+            categories.append(overdue)        
+            categories.append(other)
             #some statuses may not be present in the data, include a check for this
             return categories
         elif categories_type == "team":
@@ -46,6 +83,16 @@ class listOperationsManager:
             intern = [] #range 2 is Intern
             other = [] #range 3 is Other
             #create seperate lists for each team and return them as a list of lists
+            for project in arr:
+                if project[4] == "Police":
+                    police.append(project)
+                elif project[4] == "Intern":
+                    intern.append(project)
+                else:
+                    other.append(project)
+            categories.append(police)
+            categories.append(intern)
+            categories.append(other)
             return categories
         elif categories_type == "review":
             #write logic to seperate the data by review
@@ -57,20 +104,31 @@ class listOperationsManager:
             review4 = [] #range 4 is 2 weeks
             review5 = [] #range 5 is 1 month
             #create seperate lists for each review time and return them as a list of lists
+            for project in arr:
+                if project[3] == "1 day":
+                    review1.append(project)
+                elif project[3] == "3 days":
+                    review2.append(project)
+                elif project[3] == "1 week":
+                    review3.append(project)
+                elif project[3] == "2 weeks":
+                    review4.append(project)
+                else:
+                    review5.append(project)
+            categories.append(review1)
+            categories.append(review2)
+            categories.append(review3)
+            categories.append(review4)
+            categories.append(review5)
             return categories
         else:
             categories = "Invalid category type"
         return categories
 
-    def filter_data(self, arr, filter_type):
+    def filter_data(self, arr, filter_type, filter_word):
         #filter data based on the filter type
         filtered_data = []
-        if filter_type == "title":
-            #write logic to filter the data by title
-            #use a for loop to iterate through the data and check if the title contains the filter word
-            #return a list of the filtered data
-            return filtered_data
-        elif filter_type == "assigned date":
+        if filter_type == "assigned date":
             #write logic to filter the data by assigned date
             #use a for loop to iterate through the data and check if the assigned date matches the filter date
             #return a list of the filtered data
@@ -83,16 +141,25 @@ class listOperationsManager:
         elif filter_type == "status":
             #write logic to filter the data by status
             #use a for loop to iterate through the data and check if the status matches the filter status
+            for task in arr:
+                if task[3] == filter_word:
+                    filtered_data.append(task)
             #return a list of the filtered data
             return filtered_data
         elif filter_type == "team":
             #write logic to filter the data by team
             #use a for loop to iterate through the data and check if the team matches the filter team
+            for project in arr:
+                if project[4] == filter_word:
+                    filtered_data.append(project)
             #return a list of the filtered data
             return filtered_data
         elif filter_type == "review":
             #write logic to filter the data by review
             #use a for loop to iterate through the data and check if the review matches the filter review time
+            for project in arr:
+                if project[3] == filter_word:
+                    filtered_data.append(project)
             #return a list of the filtered data
             return filtered_data
         else:
