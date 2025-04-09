@@ -17,18 +17,18 @@ class myClass():
         router('/supervisor')(self.supervisor)
         router('/tasks')(self.tasks)
         router('/create_task', methods=['POST'])(self.create_task)
-        router('/sort_tasks')(self.sort_tasks)
-        router('/filter_tasks')(self.filter_tasks)
+        router('/sort_tasks/<string:sort_type>')(self.sort_tasks)
+        router('/filter_tasks/<string:filter_word>')(self.filter_tasks)
         router('/update_progress/<int:project_id>/<string:update>', methods=['GET', 'POST'])(self.update_progress)
         router('/edit_task/<int:task_id>')(self.edit_task)
         router('/delete_task')(self.delete_task)
         router('/show_deleted_tasks')(self.show_deleted_tasks)
         router('/assign_users')(self.assign_users)
-        router('/search_tasks')(self.search_tasks)
+        router('/search_tasks/<string:search_term>')(self.search_tasks)
         router('/login', methods=['GET', 'POST'])(self.login)
-        router('/search_projects')(self.search_projects)
-        router('/filter_projects')(self.filter_projects)
-        router('/sort_projects')(self.sort_projects)
+        router('/search_projects/<string:search_term>')(self.search_projects)
+        router('/filter_projects/<string:filter_type>/<string:filter_word>')(self.filter_projects)
+        router('/sort_projects/<string:sort_type>')(self.sort_projects)
         router('/add_user_to_project', methods=['GET', 'POST'])(self.add_user_to_project)
         router('/remove_user_from_project/<int:user_id>/<int:project_id>')(self.remove_user_from_project)
         router('/create_project', methods=['GET', 'POST'])(self.create_project)
@@ -134,7 +134,15 @@ class myClass():
             thisProject = []
             for atr in project:
                 thisProject.append(atr)
-            thisProject.append([task[1] for task in tasks if task[6] == project[0]])
+            completed_tasks = 0
+            total_tasks = 0
+            for task in tasks:
+                if task[6] == project[0]:
+                    total_tasks += 1
+                    thisProject.append(f"{task[1]} - {task[3]}")
+                    if task[3] == "Completed":
+                        completed_tasks += 1
+            thisProject.append(f"{completed_tasks} of {total_tasks} tasks completed")
             theseProjects.append(thisProject)
         projects = theseProjects
         form = UsersInProjectsForm()
@@ -168,8 +176,13 @@ class myClass():
         tasks = self.load_tasks()
         form = UpdateProgressForm()
         form1 = EditTaskForm()
-        task_titles = [task["title"] for task in tasks]
-        search_results = self.list_operation_manager.binary_search(task_titles, search_term)
+        task_titles = [task[1] for task in tasks]
+        search_results = []
+        thisResult = self.list_operation_manager.binary_search(task_titles, search_term)
+        while thisResult != -1:
+            search_results.append(tasks[thisResult])
+            task_titles.remove(task_titles[thisResult])
+            thisResult = self.list_operation_manager.binary_search(task_titles, search_term)
         project = self.database.find_project(project_id=self.project_id)
         task_updates = self.database.get_all_from_table("task_updates")
         assigned_tasks = self.database.get_all_from_table("assigned_tasks")
@@ -197,11 +210,11 @@ class myClass():
         assigned_tasks = self.database.get_all_from_table("assigned_tasks")
         return render_template('tasks.html', tasks=sorted_tasks, project=project, task_updates=task_updates, assigned_tasks=assigned_tasks, form=form, form1=form1)
 
-    def filter_tasks(self, filter_type):
+    def filter_tasks(self, filter_word):
         tasks = self.load_tasks()
         form = UpdateProgressForm()
         form1 = EditTaskForm()
-        filtered_tasks = self.list_operation_manager.filter_data(tasks, filter_type)
+        filtered_tasks = self.list_operation_manager.filter_data(tasks, "status", filter_word)
         project = self.database.find_project(project_id=self.project_id)
         task_updates = self.database.get_all_from_table("task_updates")
         assigned_tasks = self.database.get_all_from_table("assigned_tasks")
@@ -215,18 +228,26 @@ class myClass():
     def search_projects(self, search_term):
         projects = self.database.get_all_from_table("projects")
         project_titles = [project[1] for project in projects]
-        search_results = self.list_operation_manager.binary_search(project_titles, search_term)
-        return render_template('projects.html', projects=search_results)
+        search_results = []
+        thisResult = self.list_operation_manager.binary_search(project_titles, search_term)
+        while thisResult != -1:
+            search_results.append(projects[thisResult])
+            project_titles.remove(project_titles[thisResult])
+            thisResult = self.list_operation_manager.binary_search(project_titles, search_term)
+        form = UsersInProjectsForm()
+        return render_template('supervisor.html', projects=search_results, form=form)    
     
-    def filter_projects(self, filter_type):
+    def filter_projects(self, filter_type, filter_word):
         projects = self.database.get_all_from_table("projects")
-        filtered_projects = self.list_operation_manager.filter_data(projects, filter_type)
-        return render_template('projects.html', projects=filtered_projects)
-    
+        filtered_projects = self.list_operation_manager.filter_data(projects, filter_type, filter_word)
+        form = UsersInProjectsForm()
+        return render_template('supervisor.html', projects=filtered_projects, form=form)
+        
     def sort_projects(self, sort_type):
         projects = self.database.get_all_from_table("projects")
         sorted_projects = self.list_operation_manager.categorise_data(projects, sort_type)
-        return render_template('projects.html', projects=sorted_projects)
+        form = UsersInProjectsForm()
+        return render_template('supervisor.html', projects=sorted_projects, form=form)
 
     def add_user_to_project(self):
         form = UsersInProjectsForm()

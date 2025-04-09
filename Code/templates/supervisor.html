@@ -49,22 +49,11 @@
         </div>
 
         <div class="filter-container">
-            <label for="" style="margin-right: 92px;">Choose Team:</label>
-            <select id="dropdown3" class="dropdown-content">
-                <option value="all">All</option>
-                <option value="police">Police</option>
-                <option value="intern">Intern</option>
-                <option value="other">Other</option>
-            </select>
-        </div>
-
-        <div class="filter-container">
             <label for="" style="margin-right: 141px;">Sort by:</label>
-            <select id="dropdown4" class="dropdown-content">
+            <select id="dropdown3" class="dropdown-content">
                 <option value="none">None</option>
                 <option value="status">Progress Status</option>
                 <option value="review">Project Review</option>
-                <option value="team">Assigned Team</option>
             </select>
         </div>
 
@@ -109,35 +98,21 @@
                             <a href="{{ url_for('setProjectId', project_id=project[0]) }}"><button>View Project</button></a>
                         </div>
                     </div>
-                    <div id="assignment-modal" style="display: none;">
-                        <div id="assignment-modal-content">
-                            <h3>Manage Users for Project</h3>
-                            <form
-                                action="{{ url_for('add_user_to_project') }}"
-                                method="POST"
-                                enctype="multipart/form-data"
-                            >
-                                {{ form.hidden_tag() }}
-                                <div class="form-group">
-                                    {{ form.project_title.label }}<br />
-                                    {{ form.project_title() }}
-                                </div>
-                                <div class="form-group">
-                                    {{ form.username.label }}<br />
-                                    {{ form.username() }}
-                                </div>
-                                <div class="form-group">
-                                    {{ form.submit() }}
-                                </div>
-                            </form>
-                        </div>
-                        <button onclick="document.getElementById('assignment-modal').style.display='none'">Close</button>
-                    </div>
                     {% if not loop.last and loop.index0 % 2 == 0 %}
                         <div class="project-column">
                             {% set next_project = projects[loop.index] %}
                             <div class="project1">
                                 <input type="hidden" id="project-id" value="{{ next_project[0] }}">
+                                <div class="icons">
+                                    <a href="">
+                                      <img
+                                        src="https://i.ibb.co/35vt9Zwk/person-outline-icon-1.png"
+                                        alt="person-outline-icon-1"
+                                        class="assignment-button"
+                                        style="display: block;"
+                                      />
+                                    </a>
+                                </div>
                                 <h3 class="project-heading">{{ next_project[1] }}</h3>
                                 <p>{{ next_project[2] }}</p>
                                 <h2 class="project-heading">Project Status: {{ next_project[3] }}</h2>
@@ -157,6 +132,30 @@
                             {% endif %}
                         </div>
                     {% endif %}
+                </div>
+                <div id="assignment-modal" style="display: none;">
+                    <div id="assignment-modal-content">
+                        <h3>Manage Users for Project</h3>
+                        <form
+                            action="{{ url_for('add_user_to_project') }}"
+                            method="POST"
+                            enctype="multipart/form-data"
+                        >
+                            {{ form.hidden_tag() }}
+                            <div class="form-group">
+                                {{ form.project_title.label }}<br />
+                                {{ form.project_title() }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.username.label }}<br />
+                                {{ form.username() }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.submit() }}
+                            </div>
+                        </form>
+                    </div>
+                    <button onclick="document.getElementById('assignment-modal').style.display='none'">Close</button>
                 </div>
         
             {% endfor %}
@@ -205,6 +204,100 @@
                         loginLogoutBtn.textContent = 'Login';
                         loginLogoutBtn.href = "{{ url_for('login') }}";
                     }
+                });
+
+                const filterDropdown = document.getElementById("dropdown1");
+                const filterDropdown2 = document.getElementById("dropdown2");
+                const sortDropdown = document.getElementById("dropdown3");
+
+                function fetchProjects(route, params) {
+                    fetch(`{{ url_for('${route}') }}?${new URLSearchParams(params)}`)
+                        .then(response => response.json())
+                        .then(projects => {
+                            const projectsSection = document.getElementById("supervisor-projects");
+                            // Keep the heading
+                            const heading = projectsSection.querySelector('.project-heading');
+                            projectsSection.innerHTML = '';
+                            projectsSection.appendChild(heading);
+
+                            if (projects.length === 0) {
+                                const noProjects = document.createElement('p');
+                                noProjects.textContent = 'No projects found';
+                                projectsSection.appendChild(noProjects);
+                                return;
+                            }
+
+                            for (let i = 0; i < projects.length; i += 2) {
+                                const projectRow = document.createElement('div');
+                                projectRow.className = 'project-row';
+                                
+                                // First project in the row
+                                const column1 = createProjectColumn(projects[i]);
+                                projectRow.appendChild(column1);
+                                
+                                // Second project in the row (if exists)
+                                if (i + 1 < projects.length) {
+                                    const column2 = createProjectColumn(projects[i + 1]);
+                                    projectRow.appendChild(column2);
+                                }
+                                
+                                projectsSection.appendChild(projectRow);
+                            }
+                        });
+                }
+
+                function createProjectColumn(project) {
+                    const column = document.createElement('div');
+                    column.className = 'project-column';
+                    
+                    const projectDiv = document.createElement('div');
+                    projectDiv.className = 'project1';
+                    
+                    projectDiv.innerHTML = `
+                        <input type="hidden" id="project-id" value="${project[0]}">
+                        <div class="icons">
+                            <a href="">
+                                <img src="https://i.ibb.co/35vt9Zwk/person-outline-icon-1.png"
+                                    alt="person-outline-icon-1"
+                                    class="assignment-button"
+                                    style="display: block;">
+                            </a>
+                        </div>
+                        <h3 class="project-heading">${project[1]}</h3>
+                        <p>${project[2]}</p>
+                        <h2 class="project-heading">Project Status: ${project[3]}</h2>
+                        <h2 class="project-heading">Tasks</h2>
+                        <ul class="tasks">
+                            ${project[6].length === 0 ? '<li>No tasks found</li>' : 
+                                project[6].map(task => `<li>${task}</li>`).join('')}
+                        </ul>
+                        <h3 class="project-heading">Review due in ${project[4]}</h3>
+                        <h3 class="project-heading">Project owner: ${project[5]}</h3>
+                        <a href="/setProjectId/${project[0]}"><button>View Project</button></a>
+                    `;
+                    
+                    column.appendChild(projectDiv);
+                    return column;
+                }
+
+                filterDropdown.addEventListener("change", function() {
+                    fetchProjects('filter_projects', {
+                        filter_type: 'status',
+                        filter_word: filterDropdown.value
+                    });
+                });
+
+                filterDropdown2.addEventListener("change", function() {
+                    fetchProjects('filter_projects', {
+                        filter_type: 'review',
+                        filter_word: filterDropdown2.value
+                    });
+                });
+
+                sortDropdown.addEventListener("change", function() {
+                    fetchProjects('sort_projects', {
+                        sort_type: sortDropdown.value
+                    });
                 });
             });
         </script>

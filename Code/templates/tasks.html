@@ -322,9 +322,9 @@
           const filterValue = filterDropdown.value;
 
           fetch(
-            `{{ url_for('filter_tasks', filter_type='') }}`.replace(
-              "filter_type=",
-              `filter_type=${filterValue}`
+            `{{ url_for('filter_tasks', filter_word='') }}`.replace(
+              "filter_word=",
+              `filter_word=${filterValue}`
             )
           )
             .then((response) => response.json())
