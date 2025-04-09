@@ -15,6 +15,7 @@ class testDatabase:
         self.connection = con
         try:
             assert self.connection is not None
+            self.thisDatabase.create_tables()
             return "Connection test successful"
         except AssertionError:
             return "Connection test unsuccessful"
@@ -278,6 +279,70 @@ class testDatabase:
                 return "All subtests passed - Add Task update test successful"
             else:
                 return "Cannot add Task update - Add Task update test unsuccessful"
+
+    def test_update_user(self):
+        user_id = int(input("Enter the user ID of the user you wish to update: "))
+        username = ""
+        password = ""
+        role = ""
+        team = ""
+    
+        # Collect updates for the user
+        username_update = input("Do you wish to update the username (y/n)? ")
+        if username_update.upper() == "Y":
+            username = input("Enter the new username: ")
+    
+        password_update = input("Do you wish to update the password (y/n)? ")
+        if password_update.upper() == "Y":
+            password = input("Enter the new password: ")
+    
+        role_update = input("Do you wish to update the role (y/n)? ")
+        if role_update.upper() == "Y":
+            role = input("Enter the new role: ")
+    
+        team_update = input("Do you wish to update the team (y/n)? ")
+        if team_update.upper() == "Y":
+            team = input("Enter the new team: ")
+    
+        # Perform the update
+        row_id = self.thisDatabase.update_user(user_id=user_id, username=username, password=password, role=role, team=team)
+        if row_id:
+            print("User updated successfully!")
+            updated_user = self.thisDatabase.find_user(user_id=user_id)
+            if not updated_user:
+                return "Cannot retrieve user - Update user test unsuccessful"
+    
+            # Validate updates
+            try:
+                if username != "":
+                    assert updated_user[1] == username
+                    print("Username matches!")
+                else:
+                    print("Username wasn't updated!")
+    
+                if password != "":
+                    assert updated_user[2] == password
+                    print("Password matches!")
+                else:
+                    print("Password wasn't updated!")
+    
+                if role != "":
+                    assert updated_user[3] == role
+                    print("Role matches!")
+                else:
+                    print("Role wasn't updated!")
+    
+                if team != "":
+                    assert updated_user[4] == team
+                    print("Team matches!")
+                else:
+                    print("Team wasn't updated!")
+    
+                return "All subtests passed - Update user test successful"
+            except AssertionError as e:
+                return f"Update validation failed: {e}"
+        else:
+            return "Cannot update user - Update user test unsuccessful"
 
     def test_update_project(self):
         project_id = int(input("Enter the project id of the project you wish to update: "))

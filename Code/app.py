@@ -3,9 +3,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 import os
 
-from use_database import databaseManager
-from search_sort import listOperationsManager
-from forms import LoginForm, CreateUserForm, UpdateUserDetailsForm, CreateProjectForm, UpdateProgressForm, EditTaskForm, UsersInProjectsForm, PasswordResetForm
+from Code.use_database import databaseManager
+from Code.search_sort import listOperationsManager
+from Code.forms import LoginForm, CreateUserForm, UpdateUserDetailsForm, CreateProjectForm, UpdateProgressForm, EditTaskForm, UsersInProjectsForm, PasswordResetForm
  
 class myClass():
     def __init__(self, router):
