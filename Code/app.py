@@ -3,9 +3,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 import os
 
-from Code.use_database import databaseManager
-from Code.search_sort import listOperationsManager
-from Code.forms import LoginForm, CreateUserForm, UpdateUserDetailsForm, CreateProjectForm, UpdateProgressForm, EditTaskForm, UsersInProjectsForm, PasswordResetForm
+from use_database import databaseManager
+from search_sort import listOperationsManager
+from forms import LoginForm, CreateUserForm, UpdateUserDetailsForm, CreateProjectForm, UpdateProgressForm, EditTaskForm, UsersInProjectsForm, PasswordResetForm
  
 class myClass():
     def __init__(self, router):
@@ -23,7 +23,7 @@ class myClass():
         router('/edit_task/<int:task_id>')(self.edit_task)
         router('/delete_task')(self.delete_task)
         router('/show_deleted_tasks')(self.show_deleted_tasks)
-        router('/assign_users')(self.assign_users)
+        router('/assign_users', methods=['POST'])(self.assign_users)
         router('/search_tasks/<string:search_term>')(self.search_tasks)
         router('/login', methods=['GET', 'POST'])(self.login)
         router('/search_projects/<string:search_term>')(self.search_projects)
@@ -35,6 +35,7 @@ class myClass():
         router('/edit_project')(self.edit_project)
         router('/delete_project')(self.delete_project)
         router('/create_user', methods=['GET', 'POST'])(self.create_user)
+        router('/delete_users', methods=['POST'])(self.delete_users)
         router('/admin')(self.admin)
         router('/passwordReset', methods=['GET', 'POST'])(self.passwordReset)
         router('/logout')(self.logout)
@@ -136,27 +137,31 @@ class myClass():
                 thisProject.append(atr)
             completed_tasks = 0
             total_tasks = 0
+            project_tasks = []
             for task in tasks:
                 if task[6] == project[0]:
                     total_tasks += 1
-                    thisProject.append(f"{task[1]} - {task[3]}")
+                    project_tasks.append(f"{task[1]} - {task[3]}")
                     if task[3] == "Completed":
                         completed_tasks += 1
+            thisProject.append(project_tasks)
             thisProject.append(f"{completed_tasks} of {total_tasks} tasks completed")
             theseProjects.append(thisProject)
         projects = theseProjects
         form = UsersInProjectsForm()
-        return render_template('supervisor.html', projects=projects, form=form)
+        users = self.database.get_all_from_table("users")
+        return render_template('supervisor.html', projects=projects, users=users, form=form)
     
     def admin(self):
         form = CreateProjectForm()
         form1 = CreateUserForm()
         form2 = UpdateUserDetailsForm()
         form3 = UsersInProjectsForm()
+        users = self.database.get_all_from_table("users")
         if self.user_role != "admin":
             flash("You are not authorised to view this page\nMust be an admin", "danger")
             return redirect(url_for('index'))
-        return render_template('admin.html', form=form, form1=form1, form2=form2, form3=form3)
+        return render_template('admin.html', form=form, form1=form1, form2=form2, form3=form3, users=users)
 
     def tasks(self):
         tasks = self.load_tasks()
@@ -170,7 +175,8 @@ class myClass():
         tasks = project_tasks
         task_updates = self.database.get_all_from_table("task_updates")
         assigned_tasks = self.database.get_all_from_table("assigned_tasks")
-        return render_template('tasks.html', tasks=tasks, project=project, task_updates=task_updates, assigned_tasks=assigned_tasks, form=form, form1=form1)
+        users = self.database.get_all_from_table("users")
+        return render_template('tasks.html', tasks=tasks, project=project, task_updates=task_updates, assigned_tasks=assigned_tasks, users=users, form=form, form1=form1)
     
     def search_tasks(self, search_term):
         tasks = self.load_tasks()
@@ -186,7 +192,8 @@ class myClass():
         project = self.database.find_project(project_id=self.project_id)
         task_updates = self.database.get_all_from_table("task_updates")
         assigned_tasks = self.database.get_all_from_table("assigned_tasks")
-        return render_template('tasks.html', tasks=search_results, project=project, task_updates=task_updates, assigned_tasks=assigned_tasks, form=form, form1=form1)
+        users = self.database.get_all_from_table("users")
+        return render_template('tasks.html', tasks=search_results, project=project, task_updates=task_updates, assigned_tasks=assigned_tasks, users=users, form=form, form1=form1)
 
     def create_task(self):
         task_title = request.form['task-title']
@@ -208,7 +215,8 @@ class myClass():
         project = self.database.find_project(project_id=self.project_id)
         task_updates = self.database.get_all_from_table("task_updates")
         assigned_tasks = self.database.get_all_from_table("assigned_tasks")
-        return render_template('tasks.html', tasks=sorted_tasks, project=project, task_updates=task_updates, assigned_tasks=assigned_tasks, form=form, form1=form1)
+        users = self.database.get_all_from_table("users")
+        return render_template('tasks.html', tasks=sorted_tasks, project=project, task_updates=task_updates, assigned_tasks=assigned_tasks, users=users, form=form, form1=form1)
 
     def filter_tasks(self, filter_word):
         tasks = self.load_tasks()
@@ -218,7 +226,8 @@ class myClass():
         project = self.database.find_project(project_id=self.project_id)
         task_updates = self.database.get_all_from_table("task_updates")
         assigned_tasks = self.database.get_all_from_table("assigned_tasks")
-        return render_template('tasks.html', tasks=filtered_tasks, project=project, task_updates=task_updates, assigned_tasks=assigned_tasks, form=form, form1=form1)
+        users = self.database.get_all_from_table("users")
+        return render_template('tasks.html', tasks=filtered_tasks, project=project, task_updates=task_updates, assigned_tasks=assigned_tasks, users=users, form=form, form1=form1)
     
     def update_progress(self, project_id, update):
         self.database.add_task_update(project_id=project_id, progress_update=update)
@@ -235,19 +244,22 @@ class myClass():
             project_titles.remove(project_titles[thisResult])
             thisResult = self.list_operation_manager.binary_search(project_titles, search_term)
         form = UsersInProjectsForm()
-        return render_template('supervisor.html', projects=search_results, form=form)    
+        users = self.database.get_all_from_table("users")
+        return render_template('supervisor.html', projects=search_results, users=users, form=form)    
     
     def filter_projects(self, filter_type, filter_word):
         projects = self.database.get_all_from_table("projects")
         filtered_projects = self.list_operation_manager.filter_data(projects, filter_type, filter_word)
         form = UsersInProjectsForm()
-        return render_template('supervisor.html', projects=filtered_projects, form=form)
+        users = self.database.get_all_from_table("users")
+        return render_template('supervisor.html', projects=filtered_projects, users=users, form=form)
         
     def sort_projects(self, sort_type):
         projects = self.database.get_all_from_table("projects")
         sorted_projects = self.list_operation_manager.categorise_data(projects, sort_type)
         form = UsersInProjectsForm()
-        return render_template('supervisor.html', projects=sorted_projects, form=form)
+        users = self.database.get_all_from_table("users")
+        return render_template('supervisor.html', projects=sorted_projects, users=users, form=form)
 
     def add_user_to_project(self):
         form = UsersInProjectsForm()
@@ -298,6 +310,19 @@ class myClass():
             if rowID:
                 flash("User added successfully", "success")
             return redirect(url_for('index'))
+        return redirect(url_for('admin'))
+    
+    def delete_users(self):
+        # Retrieve the selected user IDs from the form
+        selected_users = request.form.get('selected_users')  # This will be a comma-separated string
+        if selected_users:
+            user_ids = selected_users.split(',')  # Convert the string into a list of user IDs
+            # Process the user IDs (e.g., delete them from the database)
+            for user_id in user_ids:
+                self.database.delete_user(user_id=user_id)
+            flash("Selected users have been deleted successfully.", "success")
+        else:
+            flash("No users were selected for deletion.", "danger")
         return redirect(url_for('admin'))
 
     def edit_project(self, project_id):
@@ -356,11 +381,21 @@ class myClass():
     def show_deleted_tasks(self):
         return render_template('tasks.html', deleted_tasks=self.deleted_tasks)
     
-    def assign_users(self, user_ids, task_id):
-        thisTask = self.database.find_task(task_id=task_id)
-        for user_id in user_ids:
-            thisUser = self.database.find_user(user_id=user_id)
-            self.database.add_assigned_task(task_id=task_id, task_title=thisTask[1], assigned_user_id=user_id, assigned_username=thisUser[1], project_id=thisTask[6])
+    def assign_users(self):
+        user_ids = request.form.getlist('user_ids')  # Get the list of user IDs
+        task_id = request.form.get('task_id')  # Get the task ID
+        if user_ids and task_id:
+            for user_id in user_ids:
+                self.database.add_assigned_task(
+                    task_id=task_id,
+                    task_title=self.database.find_task(task_id=task_id)[1],
+                    assigned_user_id=user_id,
+                    assigned_username=self.database.find_user(user_id=user_id)[1],
+                    project_id=self.project_id
+                )
+            flash("Users assigned successfully", "success")
+        else:
+            flash("Failed to assign users", "danger")
         return redirect(url_for('tasks'))
 
     def get_user_status(self):

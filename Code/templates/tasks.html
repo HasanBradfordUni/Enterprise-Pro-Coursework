@@ -162,10 +162,84 @@
         <p class="assigned-users">Assigned To: Unknown</p>
         <h4>Assigned date: {{ task[4] }}</h4>
         <h4>Due date: {{ task[5] }}</h4>
+        <div class="assignment-form-container" id="assignment-form-{{ task[0] }}" style="display: none;"></div>
       </div>
       <br />
       {% endfor %}
     </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const assignmentButtons = document.querySelectorAll(".assignment-button");
+    
+        assignmentButtons.forEach((button) => {
+          button.addEventListener("click", function (event) {
+            event.preventDefault();
+    
+            // Get the task ID from the parent task box
+            const taskBox = button.closest(".task-box");
+            const taskId = taskBox.getAttribute("data-task-id");
+    
+            // Get the assignment form container
+            const formContainer = document.getElementById(`assignment-form-${taskId}`);
+    
+            // If the form is already visible, toggle its visibility
+            if (formContainer.style.display === "block") {
+              formContainer.style.display = "none";
+              return;
+            }
+    
+            // Create the form dynamically
+            formContainer.innerHTML = `
+              <form action="{{ url_for('assign_users') }}" method="POST">
+                <input type="hidden" name="task_id" value="${taskId}">
+                <label for="user_ids">Assign Users:</label>
+                <div class="custom-multi-select">
+                  <div class="selected-tags">
+                    <!-- Selected tags will appear here -->
+                  </div>
+                  <input
+                    type="text"
+                    class="search-input"
+                    placeholder="Search and select users..."
+                    oninput="filterOptions(this.value)"
+                  />
+                  <div class="dropdown-options">
+                    {% for user in users %}
+                    <div
+                      class="dropdown-option"
+                      data-value="{{ user[0] }}"
+                      onclick="selectOption(this)"
+                    >
+                      {{ user[1] }}
+                    </div>
+                    {% endfor %}
+                  </div>
+                  <input type="hidden" name="selected_users" id="selected-users" />
+                </div>
+                <button type="submit">Assign</button>
+              </form>
+            `;
+    
+            // Show the form
+            formContainer.style.display = "block";
+            
+            // Initialize custom select functionality for this specific form
+            const customSelect = formContainer.querySelector('.custom-multi-select');
+            if (customSelect) {
+              const searchInput = customSelect.querySelector('.search-input');
+              const dropdownOptions = customSelect.querySelector('.dropdown-options');
+              
+              // Show dropdown options initially
+              dropdownOptions.style.display = "block";
+              
+              // Focus on search input
+              searchInput.focus();
+            }
+          });
+        });
+      });
+    </script>
 
     <div id="edit-task-forms-container" style="display: none">
       {% for task in tasks %}
@@ -214,6 +288,88 @@
       </form>
       {% endfor %}
     </div>
+
+    {% with messages = get_flashed_messages() %} {% if messages %}
+    <div class="hidden-messages">
+      {% for message in messages %}
+      <p id="hidden-message">{{ message }}</p>
+      {% endfor %} {% endif %} {% endwith %}
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.querySelector(".search-input");
+        const dropdownOptions = document.querySelector(".dropdown-options");
+        const selectedTagsContainer = document.querySelector(".selected-tags");
+        const hiddenInput = document.getElementById("selected-users");
+    
+        // Show dropdown when input is focused
+        searchInput.addEventListener("focus", function () {
+          dropdownOptions.style.display = "block";
+        });
+    
+        // Hide dropdown when clicking outside
+        document.addEventListener("click", function (event) {
+          if (!event.target.closest(".custom-multi-select")) {
+            dropdownOptions.style.display = "none";
+          }
+        });
+    
+        // Filter options based on search input
+        window.filterOptions = function (searchValue) {
+          const options = dropdownOptions.querySelectorAll(".dropdown-option");
+          options.forEach((option) => {
+            if (
+              option.textContent.toLowerCase().includes(searchValue.toLowerCase())
+            ) {
+              option.style.display = "block";
+            } else {
+              option.style.display = "none";
+            }
+          });
+        };
+    
+        // Select an option
+        window.selectOption = function (optionElement) {
+          const value = optionElement.getAttribute("data-value");
+          const text = optionElement.textContent;
+    
+          // Check if the tag is already selected
+          if (
+            Array.from(selectedTagsContainer.children).some(
+              (tag) => tag.getAttribute("data-value") === value
+            )
+          ) {
+            return;
+          }
+    
+          // Add the tag to the selected tags container
+          const tag = document.createElement("div");
+          tag.classList.add("tag");
+          tag.setAttribute("data-value", value);
+          tag.innerHTML = `${text} <span class="remove-tag" onclick="removeTag(this)">x</span>`;
+          selectedTagsContainer.appendChild(tag);
+    
+          // Update the hidden input value
+          updateHiddenInput();
+        };
+    
+        // Remove a tag
+        window.removeTag = function (removeButton) {
+          const tag = removeButton.parentElement;
+          tag.remove();
+          updateHiddenInput();
+        };
+    
+        // Update the hidden input value with selected tags
+        function updateHiddenInput() {
+          const selectedValues = Array.from(selectedTagsContainer.children).map(
+            (tag) => tag.getAttribute("data-value")
+          );
+          hiddenInput.value = selectedValues.join(",");
+        }
+      });
+    </script>
 
     <script>
       document.addEventListener("DOMContentLoaded", function () {
@@ -436,6 +592,11 @@
               loginLogoutBtn.href = "{{ url_for('login') }}";
             }
           });
+
+        var hiddenMessage = document.getElementById("hidden-message");
+        if (hiddenMessage) {
+          alert(hiddenMessage.textContent);
+        }
       });
     </script>
   </body>

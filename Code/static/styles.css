@@ -472,7 +472,73 @@ div.menuBar {
     display: flex;
 }
 
-.icons img {
+.icons2 {
+    position: absolute;
+    margin-left: 40%;
+    display: flex;
+}
+
+.icons img, .icons2 img {
     width: 50px;
     height: 50px;
+}
+
+.custom-multi-select {
+  position: relative;
+  width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px;
+  background-color: #fff;
+}
+
+.selected-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 5px;
+}
+
+.selected-tags .tag {
+  background-color: #007bff;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+}
+
+.selected-tags .tag .remove-tag {
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.search-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  padding: 5px;
+}
+
+.dropdown-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  max-height: 150px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  display: none;
+  z-index: 1000;
+}
+
+.dropdown-options .dropdown-option {
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.dropdown-options .dropdown-option:hover {
+  background-color: #f0f0f0;
 }

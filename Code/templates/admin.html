@@ -136,7 +136,29 @@
           </div>
           <div class="form-group">
             {{ form3.username.label }}<br />
-            {{ form3.username() }}
+            <div class="custom-multi-select">
+              <div class="selected-tags">
+                <!-- Selected tags will appear here -->
+              </div>
+              <input
+                type="text"
+                class="search-input"
+                placeholder="Search and select users..."
+                oninput="filterOptions(this.value)"
+              />
+              <div class="dropdown-options">
+                {% for value, label in form3.username.choices %}
+                <div
+                  class="dropdown-option"
+                  data-value="{{ value }}"
+                  onclick="selectOption(this)"
+                >
+                  {{ label }}
+                </div>
+                {% endfor %}
+              </div>
+              <input type="hidden" name="username" id="selected-users" />
+            </div>
           </div>
           <div class="form-group">{{ form3.submit() }}</div>
         </form>
@@ -145,25 +167,119 @@
     </section>
 
     <section id="delete-user" class="admin-form">
-      <h2>Delete user</h2>
+      <h2>Delete user(s)</h2>
       <form
-        action=""
+        action="{{ url_for('delete_users') }}"
         method="POST"
         enctype="multipart/form-data"
       >
         <div class="form-group">
-          <label for="">Username</label>
-          <select name="" id="">
-            <option value="select-user">select user</option>
-            <option value="user1">user 1</option>
-            <option value="user2">user 2</option>
-          </select>
-          <!---{{ form3.username.label }}<br />
-          {{ form3.username() }} -->
+          <div class="custom-multi-select">
+            <div class="selected-tags">
+              <!-- Selected tags will appear here -->
+            </div>
+            <input
+              type="text"
+              class="search-input"
+              placeholder="Search and select users to delete..."
+              oninput="filterOptions(this.value)"
+            />
+            <div class="dropdown-options">
+              {% if users %}
+                {% for user in users %}
+                <div
+                  class="dropdown-option"
+                  data-value="{{ user[0] }}"
+                  onclick="selectOption(this)"
+                >
+                  {{ user[1] }}
+                </div>
+                {% endfor %}
+              {% else %}
+                <div class="no-users">No users available</div>
+              {% endif %}
+            </div>
+            <input type="hidden" name="selected_users" id="selected-users" />
+          </div>
         </div>
         <button type="submit">Submit</button>
       </form>
     </section>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.querySelector(".search-input");
+        const dropdownOptions = document.querySelector(".dropdown-options");
+        const selectedTagsContainer = document.querySelector(".selected-tags");
+        const hiddenInput = document.getElementById("selected-users");
+    
+        // Show dropdown when input is focused
+        searchInput.addEventListener("focus", function () {
+          dropdownOptions.style.display = "block";
+        });
+    
+        // Hide dropdown when clicking outside
+        document.addEventListener("click", function (event) {
+          if (!event.target.closest(".custom-multi-select")) {
+            dropdownOptions.style.display = "none";
+          }
+        });
+    
+        // Filter options based on search input
+        window.filterOptions = function (searchValue) {
+          const options = dropdownOptions.querySelectorAll(".dropdown-option");
+          options.forEach((option) => {
+            if (
+              option.textContent.toLowerCase().includes(searchValue.toLowerCase())
+            ) {
+              option.style.display = "block";
+            } else {
+              option.style.display = "none";
+            }
+          });
+        };
+    
+        // Select an option
+        window.selectOption = function (optionElement) {
+          const value = optionElement.getAttribute("data-value");
+          const text = optionElement.textContent;
+    
+          // Check if the tag is already selected
+          if (
+            Array.from(selectedTagsContainer.children).some(
+              (tag) => tag.getAttribute("data-value") === value
+            )
+          ) {
+            return;
+          }
+    
+          // Add the tag to the selected tags container
+          const tag = document.createElement("div");
+          tag.classList.add("tag");
+          tag.setAttribute("data-value", value);
+          tag.innerHTML = `${text} <span class="remove-tag" onclick="removeTag(this)">x</span>`;
+          selectedTagsContainer.appendChild(tag);
+    
+          // Update the hidden input value
+          updateHiddenInput();
+        };
+    
+        // Remove a tag
+        window.removeTag = function (removeButton) {
+          const tag = removeButton.parentElement;
+          tag.remove();
+          updateHiddenInput();
+        };
+    
+        // Update the hidden input value with selected tags
+        function updateHiddenInput() {
+          const selectedValues = Array.from(selectedTagsContainer.children).map(
+            (tag) => tag.getAttribute("data-value")
+          );
+          hiddenInput.value = selectedValues.join(",");
+        }
+      });
+    </script>
 
     {% with messages = get_flashed_messages() %} {% if messages %}
     <div class="hidden-messages">

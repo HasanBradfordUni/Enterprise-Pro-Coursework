@@ -71,7 +71,7 @@
                     <div class="project-column">
                         <div class="project1">
                             <input type="hidden" id="project-id" value="{{ project[0] }}">
-                            <div class="icons">
+                            <div class="icons2">
                                 <a href="">
                                   <img
                                     src="https://i.ibb.co/35vt9Zwk/person-outline-icon-1.png"
@@ -85,6 +85,7 @@
                             <p>{{ project[2] }}</p>
                             <h2 class="project-heading">Project Status: {{ project[3] }}</h2>
                             <h2 class="project-heading">Tasks</h2>
+                            <h3 class="project-heading">{{ project[7] }}</h3>
                             <ul class="tasks">
                                 {% if project[6]|length == 0 %}
                                     <li>No tasks found</li>
@@ -103,7 +104,7 @@
                             {% set next_project = projects[loop.index] %}
                             <div class="project1">
                                 <input type="hidden" id="project-id" value="{{ next_project[0] }}">
-                                <div class="icons">
+                                <div class="icons2">
                                     <a href="">
                                       <img
                                         src="https://i.ibb.co/35vt9Zwk/person-outline-icon-1.png"
@@ -117,6 +118,7 @@
                                 <p>{{ next_project[2] }}</p>
                                 <h2 class="project-heading">Project Status: {{ next_project[3] }}</h2>
                                 <h2 class="project-heading">Tasks</h2>
+                                <h3 class="project-heading">{{ next_project[7] }}</h3>
                                 <ul class="tasks">
                                     {% if next_project[6]|length == 0 %}
                                         <li>No tasks found</li>
@@ -148,7 +150,28 @@
                             </div>
                             <div class="form-group">
                                 {{ form.username.label }}<br />
-                                {{ form.username() }}
+                                <div class="custom-multi-select">
+                                  <div class="selected-tags">
+                                    <!-- Selected tags will appear here -->
+                                  </div>
+                                  <input
+                                    type="text"
+                                    class="search-input"
+                                    placeholder="Search and select users..."
+                                    oninput="filterOptions(this.value)"
+                                  />
+                                  <div class="dropdown-options">
+                                    {% for value, label in form.username.choices %}
+                                    <div
+                                      class="dropdown-option"
+                                      data-value="{{ value }}"
+                                      onclick="selectOption(this)"
+                                    >
+                                      {{ label }}
+                                    </div>
+                                    {% endfor %}
+                                  </div>
+                                  <input type="hidden" name="username" id="selected-users" />
                             </div>
                             <div class="form-group">
                                 {{ form.submit() }}
@@ -186,6 +209,87 @@
                 });
             });
         </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const searchInput = document.querySelector(".search-input");
+      const dropdownOptions = document.querySelector(".dropdown-options");
+      const selectedTagsContainer = document.querySelector(".selected-tags");
+      const hiddenInput = document.getElementById("selected-users");
+  
+      // Show dropdown when input is focused
+      searchInput.addEventListener("focus", function () {
+        dropdownOptions.style.display = "block";
+      });
+  
+      // Hide dropdown when clicking outside
+      document.addEventListener("click", function (event) {
+        if (!event.target.closest(".custom-multi-select")) {
+          dropdownOptions.style.display = "none";
+        }
+      });
+  
+      // Filter options based on search input
+      window.filterOptions = function (searchValue) {
+        const options = dropdownOptions.querySelectorAll(".dropdown-option");
+        options.forEach((option) => {
+          if (
+            option.textContent.toLowerCase().includes(searchValue.toLowerCase())
+          ) {
+            option.style.display = "block";
+          } else {
+            option.style.display = "none";
+          }
+        });
+      };
+  
+      // Select an option
+      window.selectOption = function (optionElement) {
+        const value = optionElement.getAttribute("data-value");
+        const text = optionElement.textContent;
+  
+        // Check if the tag is already selected
+        if (
+          Array.from(selectedTagsContainer.children).some(
+            (tag) => tag.getAttribute("data-value") === value
+          )
+        ) {
+          return;
+        }
+  
+        // Add the tag to the selected tags container
+        const tag = document.createElement("div");
+        tag.classList.add("tag");
+        tag.setAttribute("data-value", value);
+        tag.innerHTML = `${text} <span class="remove-tag" onclick="removeTag(this)">x</span>`;
+        selectedTagsContainer.appendChild(tag);
+  
+        // Update the hidden input value
+        updateHiddenInput();
+      };
+  
+      // Remove a tag
+      window.removeTag = function (removeButton) {
+        const tag = removeButton.parentElement;
+        tag.remove();
+        updateHiddenInput();
+      };
+  
+      // Update the hidden input value with selected tags
+      function updateHiddenInput() {
+        const selectedValues = Array.from(selectedTagsContainer.children).map(
+          (tag) => tag.getAttribute("data-value")
+        );
+        hiddenInput.value = selectedValues.join(",");
+      }
+    });
+  </script>
+        {% with messages = get_flashed_messages() %} {% if messages %}
+        <div class="hidden-messages">
+          {% for message in messages %}
+          <p id="hidden-message">{{ message }}</p>
+          {% endfor %} {% endif %} {% endwith %}
+        </div>
         <footer>
             <p>&copy; 2025 Enterprise Pro Task Management System</p>
         </footer>
@@ -205,6 +309,11 @@
                         loginLogoutBtn.href = "{{ url_for('login') }}";
                     }
                 });
+
+                var hiddenMessage = document.getElementById("hidden-message");
+                if (hiddenMessage) {
+                    alert(hiddenMessage.textContent);
+                }
 
                 const filterDropdown = document.getElementById("dropdown1");
                 const filterDropdown2 = document.getElementById("dropdown2");
