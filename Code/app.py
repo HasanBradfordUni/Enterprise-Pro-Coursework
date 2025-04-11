@@ -265,15 +265,21 @@ class myClass():
         form = UsersInProjectsForm()
         if form.validate_on_submit():
             project_title = form.project_title.data
-            usernames = form.username.data
+            usernames = request.form.get('username').split(",")  # Split the comma-separated string into a list
+            if not usernames:
+                flash("No users selected", "danger")
+                return redirect(url_for('admin'))
+            print(usernames)
             project_id = self.database.find_project(project_title=project_title)[0]
             for username in usernames:
-                user_id = self.database.find_user(username=username)[0]
-                rowId = self.database.add_user_into_project(project_id=project_id, user_id=user_id, project_title=project_title, username=username)
+                user_id = self.database.find_user(username=username.strip())[0]
+                print(user_id)
+                rowId = self.database.add_user_into_project(project_id=project_id, user_id=user_id, project_title=project_title, username=username.strip())
             if rowId:
                 flash("User(s) added to selected project successfully", "success")
             return redirect(url_for('index'))
         else:
+            print(form.errors)
             flash("User(s) not added to selected project", "danger")
         return redirect(url_for('admin'))
 

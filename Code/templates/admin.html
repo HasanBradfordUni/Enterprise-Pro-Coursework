@@ -157,7 +157,7 @@
                 </div>
                 {% endfor %}
               </div>
-              <input type="hidden" name="username" id="selected-users" />
+              <input type="hidden" name="username" id="selected-users-project" />
             </div>
           </div>
           <div class="form-group">{{ form3.submit() }}</div>
@@ -199,7 +199,7 @@
                 <div class="no-users">No users available</div>
               {% endif %}
             </div>
-            <input type="hidden" name="selected_users" id="selected-users" />
+            <input type="hidden" name="selected_users" id="selected-users-delete" />
           </div>
         </div>
         <button type="submit">Submit</button>
@@ -208,11 +208,11 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        const searchInput = document.querySelector(".search-input");
-        const dropdownOptions = document.querySelector(".dropdown-options");
-        const selectedTagsContainer = document.querySelector(".selected-tags");
-        const hiddenInput = document.getElementById("selected-users");
-    
+        const multiSelects = document.querySelectorAll(".custom-multi-select");
+        
+        multiSelects.forEach(function(multiSelect) {
+          const searchInput = multiSelect.querySelector(".search-input");
+          const dropdownOptions = multiSelect.querySelector(".dropdown-options");
         // Show dropdown when input is focused
         searchInput.addEventListener("focus", function () {
           dropdownOptions.style.display = "block";
@@ -224,10 +224,15 @@
             dropdownOptions.style.display = "none";
           }
         });
-    
+            dropdownOptions.style.display = "none";
+        });
+        
         // Filter options based on search input
         window.filterOptions = function (searchValue) {
+          const multiSelect = event.target.closest(".custom-multi-select");
+          const dropdownOptions = multiSelect.querySelector(".dropdown-options");
           const options = dropdownOptions.querySelectorAll(".dropdown-option");
+          
           options.forEach((option) => {
             if (
               option.textContent.toLowerCase().includes(searchValue.toLowerCase())
@@ -241,8 +246,12 @@
     
         // Select an option
         window.selectOption = function (optionElement) {
+          const multiSelect = optionElement.closest(".custom-multi-select");
+          const selectedTagsContainer = multiSelect.querySelector(".selected-tags");
+          const hiddenInput = multiSelect.querySelector("input[type='hidden']");
+          
           const value = optionElement.getAttribute("data-value");
-          const text = optionElement.textContent;
+          const text = optionElement.textContent.trim();
     
           // Check if the tag is already selected
           if (
@@ -260,17 +269,27 @@
           tag.innerHTML = `${text} <span class="remove-tag" onclick="removeTag(this)">x</span>`;
           selectedTagsContainer.appendChild(tag);
     
-          // Update the hidden input value
-          updateHiddenInput();
-        };
-    
         // Remove a tag
         window.removeTag = function (removeButton) {
           const tag = removeButton.parentElement;
+          const multiSelect = tag.closest(".custom-multi-select");
+          const selectedTagsContainer = multiSelect.querySelector(".selected-tags");
+          const hiddenInput = multiSelect.querySelector("input[type='hidden']");
+          
+          tag.remove();
+          updateHiddenInput(selectedTagsContainer, hiddenInput);
+        };
+    
+        // Update the hidden input value with selected tags
+        function updateHiddenInput(selectedTagsContainer, hiddenInput) {
+          const selectedValues = Array.from(selectedTagsContainer.children).map(
+            (tag) => tag.getAttribute("data-value")
+          );
+          hiddenInput.value = selectedValues.join(",");
           tag.remove();
           updateHiddenInput();
         };
-    
+      };
         // Update the hidden input value with selected tags
         function updateHiddenInput() {
           const selectedValues = Array.from(selectedTagsContainer.children).map(
