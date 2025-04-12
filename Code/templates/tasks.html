@@ -221,84 +221,7 @@
               </form>
             `;
     
-            // Show the form
-            formContainer.style.display = "block";
-            
-            // Initialize custom select functionality for this specific form
-            const customSelect = formContainer.querySelector('.custom-multi-select');
-            if (customSelect) {
-              const searchInput = customSelect.querySelector('.search-input');
-              const dropdownOptions = customSelect.querySelector('.dropdown-options');
-              
-              // Show dropdown options initially
-              dropdownOptions.style.display = "block";
-              
-              // Focus on search input
-              searchInput.focus();
-            }
-          });
-        });
-      });
-    </script>
-
-    <div id="edit-task-forms-container" style="display: none">
-      {% for task in tasks %}
-      <form
-        id="edit-task-form-{{ task[0] }}"
-        class="edit-task-form"
-        action="{{ url_for('edit_task', task_id=task[0]) }}"
-        method="POST"
-        enctype="multipart/form-data"
-        style="display: none"
-      >
-        {{ form1.hidden_tag() }}
-        <input type="hidden" name="task_id" value="{{ task[0] }}" />
-        <div class="form-group">
-          {{ form1.task_title.label }}<br />
-          {{ form1.task_title() }}
-        </div>
-        <div class="form-group">
-          {{ form1.task_details.label }}<br />
-          {{ form1.task_details() }}
-        </div>
-        <div class="form-group">
-          {{ form1.task_status.label }}<br />
-          {{ form1.task_status() }}
-        </div>
-        <div class="form-group">
-          {{ form1.task_assigned_date.label }}<br />
-          {{ form1.task_assigned_date() }}
-        </div>
-        <div class="form-group">
-          {{ form1.task_due_date.label }}<br />
-          {{ form1.task_due_date() }}
-        </div>
-        <div class="form-group">
-          <button type="submit" class="btn btn-primary">Save Changes</button>
-        </div>
-        <div class="form-group">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            onclick="document.getElementById('edit-task-form-{{ task[0] }}').style.display='none'"
-          >
-            Cancel
-          </button>
-        </div>
-      </form>
-      {% endfor %}
-    </div>
-
-    {% with messages = get_flashed_messages() %} {% if messages %}
-    <div class="hidden-messages">
-      {% for message in messages %}
-      <p id="hidden-message">{{ message }}</p>
-      {% endfor %} {% endif %} {% endwith %}
-    </div>
-
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const searchInput = document.querySelector(".search-input");
+            const searchInput = document.querySelector(".search-input");
         const dropdownOptions = document.querySelector(".dropdown-options");
         const selectedTagsContainer = document.querySelector(".selected-tags");
         const hiddenInput = document.getElementById("selected-users");
@@ -368,8 +291,68 @@
           );
           hiddenInput.value = selectedValues.join(",");
         }
+    
+            // Show the form container
+            formContainer.style.display = "block";
+          });
+        });
       });
     </script>
+
+    <div id="edit-task-forms-container" style="display: none">
+      {% for task in tasks %}
+      <form
+        id="edit-task-form-{{ task[0] }}"
+        class="edit-task-form"
+        action="{{ url_for('edit_task', task_id=task[0]) }}"
+        method="POST"
+        enctype="multipart/form-data"
+        style="display: none"
+      >
+        {{ form1.hidden_tag() }}
+        <input type="hidden" name="task_id" value="{{ task[0] }}" />
+        <div class="form-group">
+          {{ form1.task_title.label }}<br />
+          {{ form1.task_title() }}
+        </div>
+        <div class="form-group">
+          {{ form1.task_details.label }}<br />
+          {{ form1.task_details() }}
+        </div>
+        <div class="form-group">
+          {{ form1.task_status.label }}<br />
+          {{ form1.task_status() }}
+        </div>
+        <div class="form-group">
+          {{ form1.task_assigned_date.label }}<br />
+          {{ form1.task_assigned_date() }}
+        </div>
+        <div class="form-group">
+          {{ form1.task_due_date.label }}<br />
+          {{ form1.task_due_date() }}
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+        <div class="form-group">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            onclick="document.getElementById('edit-task-form-{{ task[0] }}').style.display='none'"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+      {% endfor %}
+    </div>
+
+    {% with messages = get_flashed_messages() %} {% if messages %}
+    <div class="hidden-messages">
+      {% for message in messages %}
+      <p id="hidden-message">{{ message }}</p>
+      {% endfor %} {% endif %} {% endwith %}
+    </div>
 
     <script>
       document.addEventListener("DOMContentLoaded", function () {

@@ -138,70 +138,70 @@ class testListOperations:
                 print("Filtered tasks:",filter_tasks)
                 print("Filtered tasks present - Filter data test sucessful")
         if choice == 2:
-            filter_tasks = self.listOperationsManager.categorise_data(tasks, 'status', 'In-progress')
+            filter_tasks = self.listOperationsManager.filter_data(tasks, 'status', 'In-progress')
             if not filter_tasks:
                 print("No filtered tasks - Filter data test failed")
             else:
                 print("Filtered tasks:",filter_tasks)
                 print("Filtered tasks present - Filter data test sucessful")
         if choice == 3:
-            filter_tasks = self.listOperationsManager.categorise_data(tasks, 'status', 'Complete')
+            filter_tasks = self.listOperationsManager.filter_data(tasks, 'status', 'Complete')
             if not filter_tasks:
                 print("No filtered tasks - Filter data test failed")
             else:
                 print("Filtered tasks:",filter_tasks)
                 print("Filtered tasks present - Filter data test sucessful")
         if choice == 4:
-            filter_tasks = self.listOperationsManager.categorise_data(tasks, 'status', 'Overdue')
+            filter_tasks = self.listOperationsManager.filter_data(tasks, 'status', 'Overdue')
             if not filter_tasks:
                 print("No filtered tasks - Filter data test failed")
             else:
                 print("Filtered tasks:",filter_tasks)
                 print("Filtered tasks present - Filter data test sucessful")
         if choice == 5:
-            filter_projects = self.listOperationsManager.categorise_data(projects, 'status', 'In-progress')
+            filter_projects = self.listOperationsManager.filter_data(projects, 'status', 'In-progress')
             if not filter_projects:
                 print("No filtered projects - Filter data test failed")
             else:
                 print("Filtered projects:",filter_projects)
                 print("Filtered projects present - Filter data test sucessful")
         if choice == 6:
-            filter_projects = self.listOperationsManager.categorise_data(projects, 'status', 'Complete')
+            filter_projects = self.listOperationsManager.filter_data(projects, 'status', 'Complete')
             if not filter_projects:
                 print("No filtered projects - Filter data test failed")
             else:
                 print("Filtered projects:",filter_projects)
                 print("Filtered projects present - Filter data test sucessful")
         if choice == 7:
-            filter_projects = self.listOperationsManager.categorise_data(projects, 'review', '1 day')
+            filter_projects = self.listOperationsManager.filter_data(projects, 'review', '1 day')
             if not filter_projects:
                 print("No filtered projects - Filter data test failed")
             else:
                 print("Filtered projects:",filter_projects)
                 print("Filtered projects present - Filter data test sucessful")
         if choice == 8:
-            filter_projects = self.listOperationsManager.categorise_data(projects, 'review', '3 days')
+            filter_projects = self.listOperationsManager.filter_data(projects, 'review', '3 days')
             if not filter_projects:
                 print("No filtered projects - Filter data test failed")
             else:
                 print("Filtered projects:",filter_projects)
                 print("Filtered projects present - Filter data test sucessful")
         if choice == 9:
-            filter_projects = self.listOperationsManager.categorise_data(projects, 'review', '1 week')
+            filter_projects = self.listOperationsManager.filter_data(projects, 'review', '1 week')
             if not filter_projects:
                 print("No filtered projects - Filter data test failed")
             else:
                 print("Filtered projects:",filter_projects)
                 print("Filtered projects present - Filter data test sucessful")
         if choice == 10:
-            filter_projects = self.listOperationsManager.categorise_data(projects, 'review', '2 weeks')
+            filter_projects = self.listOperationsManager.filter_data(projects, 'review', '2 weeks')
             if not filter_projects:
                 print("No filtered projects - Filter data test failed")
             else:
                 print("Filtered projects:",filter_projects)
                 print("Filtered projects present - Filter data test sucessful")
         if choice == 11:
-            filter_projects = self.listOperationsManager.categorise_data(projects, 'review', '1 month')
+            filter_projects = self.listOperationsManager.filter_data(projects, 'review', '1 month')
             if not filter_projects:
                 print("No filtered projects - Filter data test failed")
             else:

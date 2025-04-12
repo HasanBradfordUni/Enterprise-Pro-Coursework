@@ -9,7 +9,7 @@ class testsManager:
         self.listOperationsTester = testListOperations()
         self.menu = {}
         self.choice = 0
-        self.databaseTester.test_connection()
+        self.databaseTester.thisDatabase.create_connection(os.path.join(os.getcwd(), 'Code/database.db'))
     
     def display_menu(self):
         for key, value in self.menu.items():
@@ -65,84 +65,159 @@ class testsManager:
                 6: "Exit"
             }
 
-    def handle_choice(self, menu_type):
-        if menu_type == "none":
-            self.setMenu("main")
+    def test_forms(self):
+        import pytest
+    
+        # Specify the path to the test file
+        test_file = "Testing/test_forms.py"
+    
+        print(f"Running tests in {test_file}...")
+        # Run the tests in the specified file
+        result = pytest.main([test_file, "-v"])  # Add verbose output for debugging
+        if result == 0:
+            print("All form tests passed.")
+        else:
+            print(f"Some form tests failed with result code: {result}")
+
+    def test_routes(self):
+        import pytest
+    
+        # Specify the path to the test file
+        test_file = "Testing/test_routes.py"
+    
+        print(f"Running tests in {test_file}...")
+        # Run the tests in the specified file
+        result = pytest.main([test_file, "-v"])  # Add verbose output for debugging
+        if result == 0:
+            print("All route tests passed.")
+        else:
+            print(f"Some route tests failed with result code: {result}")
+
+    def handle_choice(self):
+        current_menu = "main"
+        while True:
+            self.setMenu(current_menu)
             self.display_menu()
             self.get_choice()
-            self.handle_choice("main")
-        if menu_type == "main":
-            if self.choice == 1:
-                self.setMenu("database")
-                self.display_menu()
-                self.get_choice()
-                self.handle_choice("database")
-            elif self.choice == 2:
-                self.setMenu("list_operations")
-                self.display_menu()
-                self.get_choice()
-                self.handle_choice("list_operations")
-            elif self.choice == 3:
-                self.test_forms()
-            elif self.choice == 4:
-                self.test_routes()
-            elif self.choice == 5:
-                print("Exiting...")
-                exit(0)
-        if menu_type == "database":
-            self.display_menu()
-            self.get_choice()
-            if self.choice == 1:
-                self.databaseTester.test_add_user()
-            elif self.choice == 2:
-                self.databaseTester.test_add_project()
-            elif self.choice == 3:
-                self.databaseTester.test_add_task()
-            elif self.choice == 4:
-                self.databaseTester.test_add_user_into_project
-            elif self.choice == 5:
-                self.databaseTester.test_add_assigned_task()
-            elif self.choice == 6:
-                self.databaseTester.test_add_task_update()
-            elif self.choice == 7:
-                self.databaseTester.test_update_project()
-            elif self.choice == 8:
-                self.databaseTester.test_update_user()
-            elif self.choice == 9:
-                self.databaseTester.test_update_task()
-            elif self.choice == 10:
-                self.databaseTester.test_update_user_in_project()
-            elif self.choice == 11:
-                self.databaseTester.test_update_assigned_task()
-            elif self.choice == 12:
-                self.databaseTester.test_delete_user()
-            elif self.choice == 13:
-                self.databaseTester.test_delete_project()
-            elif self.choice == 14:
-                self.databaseTester.test_delete_task()
-            elif self.choice == 15:
-                self.databaseTester.test_delete_project_user()
-            elif self.choice == 16:
-                self.databaseTester.test_delete_assigned_task()
-            elif self.choice == 17:
-                self.handle_choice("main")
-            else:
-                print("Exiting...")
-                exit(0)
-        if menu_type == "list_operations":
-            self.display_menu()
-            self.get_choice()
-            if self.choice == 1:
-                self.listOperationsTester.test_merge_sort()
-            elif self.choice == 2:
-                self.listOperationsTester.test_binary_search()
-            elif self.choice == 3:
-                self.listOperationsTester.test_filter_data()
-            elif self.choice == 4:
-                self.listOperationsTester.test_categorise_data()
-            elif self.choice == 5:
-                self.handle_choice("main")
-            else:
-                print("Exiting...")
-                exit(0)
-            
+
+            if current_menu == "main":
+                if self.choice == 1:
+                    current_menu = "database"
+                elif self.choice == 2:
+                    current_menu = "list_operations"
+                elif self.choice == 3:
+                    self.test_forms()
+                elif self.choice == 4:
+                    self.test_routes()
+                elif self.choice == 5:
+                    print("Exiting...")
+                    exit(0)
+                else:
+                    print("Invalid choice. Please try again.")
+                    continue
+
+            elif current_menu == "database":
+                if self.choice == 1:
+                    print("Testing add user...")
+                    result = self.databaseTester.test_add_user()
+                    print(result)
+                elif self.choice == 2:
+                    print("Testing add project...")
+                    result = self.databaseTester.test_add_project()
+                    print(result)
+                elif self.choice == 3:
+                    print("Testing add task...")
+                    result = self.databaseTester.test_add_task()
+                    print(result)
+                elif self.choice == 4:
+                    print("Testing add user to project...")
+                    result = self.databaseTester.test_add_user_into_project()
+                    print(result)
+                elif self.choice == 5:
+                    print("Testing add assigned task...")
+                    result = self.databaseTester.test_add_assigned_task()
+                    print(result)
+                elif self.choice == 6:
+                    print("Testing add task update...")
+                    result = self.databaseTester.test_add_task_update()
+                    print(result)
+                elif self.choice == 7:
+                    print("Testing update project...")
+                    result = self.databaseTester.test_update_project()
+                    print(result)
+                elif self.choice == 8:
+                    print("Testing update user...")
+                    result = self.databaseTester.test_update_user()
+                    print(result)
+                elif self.choice == 9:
+                    print("Testing update task...")
+                    result = self.databaseTester.test_update_task()
+                    print(result)
+                elif self.choice == 10:
+                    print("Testing update user in project...")
+                    result = self.databaseTester.test_update_user_in_project()
+                    print(result)
+                elif self.choice == 11:
+                    print("Testing update assigned task...")
+                    result = self.databaseTester.test_update_assigned_task()
+                    print(result)
+                elif self.choice == 12:
+                    print("Testing delete user...")
+                    result = self.databaseTester.test_delete_user()
+                    print(result)
+                elif self.choice == 13:
+                    print("Testing delete project...")
+                    result = self.databaseTester.test_delete_project()
+                    print(result)
+                elif self.choice == 14:
+                    print("Testing delete task...")
+                    result = self.databaseTester.test_delete_task()
+                    print(result)
+                elif self.choice == 15:
+                    print("Testing delete user from project...")
+                    result = self.databaseTester.test_delete_project_user()
+                    print(result)
+                elif self.choice == 16:
+                    print("Testing delete assigned task...")
+                    result = self.databaseTester.test_delete_assigned_task()
+                    print(result)
+                elif self.choice == 17:
+                    current_menu = "main"
+                elif self.choice == 18:
+                    print("Exiting...")
+                    break
+                else:
+                    print("Invalid choice. Please try again.")
+        
+            elif current_menu == "list_operations":
+                if self.choice == 1:
+                    print("Testing merge sort...")
+                    result = self.listOperationsTester.test_merge_sort()
+                    print(result)
+                elif self.choice == 2:
+                    print("Testing binary search...")
+                    result = self.listOperationsTester.test_binary_search()
+                    print(result)
+                elif self.choice == 3:
+                    print("Testing filter data...")
+                    result = self.listOperationsTester.test_filter_data()
+                    print(result)
+                elif self.choice == 4:
+                    print("Testing categorise data...")
+                    result = self.listOperationsTester.test_categorise_data()
+                    print(result)
+                elif self.choice == 5:
+                    current_menu = "main"
+                elif self.choice == 6:
+                    print("Exiting...")
+                    break
+                else:
+                    print("Invalid choice. Please try again.")
+    
+    def manage_tests(self):
+        print("Welcome to the Test Manager!")
+        self.handle_choice()
+
+if __name__ == "__main__":
+    test_manager = testsManager()
+    test_manager.manage_tests()
