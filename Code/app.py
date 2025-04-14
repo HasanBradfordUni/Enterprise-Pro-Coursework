@@ -3,9 +3,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 import os
 
-from Code.use_database import databaseManager
-from Code.search_sort import listOperationsManager
-from Code.forms import LoginForm, CreateUserForm, UpdateUserDetailsForm, CreateProjectForm, UpdateProgressForm, EditTaskForm, UsersInProjectsForm, PasswordResetForm
+from use_database import databaseManager
+from search_sort import listOperationsManager
+from forms import LoginForm, CreateUserForm, UpdateUserDetailsForm, CreateProjectForm, UpdateProgressForm, EditTaskForm, UsersInProjectsForm, PasswordResetForm
  
 class myClass():
     def __init__(self, router):
@@ -19,7 +19,7 @@ class myClass():
         router('/create_task', methods=['POST'])(self.create_task)
         router('/sort_tasks/<string:sort_type>')(self.sort_tasks)
         router('/filter_tasks/<string:filter_word>')(self.filter_tasks)
-        router('/update_progress/<int:project_id>/<string:update>', methods=['GET', 'POST'])(self.update_progress)
+        router('/update_progress/<int:project_id>', methods=['GET', 'POST'])(self.update_progress)
         router('/edit_task/<int:task_id>')(self.edit_task)
         router('/delete_task')(self.delete_task)
         router('/show_deleted_tasks')(self.show_deleted_tasks)
@@ -173,15 +173,16 @@ class myClass():
             if task[6] == self.project_id:
                 project_tasks.append(task)
         tasks = project_tasks
-        task_updates = self.database.get_all_from_table("task_updates")
+        task_updates = self.database.get_all_from_table("task_updates")[::-1]
         assigned_tasks = self.database.get_all_from_table("assigned_tasks")
         users = self.database.get_all_from_table("users")
         return render_template('tasks.html', tasks=tasks, project=project, task_updates=task_updates, assigned_tasks=assigned_tasks, users=users, form=form, form1=form1)
     
-    def search_tasks(self, search_term):
+    def search_tasks(self):
         tasks = self.load_tasks()
         form = UpdateProgressForm()
         form1 = EditTaskForm()
+        search_term = request.get_json('search_term')
         task_titles = [task[1] for task in tasks]
         search_results = []
         thisResult = self.list_operation_manager.binary_search(task_titles, search_term)
@@ -190,7 +191,7 @@ class myClass():
             task_titles.remove(task_titles[thisResult])
             thisResult = self.list_operation_manager.binary_search(task_titles, search_term)
         project = self.database.find_project(project_id=self.project_id)
-        task_updates = self.database.get_all_from_table("task_updates")
+        task_updates = self.database.get_all_from_table("task_updates")[::-1]
         assigned_tasks = self.database.get_all_from_table("assigned_tasks")
         users = self.database.get_all_from_table("users")
         return render_template('tasks.html', tasks=search_results, project=project, task_updates=task_updates, assigned_tasks=assigned_tasks, users=users, form=form, form1=form1)
@@ -207,31 +208,42 @@ class myClass():
         self.database.add_assigned_task(task_id=task_id, task_title=task_title, assigned_user_id=self.user_id, assigned_username=self.database.find_user(user_id=self.user_id)[1], project_id=self.project_id)
         return redirect(url_for('tasks'))
     
-    def sort_tasks(self, sort_type):
+    def sort_tasks(self):
         tasks = self.load_tasks()
         form = UpdateProgressForm()
         form1 = EditTaskForm()
+        sort_type = request.get_json('sort_type')
         sorted_tasks = self.list_operation_manager.categorise_data(tasks, sort_type)
         project = self.database.find_project(project_id=self.project_id)
-        task_updates = self.database.get_all_from_table("task_updates")
+        task_updates = self.database.get_all_from_table("task_updates")[::-1]
         assigned_tasks = self.database.get_all_from_table("assigned_tasks")
         users = self.database.get_all_from_table("users")
         return render_template('tasks.html', tasks=sorted_tasks, project=project, task_updates=task_updates, assigned_tasks=assigned_tasks, users=users, form=form, form1=form1)
 
-    def filter_tasks(self, filter_word):
+    def filter_tasks(self):
         tasks = self.load_tasks()
         form = UpdateProgressForm()
         form1 = EditTaskForm()
+        filter_word = request.get_json('filter_word')
         filtered_tasks = self.list_operation_manager.filter_data(tasks, "status", filter_word)
         project = self.database.find_project(project_id=self.project_id)
-        task_updates = self.database.get_all_from_table("task_updates")
+        task_updates = self.database.get_all_from_table("task_updates")[::-1]
         assigned_tasks = self.database.get_all_from_table("assigned_tasks")
         users = self.database.get_all_from_table("users")
         return render_template('tasks.html', tasks=filtered_tasks, project=project, task_updates=task_updates, assigned_tasks=assigned_tasks, users=users, form=form, form1=form1)
     
-    def update_progress(self, project_id, update):
-        self.database.add_task_update(project_id=project_id, progress_update=update)
-        flash("Progress updated successfully", "success")
+    def update_progress(self, project_id):
+        form = UpdateProgressForm()
+        if form.validate_on_submit():
+            update = form.progress_update.data
+            if not update:
+                flash("No progress update provided", "danger")
+                return redirect(url_for('tasks'))
+            row_id = self.database.add_task_update(project_id=project_id, progress_update=update)
+            if row_id:
+                flash("Progress update added successfully", "success")
+            else:
+                flash("Failed to add progress update", "danger")
         return redirect(url_for('tasks'))
 
     def search_projects(self, search_term):

@@ -95,9 +95,15 @@
         <p>No task updates found</p>
         {% endif %} {% for task_update in task_updates %}
         <div class="task-box" data-task-update-id="{{ task_update[0] }}">
+          {% if task_update[4] %}
           <h1>Date: {{ task_update[4] }}</h1>
+          {% endif %}
+          {% if task_update[2] %}
           <h3>Progress Update: {{ task_update[2] }}</h3>
+          {% endif %}
+          {% if task_update[3] %}
           <p>Status: {{ task_update[3] }}</p>
+          {% endif %}
         </div>
         <br />
         {% endfor %}
