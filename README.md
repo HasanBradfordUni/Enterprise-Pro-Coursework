@@ -88,8 +88,7 @@ The Yorkshire and Humber Regional Organised Crime Unit (YHROCU) requires a web-b
 - **Final SRS Submission**: 18th February 2025 ✅
 - **SDD Draft Deadline**: 24th February 2025 ✅
 - **Final SDD Version**: 4th March 2025 ✅
-- **Midway report submission**: 6th March 2025 ✅ 
-- **Development & Testing**: Ongoing until completion
-
-This README will be updated as the project progresses to reflect changes and improvements in scope and functionality.
-
+- **Midway report submission**: 6th March 2025 ✅
+- **Midway Prototype Demo (to client)**: 11th March 2025 ✅
+- **Testing report (final) submission**: 11th April 2025 ✅ 
+- **Final Prototype Demo (to client)**: 22nd April 2025 
