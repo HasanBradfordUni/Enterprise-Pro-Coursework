@@ -209,6 +209,8 @@
                     class="search-input"
                     placeholder="Search and select users..."
                     oninput="filterOptions(this.value)"
+                    id="user_ids"
+                    name="user_ids"
                   />
                   <div class="dropdown-options">
                     {% for user in users %}
@@ -221,16 +223,16 @@
                     </div>
                     {% endfor %}
                   </div>
-                  <input type="hidden" name="selected_users" id="selected-users" />
+                  <input type="hidden" name="selected_users" id="selected-users-${taskId}" />
                 </div>
                 <button type="submit">Assign</button>
               </form>
             `;
     
-            const searchInput = document.querySelector(".search-input");
+        const searchInput = document.querySelector(".search-input");
         const dropdownOptions = document.querySelector(".dropdown-options");
         const selectedTagsContainer = document.querySelector(".selected-tags");
-        const hiddenInput = document.getElementById("selected-users");
+        const hiddenInput = document.getElementById(`selected-users-${taskId}`);
     
         // Show dropdown when input is focused
         searchInput.addEventListener("focus", function () {
@@ -544,8 +546,8 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        const currentTasks = JSON.parse("{{ tasks|tojson }}");
-        const assignedUsers = JSON.parse("{{ assigned_tasks|tojson }}");
+        const currentTasks = JSON.parse('{{ tasks|tojson|safe }}');
+        const assignedUsers = JSON.parse('{{ assigned_tasks|tojson|safe }}');
 
         currentTasks.forEach((task) => {
           const taskBox = document.querySelector(

@@ -204,7 +204,7 @@ class myClass():
         task_assigned_date = datetime.now().strftime("%d-%m-%Y")
         task_status = 'New'
         self.database.add_task(task_title, task_details, task_status, task_assigned_date, task_due_date, self.project_id)
-        task_id = self.database.get_last_row_id("tasks")
+        task_id = self.database.get_last_row_id("tasks")[0]
         self.database.add_assigned_task(task_id=task_id, task_title=task_title, assigned_user_id=self.user_id, assigned_username=self.database.find_user(user_id=self.user_id)[1], project_id=self.project_id)
         return redirect(url_for('tasks'))
     
@@ -400,9 +400,10 @@ class myClass():
         return render_template('tasks.html', deleted_tasks=self.deleted_tasks)
     
     def assign_users(self):
-        user_ids = request.form.getlist('user_ids')  # Get the list of user IDs
+        selected_users = request.form.get('selected_users')  # Get the selected user IDs from the form
         task_id = request.form.get('task_id')  # Get the task ID
-        if user_ids and task_id:
+        if selected_users and task_id:
+            user_ids = selected_users.split(",")  # Convert the string into a list of user IDs
             for user_id in user_ids:
                 self.database.add_assigned_task(
                     task_id=task_id,
@@ -413,6 +414,8 @@ class myClass():
                 )
             flash("Users assigned successfully", "success")
         else:
+            print("Selected users:", selected_users)
+            print("Task id:", task_id)
             flash("Failed to assign users", "danger")
         return redirect(url_for('tasks'))
 
