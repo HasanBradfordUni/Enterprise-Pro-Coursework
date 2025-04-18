@@ -51,6 +51,14 @@ class UsersInProjectsForm(FlaskForm):
     username = SelectMultipleField('Username', choices=users, validators=[DataRequired()])
     submit = SubmitField('Submit')
 
+class RemoveProjectUsersForm(FlaskForm):
+    projects = [(project[1], project[1]) for project in thisDatabase.get_all_from_table('projects')]
+    project_title = SelectField('Project Title', choices=projects, validators=[DataRequired()])
+    
+    # This will be populated dynamically via JavaScript after selecting a project
+    username = SelectMultipleField('Users to Remove', validators=[DataRequired()])
+    submit = SubmitField('Submit')
+
 class CreateProjectForm(FlaskForm):
     project_title = StringField('Project Title', validators=[DataRequired()])
     project_details = TextAreaField('Project Details', validators=[DataRequired()])

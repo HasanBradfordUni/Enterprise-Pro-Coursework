@@ -268,6 +268,10 @@
           tag.setAttribute("data-value", value);
           tag.innerHTML = `${text} <span class="remove-tag" onclick="removeTag(this)">x</span>`;
           selectedTagsContainer.appendChild(tag);
+          
+          // Update the hidden input with selected values
+          updateHiddenInput(selectedTagsContainer, hiddenInput);
+        };
     
         // Remove a tag
         window.removeTag = function (removeButton) {
@@ -282,16 +286,6 @@
     
         // Update the hidden input value with selected tags
         function updateHiddenInput(selectedTagsContainer, hiddenInput) {
-          const selectedValues = Array.from(selectedTagsContainer.children).map(
-            (tag) => tag.getAttribute("data-value")
-          );
-          hiddenInput.value = selectedValues.join(",");
-          tag.remove();
-          updateHiddenInput();
-        };
-      };
-        // Update the hidden input value with selected tags
-        function updateHiddenInput() {
           const selectedValues = Array.from(selectedTagsContainer.children).map(
             (tag) => tag.getAttribute("data-value")
           );

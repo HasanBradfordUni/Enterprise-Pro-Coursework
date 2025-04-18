@@ -5,7 +5,7 @@ import os
 
 from use_database import databaseManager
 from search_sort import listOperationsManager
-from forms import LoginForm, CreateUserForm, UpdateUserDetailsForm, CreateProjectForm, UpdateProgressForm, EditTaskForm, UsersInProjectsForm, PasswordResetForm
+from forms import LoginForm, CreateUserForm, UpdateUserDetailsForm, CreateProjectForm, UpdateProgressForm, EditTaskForm, UsersInProjectsForm, PasswordResetForm, RemoveProjectUsersForm
  
 class myClass():
     def __init__(self, router):
@@ -129,6 +129,8 @@ class myClass():
             flash("You are not authorised to view this page\nMust be a supervisor or admin", "danger")
             return redirect(url_for('index'))
         projects = self.database.get_all_from_table("projects")
+        project_users = self.database.get_all_from_table("project_users")
+        users_in_projects = []
         tasks = self.load_tasks()
         theseProjects = []
         for project in projects:
@@ -147,10 +149,21 @@ class myClass():
             thisProject.append(project_tasks)
             thisProject.append(f"{completed_tasks} of {total_tasks} tasks completed")
             theseProjects.append(thisProject)
+        current_project_id = 1
+        current_user_names = []
+        for row in project_users:
+            if row[1] != current_project_id:
+                users_in_projects.append(current_project_id)
+                users_in_projects.append(current_user_names)
+                current_user_names = []
+                current_project_id = row[1]
+            else:
+                current_user_names.append(row[4])
         projects = theseProjects
         form = UsersInProjectsForm()
+        form1 = RemoveProjectUsersForm()
         users = self.database.get_all_from_table("users")
-        return render_template('supervisor.html', projects=projects, users=users, form=form)
+        return render_template('supervisor.html', projects=projects, users=users, form=form, users_in_projects=users_in_projects, form1=form1)
     
     def admin(self):
         form = CreateProjectForm()
@@ -275,29 +288,32 @@ class myClass():
 
     def add_user_to_project(self):
         form = UsersInProjectsForm()
-        if form.validate_on_submit():
-            project_title = form.project_title.data
-            usernames = request.form.get('username').split(",")  # Split the comma-separated string into a list
-            if not usernames:
-                flash("No users selected", "danger")
-                return redirect(url_for('admin'))
-            print(usernames)
-            project_id = self.database.find_project(project_title=project_title)[0]
-            for username in usernames:
-                user_id = self.database.find_user(username=username.strip())[0]
-                print(user_id)
-                rowId = self.database.add_user_into_project(project_id=project_id, user_id=user_id, project_title=project_title, username=username.strip())
-            if rowId:
-                flash("User(s) added to selected project successfully", "success")
-            return redirect(url_for('index'))
+        project_title = form.project_title.data
+        usernames = request.form.get('username').split(",")  # Split the comma-separated string into a list
+        if not usernames:
+            flash("No users selected", "danger")
+            return redirect(url_for('admin'))
+        print(usernames)
+        project_id = self.database.find_project(project_title=project_title)[0]
+        for username in usernames:
+            user_id = self.database.find_user(username=username.strip())[0]
+            print(user_id)
+            rowId = self.database.add_user_into_project(project_id=project_id, user_id=user_id, project_title=project_title, username=username.strip())
+        if rowId:
+            flash("User(s) added to selected project successfully", "success")
         else:
-            print(form.errors)
             flash("User(s) not added to selected project", "danger")
-        return redirect(url_for('admin'))
-
-    def remove_user_from_project(self, user_id, project_id):
-        id = self.database.find_user_in_project(user_id=user_id, project_id=project_id)[0]
-        self.database.remove_user_from_project(id=id)
+        return redirect(url_for('index'))
+    
+    def remove_user_from_project(self):
+        form = RemoveProjectUsersForm()
+        users = form.selected_users.data
+        project_title = form.project_title.data
+        for user in users:
+            user_id = self.database.find_user(username=user)[0]
+            project_id = self.database.find_project(project_title=project_title)[0]
+            id = self.database.find_user_in_project(user_id=user_id, project_id=project_id)[0]
+            self.database.remove_user_from_project(id=id)
         return redirect(url_for('index'))
 
     def create_project(self):

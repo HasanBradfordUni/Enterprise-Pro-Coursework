@@ -183,6 +183,52 @@
         
             {% endfor %}
         </section>
+        <div id="removal-modal" style="display: none;">
+            <div id="removal-modal-content">
+                <h3>Manage Users for Project</h3>
+                <form
+                    action="{{ url_for('remove_user_from_project') }}"
+                    method="POST"
+                    enctype="multipart/form-data"
+                >
+                    {{ form1.hidden_tag() }}
+                    <div class="form-group">
+                        {{ form1.project_title.label }}<br />
+                        {{ form1.project_title() }}
+                    </div>
+                    <div class="form-group">
+                        {{ form1.username.label }}<br />
+                        <div class="custom-multi-select">
+                          <div class="selected-tags">
+                            <!-- Selected tags will appear here -->
+                          </div>
+                          <input
+                            type="text"
+                            class="search-input"
+                            placeholder="Search and select users..."
+                            oninput="filterOptions(this.value)"
+                          />
+                        <div class="dropdown-options">
+                            <!-- Load users dynamically based on selected project -->
+                            <div id="available-users">
+                                <div
+                                    class="dropdown-option"
+                                    data-value="{{ value }}"
+                                    data-project-users="{% for i in range(0, project_users|length, 2) %}{% if project_users[i]|string == form1.project_title.data|string and value in project_users[i+1] %}true{% endif %}{% endfor %}"
+                                    onclick="selectOption(this)"
+                                >
+                                </div>
+                            </div>
+                        </div>
+                          <input type="hidden" name="username" id="selected-users" />
+                    </div>
+                    <div class="form-group">
+                        {{ form1.submit() }}
+                    </div>
+                </form>
+            </div>
+            <button onclick="document.getElementById('removal-modal').style.display='none'">Close</button>
+        </div>
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 const assignmentButtons = document.querySelectorAll('.assignment-button');
