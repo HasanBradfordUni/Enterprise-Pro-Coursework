@@ -467,72 +467,40 @@
 
         function fetchFilteredTasks() {
           const filterValue = filterDropdown.value;
-
-          fetch(
-            `{{ url_for('filter_tasks', filter_word='') }}`.replace(
-              "filter_word=",
-              `filter_word=${filterValue}`
-            )
-          )
-            .then((response) => response.json())
-            .then((filteredTasks) => {
-              const taskContainer = document.querySelector(".todo-container");
-              taskContainer.innerHTML = "";
-              filteredTasks.forEach((task) => {
-                const taskBox = document.createElement("div");
-                taskBox.classList.add("task-box");
-                taskBox.setAttribute("data-task-id", task[0]);
-                taskBox.innerHTML = `
-                    <div class="icons">
-                        <img src="https://i.ibb.co/nNkRC080/delete-icon-png-12.png" alt="delete-icon-png-12" border="0">
-                        <img src="https://i.ibb.co/GvgwL378/edit-icon-image-29.png" alt="edit-icon-image-29" border="0">
-                        <img src="https://i.ibb.co/35vt9Zwk/person-outline-icon-1.png" alt="person-outline-icon-1" border="0">
-                    </div>
-                    <h1>Title: ${task[1]}</h1>
-                    <h3>Details: ${task[2]}</h3>
-                    <p>Status: ${task[3]}</p>
-                    <p class="assigned-users">Assigned To: Unknown</p>
-                    <h4>Assigned date: ${task[4]}</h4>
-                    <h4>Due date: ${task[5]}</h4>
-                    `;
-                taskContainer.appendChild(taskBox);
-              });
-            });
+          
+          fetch('{{ url_for("filter_tasks") }}', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ filter_word: filterValue })
+          })
+          .then(response => {
+            // Since the response is a full HTML page, reload the current page
+            window.location.reload();
+          })
+          .catch(error => {
+            console.error('Error filtering tasks:', error);
+          });
         }
 
         function fetchSortedTasks() {
           const sortValue = sortDropdown.value;
-
-          fetch(
-            `{{ url_for('sort_tasks', sort_type='') }}`.replace(
-              "sort_type=",
-              `sort_type=${sortValue}`
-            )
-          )
-            .then((response) => response.json())
-            .then((sortedTasks) => {
-              const taskContainer = document.querySelector(".todo-container");
-              taskContainer.innerHTML = "";
-              sortedTasks.forEach((task) => {
-                const taskBox = document.createElement("div");
-                taskBox.classList.add("task-box");
-                taskBox.setAttribute("data-task-id", task[0]);
-                taskBox.innerHTML = `
-                    <div class="icons">
-                        <img src="https://i.ibb.co/nNkRC080/delete-icon-png-12.png" alt="delete-icon-png-12" border="0">
-                        <img src="https://i.ibb.co/GvgwL378/edit-icon-image-29.png" alt="edit-icon-image-29" border="0">
-                        <img src="https://i.ibb.co/35vt9Zwk/person-outline-icon-1.png" alt="person-outline-icon-1" border="0">
-                    </div>
-                    <h1>Title: ${task[1]}</h1>
-                    <h3>Details: ${task[2]}</h3>
-                    <p>Status: ${task[3]}</p>
-                    <p class="assigned-users">Assigned To: Unknown</p>
-                    <h4>Assigned date: ${task[4]}</h4>
-                    <h4>Due date: ${task[5]}</h4>
-                    `;
-                taskContainer.appendChild(taskBox);
-              });
-            });
+          
+          fetch(`{{ url_for('sort_tasks') }}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ sort_type: sortValue })
+          })
+          .then(response => {
+            // Since the response is a full HTML page, reload the current page
+            window.location.reload();
+          })
+          .catch(error => {
+            console.error('Error sorting tasks:', error);
+          });
         }
 
         filterDropdown.addEventListener("change", fetchFilteredTasks);
