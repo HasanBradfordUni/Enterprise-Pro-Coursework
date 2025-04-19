@@ -74,4 +74,60 @@
 
 | Commit ID | Version Name/Number | Commit Info | Files Affected | Person |
 |------------------------------------------|------|-------------|----------------|------------|
-| 24fca1a6a2819d56c6b71d737e5c974e7bafc5a0 | v2.0 | Initial commit | Readme.md | Hasan |
+| a6a4e54c8981fa92ca0aa6eb799d734afd6f05f4 | v2.0 | started following testing plan and created database tests | conftest.py, test_database.py | Hamza |
+| b52568a21083471d7b14ce806f216b793772a4b0 | v2.0 | Client presentation | database.db | Hasan |
+| a3f643c7f65e3441450416a10787fb362a6a1d14 | v2.1 | create forms test | test_forms.py | Hammad |
+| f82079cd5d3e4b7187ae444b85ed710958e81c77 | v2.1.1 | updating forms test, no errors now | forms.py, test_forms.py | Hammad |
+| 122ce37652615701b2cee8837ce6eb87d71435f2 | v2.1.2 | fixing database | database.db | Hasan |
+| e3e3b939c1cda9889dc28befae4e8b9abcfad9f7 | v2.1.3 | Create Non-technical Explanation | Other Documents/Non-technical Explanation | Rahat |
+| f18b23806cb5dea28986640d09674bcef50596f4 | v2.1.3 | Create documentation_non-technical.md |  documentation_non-technical.md | Rahat |
+| a5462e3e6df2fb08d687ddf55e0789eb0c2cccb9 | v2.1.3 | Upload non-technical documentation pdf version | Other Documents/Non-technical Documentation for Enterprise Pro Task Management System V2.pdf | Rahat |
+| 31d0ff66467005611fa5625fee94098dc8761dfa | v2.2 | Development of testing Version 2 of app (initial release version), mostly testing flask routes | test_routes.py, test_database.py, conftest.py, test_database.db | Hasan |
+| 4ec805ad8fef017b46d39c4cc0655fa55a75ab78 | v2.2.1 | Updating version history documentation | versions-releases.md [This document] | Hasan |
+| 4cc16dbb92e4891ff03c437054e5190415947f16 | v2.2.1 | Updating version history documentation, all pre-releases versions updated | versions-releases.md [This document] | Hasan |
+| b8eea31bbf5438418f9119b07d54247a93af0d1d | v2.2.2 | Update tasks.html with progress logs form | tasks.html | Humayun |
+| d4769b4e485ee2c45f39b196e16d6484ca333ff8 | v2.2.3 | updating task updates part of tasks html with form | app.py | Hasan |
+| 397f2079134004f24f509f3faae3be3c5953f665 | v2.2.4 | Update tasks.html with progress logs from database | tasks.html | Humayun |
+| 1ee53d9ebac368104cb4a4e25db9721137626b2e | v2.3 | styling changes ands integrating update project progress with Python | styles.css, tasks.html, app.py | Hasan |
+| e99c16251f2cd16a203ed2c8fe409627aa838e88 | v2.3.1 | create technical documentation markdown | technical-documentation.md | Umair |
+| 3e5db51f50bf08d0cd20e81f46bd271e76df8a7d | v2.3.1 | Upload Technical Documentation pdf version | Other Documents/Technical Documentation for Enterprise Pro Task Management System V2.pdf | Umair |
+| c090e85b950f7d8727e7fdc68db7219613c4f029 | v2.3.1 | uploading previous meet minutes for the past 3 weeks | 3 files in Meeting Minutes | Humayun |
+| cc9ce62edda5b6068b01f795fc8d5c462c2ef550 | v2.3.2 | Changes to tasks html and styling | styles.css, tasks.html | Umair |
+| 2b827162241637fef30d56b96765da7cf62a682e | v2.3.3 | Templating logic for sorting and filtering Python backend for Humayun to write | search-sort.py | Hasan |
+| a2411240112ca0dc21e6cce82f53a666b234d274 | v2.3.4 | Added password reset functionality | passwordReset.html, app.py, database.db, forms.py | Hasan |
+| c4dc8429cdaa432b56344d72e4f40b76756a2e21 | v2.3.5 | Updating tasks logic so that progress logs work and dropdowns perform intended function | styles.css, tasks.html, app.py | Hasan |
+| 5a88e23c900a73b8b9bc53ed512c41604b49d731 | v2.4 | Update admin.html (Added a block of code inside the "<body>" tag but after "<header> section) | admin.html | Rahat |
+| a309b9150704398328d9a5c129cba326dc0c4c83 | v2.4.1 | Update styles.css (Added a block of code beneaeth the ".admin-form" section) | styls.css | Rahat |
+| 18c6a9aa2431ff52b72c2d6c5a8bd42b85bfb0ba | TS1 | searching sorting tests complete | test_list_operations.py, search_sort.py | Ehtesham |
+| c526ddf0c29640c16d4b2a731f5e5727adf57408 | v2.4.2 | Merge pull request [#6](https://github.com/HasanBradfordUni/Enterprise-Pro-Coursework/issues/6) from HasanBradfordUni/test-list-operations (searching sorting tests complete) | test_list_operations.py, search_sort.py | Ehtesham + Hasan (review merge) |
+| a6a4e54c8981fa92ca0aa6eb799d734afd6f05f4 | v2.0 | started following testing plan and created database tests | conftest.py, test_database.py | Hamza |
+| a6a4e54c8981fa92ca0aa6eb799d734afd6f05f4 | v2.0 | started following testing plan and created database tests | conftest.py, test_database.py | Hamza |
+| a6a4e54c8981fa92ca0aa6eb799d734afd6f05f4 | v2.0 | started following testing plan and created database tests | conftest.py, test_database.py | Hamza |
+| a6a4e54c8981fa92ca0aa6eb799d734afd6f05f4 | v2.0 | started following testing plan and created database tests | conftest.py, test_database.py | Hamza |
+| a6a4e54c8981fa92ca0aa6eb799d734afd6f05f4 | v2.0 | started following testing plan and created database tests | conftest.py, test_database.py | Hamza |
+| a6a4e54c8981fa92ca0aa6eb799d734afd6f05f4 | v2.0 | started following testing plan and created database tests | conftest.py, test_database.py | Hamza |
+| a6a4e54c8981fa92ca0aa6eb799d734afd6f05f4 | v2.0 | started following testing plan and created database tests | conftest.py, test_database.py | Hamza |
+| a6a4e54c8981fa92ca0aa6eb799d734afd6f05f4 | v2.0 | started following testing plan and created database tests | conftest.py, test_database.py | Hamza |
+| a6a4e54c8981fa92ca0aa6eb799d734afd6f05f4 | v2.0 | started following testing plan and created database tests | conftest.py, test_database.py | Hamza |
+| a6a4e54c8981fa92ca0aa6eb799d734afd6f05f4 | v2.0 | started following testing plan and created database tests | conftest.py, test_database.py | Hamza |
+| a6a4e54c8981fa92ca0aa6eb799d734afd6f05f4 | v2.0 | started following testing plan and created database tests | conftest.py, test_database.py | Hamza |
+| a6a4e54c8981fa92ca0aa6eb799d734afd6f05f4 | v2.0 | started following testing plan and created database tests | conftest.py, test_database.py | Hamza |
+| a6a4e54c8981fa92ca0aa6eb799d734afd6f05f4 | v2.0 | started following testing plan and created database tests | conftest.py, test_database.py | Hamza |
+| a6a4e54c8981fa92ca0aa6eb799d734afd6f05f4 | v2.0 | started following testing plan and created database tests | conftest.py, test_database.py | Hamza |
+| a6a4e54c8981fa92ca0aa6eb799d734afd6f05f4 | v2.0 | started following testing plan and created database tests | conftest.py, test_database.py | Hamza |
+| a6a4e54c8981fa92ca0aa6eb799d734afd6f05f4 | v2.0 | started following testing plan and created database tests | conftest.py, test_database.py | Hamza |
+| a6a4e54c8981fa92ca0aa6eb799d734afd6f05f4 | v2.0 | started following testing plan and created database tests | conftest.py, test_database.py | Hamza |
+| a6a4e54c8981fa92ca0aa6eb799d734afd6f05f4 | v2.0 | started following testing plan and created database tests | conftest.py, test_database.py | Hamza |
+| a6a4e54c8981fa92ca0aa6eb799d734afd6f05f4 | v2.0 | started following testing plan and created database tests | conftest.py, test_database.py | Hamza |
+| a6a4e54c8981fa92ca0aa6eb799d734afd6f05f4 | v2.0 | started following testing plan and created database tests | conftest.py, test_database.py | Hamza |
+| a6a4e54c8981fa92ca0aa6eb799d734afd6f05f4 | v2.0 | started following testing plan and created database tests | conftest.py, test_database.py | Hamza |
+| a6a4e54c8981fa92ca0aa6eb799d734afd6f05f4 | v2.0 | started following testing plan and created database tests | conftest.py, test_database.py | Hamza |
+| a6a4e54c8981fa92ca0aa6eb799d734afd6f05f4 | v2.0 | started following testing plan and created database tests | conftest.py, test_database.py | Hamza |
+| a6a4e54c8981fa92ca0aa6eb799d734afd6f05f4 | v2.0 | started following testing plan and created database tests | conftest.py, test_database.py | Hamza |
+| a6a4e54c8981fa92ca0aa6eb799d734afd6f05f4 | v2.0 | started following testing plan and created database tests | conftest.py, test_database.py | Hamza |
+| a6a4e54c8981fa92ca0aa6eb799d734afd6f05f4 | v2.0 | started following testing plan and created database tests | conftest.py, test_database.py | Hamza |
+| a6a4e54c8981fa92ca0aa6eb799d734afd6f05f4 | v2.0 | started following testing plan and created database tests | conftest.py, test_database.py | Hamza |
+| a6a4e54c8981fa92ca0aa6eb799d734afd6f05f4 | v2.0 | started following testing plan and created database tests | conftest.py, test_database.py | Hamza |
+| a6a4e54c8981fa92ca0aa6eb799d734afd6f05f4 | v2.0 | started following testing plan and created database tests | conftest.py, test_database.py | Hamza |
+| a6a4e54c8981fa92ca0aa6eb799d734afd6f05f4 | v2.0 | started following testing plan and created database tests | conftest.py, test_database.py | Hamza |
+| a6a4e54c8981fa92ca0aa6eb799d734afd6f05f4 | v2.0 | started following testing plan and created database tests | conftest.py, test_database.py | Hamza |
