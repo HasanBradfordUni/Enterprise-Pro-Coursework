@@ -145,7 +145,7 @@
               style="display: none"
             />
           </a>
-          <a href="editForm()">
+          <a href="#" class="edit-link">
             <img
               src="https://i.ibb.co/GvgwL378/edit-icon-image-29.png"
               alt="edit-icon-image-29"
@@ -312,7 +312,7 @@
       <form
         id="edit-task-form-{{ task[0] }}"
         class="edit-task-form"
-        action="{{ url_for('edit_task', task_id=task[0]) }}"
+        action="{{ url_for('edit_task') }}"
         method="POST"
         enctype="multipart/form-data"
         style="display: none"
@@ -364,16 +364,17 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        const editButtons = document.querySelectorAll(".edit-button");
-        editButtons.forEach((button) => {
-          button.addEventListener("click", function (event) {
+        const editLinks = document.querySelectorAll(".edit-link");
+        editLinks.forEach((link) => {
+          link.addEventListener("click", function (event) {
             event.preventDefault();
-            const taskBox = button.closest(".task-box");
+            const taskBox = link.closest(".task-box");
             const taskId = taskBox.getAttribute("data-task-id");
             const editForm = document.getElementById(
               `edit-task-form-${taskId}`
             );
             if (editForm) {
+              document.getElementById("edit-task-forms-container").style.display = "block";
               if (
                 editForm.style.display === "none" ||
                 editForm.style.display === ""

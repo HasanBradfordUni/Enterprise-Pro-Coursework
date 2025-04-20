@@ -5,7 +5,8 @@ import os
 
 from use_database import databaseManager
 from search_sort import listOperationsManager
-from forms import LoginForm, CreateUserForm, UpdateUserDetailsForm, CreateProjectForm, UpdateProgressForm, EditTaskForm, UsersInProjectsForm, PasswordResetForm, RemoveProjectUsersForm
+from forms import LoginForm, CreateUserForm, UpdateUserDetailsForm, CreateProjectForm, UpdateProgressForm
+from forms import EditTaskForm, UsersInProjectsForm, PasswordResetForm, RemoveProjectUsersForm, EditProjectForm
  
 class myClass():
     def __init__(self, router):
@@ -19,8 +20,8 @@ class myClass():
         router('/create_task', methods=['POST'])(self.create_task)
         router('/sort_tasks', methods=['GET', 'POST'])(self.sort_tasks)
         router('/filter_tasks', methods=['GET', 'POST'])(self.filter_tasks)
-        router('/update_progress/<int:project_id>', methods=['GET', 'POST'])(self.update_progress)
-        router('/edit_task/<int:task_id>')(self.edit_task)
+        router('/update_progress', methods=['GET', 'POST'])(self.update_progress)
+        router('/edit_task', methods=['GET', 'POST'])(self.edit_task)
         router('/delete_task')(self.delete_task)
         router('/show_deleted_tasks')(self.show_deleted_tasks)
         router('/assign_users', methods=['POST'])(self.assign_users)
@@ -30,9 +31,9 @@ class myClass():
         router('/filter_projects/<string:filter_type>/<string:filter_word>')(self.filter_projects)
         router('/sort_projects/<string:sort_type>')(self.sort_projects)
         router('/add_user_to_project', methods=['GET', 'POST'])(self.add_user_to_project)
-        router('/remove_user_from_project/<int:user_id>/<int:project_id>')(self.remove_user_from_project)
+        router('/remove_user_from_project')(self.remove_user_from_project)
         router('/create_project', methods=['GET', 'POST'])(self.create_project)
-        router('/edit_project')(self.edit_project)
+        router('/edit_project', methods=['GET', 'POST'])(self.edit_project)
         router('/delete_project')(self.delete_project)
         router('/create_user', methods=['GET', 'POST'])(self.create_user)
         router('/delete_users', methods=['POST'])(self.delete_users)
@@ -162,8 +163,9 @@ class myClass():
         projects = theseProjects
         form = UsersInProjectsForm()
         form1 = RemoveProjectUsersForm()
+        form2 = EditProjectForm()
         users = self.database.get_all_from_table("users")
-        return render_template('supervisor.html', projects=projects, users=users, form=form, users_in_projects=users_in_projects, form1=form1)
+        return render_template('supervisor.html', projects=projects, users=users, form=form, users_in_projects=users_in_projects, form1=form1, form2=form2)
     
     def admin(self):
         form = CreateProjectForm()
@@ -245,14 +247,14 @@ class myClass():
         users = self.database.get_all_from_table("users")
         return render_template('tasks.html', tasks=filtered_tasks, project=project, task_updates=task_updates, assigned_tasks=assigned_tasks, users=users, form=form, form1=form1)
     
-    def update_progress(self, project_id):
+    def update_progress(self):
         form = UpdateProgressForm()
         if form.validate_on_submit():
             update = form.progress_update.data
             if not update:
                 flash("No progress update provided", "danger")
                 return redirect(url_for('tasks'))
-            row_id = self.database.add_task_update(project_id=project_id, progress_update=update)
+            row_id = self.database.add_task_update(project_id=self.project_id, progress_update=update)
             if row_id:
                 flash("Progress update added successfully", "success")
             else:
@@ -359,9 +361,31 @@ class myClass():
             flash("No users were selected for deletion.", "danger")
         return redirect(url_for('admin'))
 
-    def edit_project(self, project_id):
-        self.database.update_project(project_id=project_id)
-        return redirect(url_for('index'))
+    def edit_project(self):
+        project_id = request.form.get('project_id') # Get the project ID from the form
+        form = EditProjectForm()
+        project_title = ""
+        project_details = ""
+        project_status = ""
+        project_review = ""
+        project_owner = ""
+        if form.validate_on_submit():
+            if form.project_title.data:
+                project_title = form.project_title.data
+            if form.project_details.data:
+                project_details = form.project_details.data
+            if form.project_status.data:
+                project_status = form.project_status.data
+            if form.project_review.data:
+                project_review = form.project_review.data
+            if form.project_owner.data:
+                project_owner = form.project_owner.data
+            row_id = self.database.update_project(project_id=project_id, project_title=project_title, project_details=project_details, project_status=project_status, project_review=project_review, project_owner=project_owner)
+            if row_id:
+                flash("Project updated successfully", "success")
+            else:
+                flash("Project not updated", "danger")
+        return redirect(url_for('supervisor'))
 
     def delete_project(self, project_id):
         deleted_project = self.database.find_task(project_id=project_id)
@@ -392,18 +416,30 @@ class myClass():
             return redirect(url_for('index'))
         return redirect(url_for('admin'))
 
-    def edit_task(self, task_id):
-        form = EditTaskForm()        
+    def edit_task(self):
+        task_id = request.form.get('task_id') # Get the task ID from the form     
+        form = EditTaskForm()   
+        task_title = ""
+        task_details = ""
+        assigned_date = ""
+        due_date = ""
+        task_status = ""
         if form.validate_on_submit():
-            task_title = form.task_title.data
-            task_details = form.task_details.data
-            assigned_date = form.task_assigned_date.data
-            due_date = form.task_due_date.data
-            task_status = form.task_status.data
-            self.database.update_task(task_id=task_id, task_title=task_title, task_details=task_details, task_status=task_status, task_assigned_date=assigned_date, task_due_date=due_date, project_id=self.project_id)
-            flash("Task updated successfully", "success")
-            return redirect(url_for('tasks'))
-        self.database.update_task(task_id=task_id)
+            if form.task_title.data:
+                task_title = form.task_title.data
+            if form.task_details.data:
+                task_details = form.task_details.data
+            if form.task_assigned_date.data:
+                assigned_date = form.task_assigned_date.data
+            if form.task_due_date.data:
+                due_date = form.task_due_date.data
+            if form.task_status.data:
+                task_status = form.task_status.data
+            row_id = self.database.update_task(task_id=task_id, task_title=task_title, task_details=task_details, task_status=task_status, task_assigned_date=assigned_date, task_due_date=due_date, project_id=self.project_id)
+            if row_id:
+                flash("Task updated successfully", "success")
+            else:
+                flash("Task not updated", "danger")
         return redirect(url_for('tasks'))
     
     def delete_task(self, task_id):

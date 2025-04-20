@@ -80,6 +80,14 @@
                                     style="display: block;"
                                   />
                                 </a>
+                                <a href="#" class="edit-link">
+                                    <img
+                                      src="https://i.ibb.co/GvgwL378/edit-icon-image-29.png"
+                                      alt="edit-icon-image-29"
+                                      class="edit-button"
+                                      style="display: block;"
+                                    />
+                                </a>
                             </div>
                             <h3 class="project-heading">{{ project[1] }}</h3>
                             <p>{{ project[2] }}</p>
@@ -113,6 +121,14 @@
                                         style="display: block;"
                                       />
                                     </a>
+                                    <a href="#" class="edit-link">
+                                        <img
+                                            src="https://i.ibb.co/GvgwL378/edit-icon-image-29.png"
+                                            alt="edit-icon-image-29"
+                                            class="edit-button"
+                                            style="display: block;"
+                                        />
+                                    </a>
                                 </div>
                                 <h3 class="project-heading">{{ next_project[1] }}</h3>
                                 <p>{{ next_project[2] }}</p>
@@ -134,6 +150,54 @@
                             {% endif %}
                         </div>
                     {% endif %}
+                </div>
+                <!-- Edit Project Modal -->
+                <div id="edit-project-modal" style="display: none;">
+                    <div id="edit-project-modal-content">
+                        <h3>Edit Project</h3>
+                        <form
+                            action="{{ url_for('edit_project') }}"
+                            method="POST"
+                            enctype="multipart/form-data"
+                        >
+                            {{ form2.hidden_tag() }}
+                            <div class="form-group">
+                                <label for="project-title">Project Title:</label>
+                                <input type="text" id="edit-project-title" name="project_title" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="project-description">Description:</label>
+                                <textarea id="edit-project-description" name="project_description" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="project-status">Status:</label>
+                                <select id="edit-project-status" name="project_status">
+                                    <option value="in-progress">In Progress</option>
+                                    <option value="complete">Complete</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="project-review">Review Due:</label>
+                                <select id="edit-project-review" name="project_review">
+                                    <option value="one-day">1 Day</option>
+                                    <option value="three-days">3 Days</option>
+                                    <option value="one-week">1 Week</option>
+                                    <option value="two-weeks">2 Weeks</option>
+                                    <option value="one-month">1 Month</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                {{ form2.project_owner.label }}<br />
+                                {{ form2.project_owner() }}
+                            </div>
+                            <input type="hidden" id="edit-project-id" name="project_id">
+                            <div class="form-group">
+                                <button type="submit">Save Changes</button>
+                            </div>
+                        </form>
+                        <button onclick="document.getElementById('edit-project-modal').style.display='none'">Close</button>
+                    </div>
                 </div>
                 <div id="assignment-modal" style="display: none;">
                     <div id="assignment-modal-content">
@@ -255,6 +319,35 @@
                 });
             });
         </script>
+
+<script>
+        document.addEventListener('DOMContentLoaded', function () {
+        const editButtons = document.querySelectorAll('.edit-button');
+    
+        editButtons.forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+    
+                // Get the project details
+                const projectDiv = button.closest('.project1');
+                const projectId = projectDiv.querySelector('#project-id').value;
+                const projectTitle = projectDiv.querySelector('.project-heading').textContent;
+                const projectDescription = projectDiv.querySelector('p').textContent;
+                const projectStatus = projectDiv.querySelector('h2.project-heading').textContent.split(': ')[1];
+    
+                // Populate the modal fields
+                document.getElementById('edit-project-id').value = projectId;
+                document.getElementById('edit-project-title').value = projectTitle;
+                document.getElementById('edit-project-description').value = projectDescription;
+                document.getElementById('edit-project-status').value = projectStatus.toLowerCase();
+    
+                // Show the modal
+                const modal = document.getElementById('edit-project-modal');
+                modal.style.display = 'block';
+            });
+        });
+    });
+</script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {

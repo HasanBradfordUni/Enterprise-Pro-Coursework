@@ -79,9 +79,24 @@ class UpdateProgressForm(FlaskForm):
 
 class EditTaskForm(FlaskForm):
     task_id = StringField('Task ID', validators=[DataRequired()])
-    task_title = StringField('Task Title', validators=[DataRequired()])
-    task_details = TextAreaField('Task Details', validators=[DataRequired()])
-    task_status = SelectField('Task Status', choices=[('In Progress', 'In Progress'), ('Complete', 'Complete'), ('New', 'New'), ('Overdue', 'Overdue')], validators=[DataRequired()])
-    task_assigned_date = StringField('Task Assigned Date', validators=[DataRequired()], render_kw={"type": "date"})
-    task_due_date = StringField('Task Due Date', validators=[DataRequired()], render_kw={"type": "date"})
+    task_title = StringField('Task Title')
+    task_details = TextAreaField('Task Details')
+    task_status = SelectField('Task Status', choices=[('In Progress', 'In Progress'), ('Complete', 'Complete'), ('New', 'New'), ('Overdue', 'Overdue')])
+    task_assigned_date = StringField('Task Assigned Date', render_kw={"type": "date"})
+    task_due_date = StringField('Task Due Date', render_kw={"type": "date"})
+    submit = SubmitField('Submit')
+
+class EditProjectForm(FlaskForm):
+    project_id = StringField('Project ID', validators=[DataRequired()])
+    projet_title = StringField('Project Title')
+    project_details = TextAreaField('Project Details')
+    project_status = SelectField('Project Status', choices=[('In Progress', 'In Progress'), ('Complete', 'Complete'), ('Other', 'Other')])
+    project_review = SelectField('Project Review', choices=[
+        ('1 day', '1 day'),
+        ('3 days', '3 days'),
+        ('1 week', '1 week'),
+        ('2 weeks', '2 weeks'),
+        ('1 month', '1 month')])
+    users = [(user[1], user[1]) for user in thisDatabase.get_all_from_table('users')]
+    project_owner = SelectField('Project Owner', choices=users)
     submit = SubmitField('Submit')
