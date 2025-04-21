@@ -170,6 +170,7 @@
         <h4>Due date: {{ task[5] }}</h4>
         <div class="assignment-form-container" id="assignment-form-{{ task[0] }}" style="display: none;"></div>
       </div>
+    </div>
       <br />
       {% endfor %}
     </div>
@@ -195,8 +196,9 @@
               return;
             }
     
-            // Create the form dynamically
+            // Create the forms dynamically
             formContainer.innerHTML = `
+              <!-- Assign Users Form -->
               <form action="{{ url_for('assign_users') }}" method="POST">
                 <input type="hidden" name="task_id" value="${taskId}">
                 <label for="user_ids">Assign Users:</label>
@@ -227,7 +229,62 @@
                 </div>
                 <button type="submit">Assign</button>
               </form>
+    
+              <!-- Remove Assigned Users Form -->
+              <form
+                action="{{ url_for('remove_assigned_user') }}"
+                method="POST"
+                enctype="multipart/form-data"
+              >
+                {{ form2.hidden_tag() }}
+                <input type="hidden" name="task_id" value="${taskId}">
+                <div class="form-group">
+                  <label for="remove_user_ids">Remove Assigned Users:</label>
+                  <div class="custom-multi-select">
+                    <div class="selected-tags">
+                      <!-- Selected tags will appear here -->
+                    </div>
+                    <input
+                      type="text"
+                      class="search-input"
+                      placeholder="Search and select users..."
+                      oninput="filterOptions(this.value)"
+                      id="remove_user_ids"
+                      name="remove_user_ids"
+                    />
+                    <div class="dropdown-options">
+                      {% for assigned_user in assigned_tasks %}
+                      <div
+                        class="dropdown-option assigned-user-option"
+                        data-task-id="{{ assigned_user[1] }}"
+                        data-value="{{ assigned_user[3] }}"
+                        data-username="{{ assigned_user[4] }}"
+                        style="display: none;"
+                        onclick="selectOption(this)"
+                      >
+                        {{ assigned_user[4] }}
+                      </div>
+                      {% endfor %}
+                    </div>
+                    <input type="hidden" name="selected_users" id="selected-users-${taskId}" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <button type="submit" class="btn btn-danger">Remove</button>
+                </div>
+              </form>
             `;
+
+        // Update dropdown options to only show users assigned to this task
+        const taskOptions = formContainer.querySelectorAll('.assigned-user-option');
+        taskOptions.forEach(option => {
+          // Show only options that match the current task ID
+          if (option.getAttribute('data-task-id') === taskId) {
+            option.style.display = 'block';
+          } else {
+            option.style.display = 'none';
+          }
+        });
     
         const searchInput = document.querySelector(".search-input");
         const dropdownOptions = document.querySelector(".dropdown-options");
@@ -247,59 +304,90 @@
         });
     
         // Filter options based on search input
-        window.filterOptions = function (searchValue) {
-          const options = dropdownOptions.querySelectorAll(".dropdown-option");
+        window.filterOptions = function(searchValue, dropdownContainer) {
+          const options = dropdownContainer.querySelectorAll(".dropdown-option");
           options.forEach((option) => {
-            if (
-              option.textContent.toLowerCase().includes(searchValue.toLowerCase())
-            ) {
+            if (option.textContent.toLowerCase().includes(searchValue.toLowerCase())) {
               option.style.display = "block";
             } else {
               option.style.display = "none";
             }
           });
         };
-    
+
         // Select an option
-        window.selectOption = function (optionElement) {
+        window.selectOption = function(optionElement) {
+          const dropdown = optionElement.closest(".custom-multi-select");
+          const selectedTagsContainer = dropdown.querySelector(".selected-tags");
+          const hiddenInput = dropdown.querySelector("input[type='hidden']");
+          
           const value = optionElement.getAttribute("data-value");
-          const text = optionElement.textContent;
-    
+          const text = optionElement.textContent.trim();
+
           // Check if the tag is already selected
-          if (
-            Array.from(selectedTagsContainer.children).some(
-              (tag) => tag.getAttribute("data-value") === value
-            )
-          ) {
+          if (Array.from(selectedTagsContainer.children).some(
+            (tag) => tag.getAttribute("data-value") === value
+          )) {
             return;
           }
-    
+
           // Add the tag to the selected tags container
           const tag = document.createElement("div");
           tag.classList.add("tag");
           tag.setAttribute("data-value", value);
           tag.innerHTML = `${text} <span class="remove-tag" onclick="removeTag(this)">x</span>`;
           selectedTagsContainer.appendChild(tag);
-    
+
           // Update the hidden input value
-          updateHiddenInput();
+          updateHiddenInput(selectedTagsContainer, hiddenInput);
         };
-    
+
         // Remove a tag
-        window.removeTag = function (removeButton) {
+        window.removeTag = function(removeButton) {
           const tag = removeButton.parentElement;
+          const selectedTagsContainer = tag.parentElement;
+          const dropdown = selectedTagsContainer.closest(".custom-multi-select");
+          const hiddenInput = dropdown.querySelector("input[type='hidden']");
+          
           tag.remove();
-          updateHiddenInput();
+          updateHiddenInput(selectedTagsContainer, hiddenInput);
         };
-    
+
         // Update the hidden input value with selected tags
-        function updateHiddenInput() {
+        function updateHiddenInput(selectedTagsContainer, hiddenInput) {
           const selectedValues = Array.from(selectedTagsContainer.children).map(
             (tag) => tag.getAttribute("data-value")
           );
           hiddenInput.value = selectedValues.join(",");
         }
-    
+
+        // Set up event listeners for both form dropdowns
+        formContainer.addEventListener('click', function(event) {
+          const searchInputs = formContainer.querySelectorAll(".search-input");
+          searchInputs.forEach(searchInput => {
+            searchInput.addEventListener("focus", function() {
+              const dropdown = this.closest(".custom-multi-select");
+              const dropdownOptions = dropdown.querySelector(".dropdown-options");
+              dropdownOptions.style.display = "block";
+            });
+            
+            searchInput.addEventListener("input", function() {
+              const dropdown = this.closest(".custom-multi-select");
+              const dropdownOptions = dropdown.querySelector(".dropdown-options");
+              filterOptions(this.value, dropdownOptions);
+            });
+          });
+        });
+
+        // Hide dropdown when clicking outside
+        document.addEventListener("click", function(event) {
+          if (!event.target.closest(".custom-multi-select")) {
+            const dropdowns = formContainer.querySelectorAll(".dropdown-options");
+            dropdowns.forEach(dropdown => {
+              dropdown.style.display = "none";
+            });
+          }
+        });
             // Show the form container
             formContainer.style.display = "block";
           });

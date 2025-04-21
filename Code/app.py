@@ -6,7 +6,7 @@ import os
 from use_database import databaseManager
 from search_sort import listOperationsManager
 from forms import LoginForm, CreateUserForm, UpdateUserDetailsForm, CreateProjectForm, UpdateProgressForm
-from forms import EditTaskForm, UsersInProjectsForm, PasswordResetForm, RemoveProjectUsersForm, EditProjectForm
+from forms import EditTaskForm, UsersInProjectsForm, PasswordResetForm, RemoveProjectUsersForm, EditProjectForm, RemoveAssignedUsersForm
  
 class myClass():
     def __init__(self, router):
@@ -22,7 +22,7 @@ class myClass():
         router('/filter_tasks', methods=['GET', 'POST'])(self.filter_tasks)
         router('/update_progress', methods=['GET', 'POST'])(self.update_progress)
         router('/edit_task', methods=['GET', 'POST'])(self.edit_task)
-        router('/delete_task')(self.delete_task)
+        router('/delete_task', methods=['GET', 'POST'])(self.delete_task)
         router('/show_deleted_tasks')(self.show_deleted_tasks)
         router('/assign_users', methods=['POST'])(self.assign_users)
         router('/search_tasks/<string:search_term>')(self.search_tasks)
@@ -31,10 +31,11 @@ class myClass():
         router('/filter_projects/<string:filter_type>/<string:filter_word>')(self.filter_projects)
         router('/sort_projects/<string:sort_type>')(self.sort_projects)
         router('/add_user_to_project', methods=['GET', 'POST'])(self.add_user_to_project)
-        router('/remove_user_from_project')(self.remove_user_from_project)
+        router('/remove_user_from_project', methods=['GET', 'POST'])(self.remove_user_from_project)
+        router('/remove_assigned_user', methods=['GET', 'POST'])(self.remove_assigned_user)
         router('/create_project', methods=['GET', 'POST'])(self.create_project)
         router('/edit_project', methods=['GET', 'POST'])(self.edit_project)
-        router('/delete_project')(self.delete_project)
+        router('/delete_project', methods=['GET', 'POST'])(self.delete_project)
         router('/create_user', methods=['GET', 'POST'])(self.create_user)
         router('/delete_users', methods=['POST'])(self.delete_users)
         router('/admin')(self.admin)
@@ -182,6 +183,7 @@ class myClass():
         tasks = self.load_tasks()
         form = UpdateProgressForm()
         form1 = EditTaskForm()
+        form2 = RemoveAssignedUsersForm()
         project = self.database.find_project(project_id=self.project_id)
         project_tasks = []
         for task in tasks:
@@ -191,7 +193,7 @@ class myClass():
         task_updates = self.database.get_all_from_table("task_updates")[::-1]
         assigned_tasks = self.database.get_all_from_table("assigned_tasks")
         users = self.database.get_all_from_table("users")
-        return render_template('tasks.html', tasks=tasks, project=project, task_updates=task_updates, assigned_tasks=assigned_tasks, users=users, form=form, form1=form1)
+        return render_template('tasks.html', tasks=tasks, project=project, task_updates=task_updates, assigned_tasks=assigned_tasks, users=users, form=form, form1=form1, form2=form2)
     
     def search_tasks(self):
         tasks = self.load_tasks()
@@ -316,7 +318,20 @@ class myClass():
             project_id = self.database.find_project(project_title=project_title)[0]
             id = self.database.find_user_in_project(user_id=user_id, project_id=project_id)[0]
             self.database.remove_user_from_project(id=id)
-        return redirect(url_for('index'))
+        return redirect(url_for('supervisor'))
+    
+    def remove_assigned_user(self):
+        form = RemoveAssignedUsersForm()
+        users = request.form.get('selected_users').split(",") # Split the comma-separated string into a list 
+        task_id = request.form.get('task_id')
+        for user in users:
+            id = self.database.find_assigned_task(assigned_user_id=int(user), task_id=task_id, project_id=self.project_id)[0]
+            row_id = self.database.remove_assigned_task(assigned_task_id=id)
+            if row_id:
+                flash("Assigned user removed successfully", "success")
+            else:
+                flash("Assigned user not removed", "danger")
+        return redirect(url_for('tasks'))
 
     def create_project(self):
         form = CreateProjectForm()

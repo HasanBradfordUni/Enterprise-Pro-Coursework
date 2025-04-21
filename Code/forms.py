@@ -100,3 +100,11 @@ class EditProjectForm(FlaskForm):
     users = [(user[1], user[1]) for user in thisDatabase.get_all_from_table('users')]
     project_owner = SelectField('Project Owner', choices=users)
     submit = SubmitField('Submit')
+
+class RemoveAssignedUsersForm(FlaskForm):
+    tasks = [(task[1], task[1]) for task in thisDatabase.get_all_from_table('tasks')]
+    task_title = SelectField('Task Title', choices=tasks, validators=[DataRequired()])
+
+    # This will be populated dynamically via JavaScript after selecting a project
+    username = SelectMultipleField('Users to Remove', validators=[DataRequired()])
+    submit = SubmitField('Submit')
